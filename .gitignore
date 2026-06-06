@@ -1,0 +1,21 @@
+# 提取输出（版权资源，不上传）
+starconflict_upcaksource/
+
+# 原始游戏文件（版权资源，不上传）
+StarConflict/
+
+# 工具工作目录
+.sisyphus/
+
+# 临时文件
+*.pyc
+__pycache__/
+session-*.md
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+Thumbs.db
+Desktop.ini
