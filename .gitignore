@@ -1,16 +1,32 @@
 # 提取输出（版权资源，不上传）
 starconflict_upcaksource/
+quickbms_unpacksource/
+scunpack/output/
+scunpack/texcheck/
+rawtex_output/
+NinjaRipper_unpacksource/
 
 # 原始游戏文件（版权资源，不上传）
 StarConflict/
+quickbms/
 
 # 工具工作目录
 .sisyphus/
+NOESIS/
 
 # 临时文件
 *.pyc
 __pycache__/
 session-*.md
+*.dds
+*.tga
+*.png
+*.jpg
+*.obj
+test_output/
+backup/
+_diag*.py
+_check_*.py
 
 # IDE
 .vscode/
@@ -19,3 +35,4 @@ session-*.md
 # 系统文件
 Thumbs.db
 Desktop.ini
+.DS_Store

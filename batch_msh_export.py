@@ -5,7 +5,7 @@ Usage: python batch_msh_export.py --root <extracted_dir> [--dry-run]
 """
 import os, sys, struct, subprocess
 
-MSH2OBJ = os.path.join(os.path.dirname(__file__), 'msh_to_obj_v2.py')
+MSH2OBJ = os.path.join(os.path.dirname(__file__), 'msh_to_obj_v3.py')
 
 def is_simple_msh(path):
     """Quick check if MSH is simple (uncompressed) format"""

@@ -189,15 +189,13 @@ Extracted files are **not all directly usable**. Further conversion is needed de
 
 | Tool | Coverage | Usage |
 |------|----------|-------|
-| `rawtex_py.py` (in-house) | ~32% (3,649/11,468) | `python rawtex_py.py dir/ --auto` |
-| `rawtex` (id-daemon) | ~90% | `RawtexCmd.exe file.dds DXT5` |
-| AceWell Noesis plugin | ~90% | Drag .tfd into Noesis |
+| `rawtex_py.py` (in-house) | ~50% (simple TFH) | `python rawtex_py.py dir/ --auto` |
+| `tex_StarConflict_tfh_tfd_v2.py` (Noesis plugin) | ~70% (fonts ✅, _d/_nm ✅) | Drag .tfh into Noesis |
+| `rawtex` (id-daemon) | ~90% (fallback) | `RawtexCmd.exe file.dds DXT5` |
 
-**Converted**: 3,400 valid DDS textures, openable in GIMP / Noesis / PVRTexTool.
+**Converted usable**: fonts (70/70), _d/_nm (simple + compressed), mapskit/decorative mostly usable.
 
-**Blocker**: ~7,819 textures have compressed/encrypted TFH metadata that `rawtex_py.py` cannot parse. Requires `rawtex` or Noesis plugin.
-
-- rawtex download: [ZenHAX](https://zenhax.com/viewtopic.php@t=7099.html) (registration required) or [MEGA](https://mega.nz/file/nV8EVZyC#o-53r4Vqu93iMMypPC4NvL1wmYCr6P15nVN4tpf3afk)
+**Blocker**: _s1 (BC5/ATI2 non-square), new-format _s, background/level textures — majority of compressed TFH remain unresolved.
 
 ### 6.2 Models (.mdl-msh → .obj)
 
@@ -205,10 +203,10 @@ Two format variants exist:
 
 | Format | Share | Tool | Notes |
 |--------|-------|------|-------|
-| **Simple MSH** (uncompressed) | ~11% (487 files) | `msh_to_obj_v2.py` (in-house) ✅ | stride=24/36 auto-detect, direct OBJ export |
-| **Complex MSH** (compressed) | ~89% (3,871 files) | Noesis + AceWell plugin ⚠️ | High-entropy data, not parseable in Python |
+| **Simple MSH** (uncompressed) | ~11% (487 files) | `msh_to_obj_v3.py` (in-house) ✅ | VBytes=20-40 auto-detect, direct OBJ export |
+| **Complex MSH** (compressed) | ~89% (3,871 files) | Noesis 26-plugin pack ⚠️ | `.msh000~987` (99.5%), `.msh988+` via CLI |
 
-**Blocker**: Complex MSH uses Hammer Engine proprietary compression, not standard zlib/zstd. The only known import solution is AceWell's Noesis plugin (shared with Crossout).
+**Blocker**: Complex MSH uses Hammer Engine proprietary compression. Our 26 Noesis plugins cover `.msh000~987` (99.5%), `.msh988+` via `msh_to_obj_v3.py` CLI.
 
 - AceWell plugin: [Yandex Disk](https://yadi.sk/d/iJiQ4Ajr3PeySZ)
 - Noesis: [richwhitehouse.com](https://richwhitehouse.com/noesis/)
@@ -234,11 +232,11 @@ Two format variants exist:
 ```
 TPAK Extraction
   │
-  ├── .tfd + .tfh ──→ rawtex / Noesis ──→ .dds (usable)
-  │     └── Blocker: 68% TFH compressed, needs external tool
+  ├── .tfd + .tfh ──→ rawtex_py / Noesis v2 ──→ .dds (fonts ✅, _s1/_s ❌)
+  │     └── Blocker: _s1 non-square BC5/ATI2, new-format _s, bg textures
   │
-  ├── .mdl-msh ──→ msh_to_obj_v2.py ──→ .obj (11% simple format)
-  │     └── Blocker: 89% complex compressed, needs Noesis + AceWell plugin
+  ├── .mdl-msh ──→ msh_to_obj_v3.py ──→ .obj (11% simple format)
+  │     └── Blocker: 89% complex compressed, via Noesis 26 plugins
   │
   ├── .fsb ──→ fsb_aud_extr ──→ .wav / .ogg ✅
   │
