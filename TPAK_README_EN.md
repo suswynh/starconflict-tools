@@ -189,13 +189,14 @@ Extracted files are **not all directly usable**. Further conversion is needed de
 
 | Tool | Coverage | Usage |
 |------|----------|-------|
-| `rawtex_py.py` (in-house) | ~50% (simple TFH) | `python rawtex_py.py dir/ --auto` |
-| `tex_StarConflict_tfh_tfd_v2.py` (Noesis plugin) | ~70% (fonts ✅, _d/_nm ✅) | Drag .tfh into Noesis |
+| `tex_targem_py.py` (in-house) | **99.6%** (11,623/11,671) | `python tex_targem_py.py file.tfh` |
+| `batch_tex_all.py` (batch) | One-shot full conversion | `python batch_tex_all.py --workers 8` |
+| `tex_StarConflict_tfh_tfd_v2.py` (Noesis) | fonts-specific | Drag .tfh into Noesis |
 | `rawtex` (id-daemon) | ~90% (fallback) | `RawtexCmd.exe file.dds DXT5` |
 
-**Converted usable**: fonts (70/70), _d/_nm (simple + compressed), mapskit/decorative mostly usable.
+**Converted**: 11,623 valid DDS textures, **all formats supported** (DXT1/3/5, RGBA32, fonts).
 
-**Blocker**: _s1 (BC5/ATI2 non-square), new-format _s, background/level textures — majority of compressed TFH remain unresolved.
+**Remaining**: ~48 .tfh failed (missing TFD, unrecognized format), irradiance cubemap needs re-extraction.
 
 ### 6.2 Models (.mdl-msh → .obj)
 
