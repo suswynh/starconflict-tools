@@ -2,6 +2,8 @@
 
 A pure C command-line tool that converts Hammer Engine `.mdl-mshXXX` static meshes to Autodesk FBX format. Zero external dependencies — no Noesis or Autodesk SDK required.
 
+> **v1.1** (2026-06) — Fixed triangle winding order (face normal inversion issue). Batch mode now overwrites existing files by default.
+
 ## Building
 
 **Prerequisites**: Visual Studio 2019 or 2022 (with C++ Desktop Development workload)
@@ -67,7 +69,7 @@ fbx_output/
             └── map002.fbx
 ```
 
-**Resume support**: Existing output files (>0 bytes) are automatically skipped. Re-run after interruption without re-converting.
+**Overwrite mode**: v1.1+ overwrites existing files by default. For resume support (skip already-converted files), rename or move existing outputs first.
 
 ## Conversion Pipeline
 
@@ -82,13 +84,17 @@ fbx_output/
 Exported data:
 - Vertex positions (position xyz)
 - UV coordinates (set 0, per-vertex mapping, V auto-flipped)
-- Triangle face indices
+- Triangle face indices (**v1.1: auto-reverses winding order** to match FBX front-face convention)
+
+> **About normals**: Hammer Engine's triangle winding direction is opposite to standard FBX/Blender/OBJ convention.
+> Noesis handles this via `RPGOPT_TRIWINDBACKWARD=1` internally.
+> Since v1.1, msh2fbx automatically swaps the 2nd and 3rd index of each triangle to reverse winding,
+> ensuring outward-facing normals when imported into Blender/Maya.
 
 Not included (MSH format lacks this data):
 - Bones/skinning
 - Material/texture references
 - Animation
-- Normals (can be computed later)
 
 ## Performance
 
@@ -96,7 +102,7 @@ Not included (MSH format lacks this data):
 |-------|-----------|------|------------|
 | Small batch | 83 | 0.5 s | ~173 files/s |
 | Medium batch | 622 | 3.4 s | ~183 files/s |
-| Full set (estimated) | ~188,000 | ~17 min | — |
+| Full set (measured) | 62,825 | ~6 min | ~175 files/s |
 
 ## Supported Formats
 

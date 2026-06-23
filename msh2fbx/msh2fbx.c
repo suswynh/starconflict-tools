@@ -249,8 +249,16 @@ static int export_fbx(const char *input_path, const char *output_path)
         free(fbx_uvs);
     }
 
-    /* 三角形索引 */
+    /* 三角形索引 — 反转卷绕方向以匹配 FBX 正面约定
+     * Hammer Engine 的三角形卷绕方向与 Noesis/FBX/Blender 相反。
+     * Noesis 通过 RPGOPT_TRIWINDBACKWARD=1 处理此问题，
+     * 此处手动交换每个三角形的第二、第三索引来反转卷绕。 */
     {
+        for (uint32_t i = 0; i + 2 < icount; i += 3) {
+            int32_t tmp = indices[i + 1];
+            indices[i + 1] = indices[i + 2];
+            indices[i + 2] = tmp;
+        }
         ufbxw_int_buffer idx_buf = ufbxw_view_int_array(scene, indices, icount);
         ufbxw_mesh_set_triangles(scene, mesh, idx_buf);
     }
@@ -346,15 +354,7 @@ static int process_directory(const char *input_dir, const char *output_dir,
                 }
                 snprintf(output_path, sizeof(output_path), "%s\\%s", output_dir, out_name);
 
-                /* 跳过已存在的输出文件 */
-                {
-                    wchar_t wout[MAX_PATH];
-                    MultiByteToWideChar(CP_UTF8, 0, output_path, -1, wout, MAX_PATH);
-                    if (GetFileAttributesW(wout) != INVALID_FILE_ATTRIBUTES) {
-                        continue;  /* 已存在，跳过 */
-                    }
-                }
-
+                /* 始终覆盖已存在的输出文件 */
                 int ret = export_fbx(input_path, output_path);
                 if (ret == 0) {
                     (*success)++;

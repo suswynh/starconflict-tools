@@ -159,14 +159,16 @@ def write_obj(vertices, uvs, indices, output_path, name="model"):
             for uv in uvs:
                 f.write(f"vt {uv[0]:.6f} {1.0 - uv[1]:.6f}\n")
             f.write("\n")
-            # 带 UV 的面
+            # 带 UV 的面 — 反转卷绕方向以匹配 OBJ 正面约定
+            # Hammer Engine 的三角形卷绕与 Noesis/OBJ 相反，
+            # 交换 b、c 索引以匹配 RPGOPT_TRIWINDBACKWARD 行为。
             for i in range(0, len(indices) - 2, 3):
-                a, b, c = indices[i]+1, indices[i+1]+1, indices[i+2]+1
+                a, b, c = indices[i]+1, indices[i+2]+1, indices[i+1]+1
                 f.write(f"f {a}/{a} {b}/{b} {c}/{c}\n")
         else:
-            # 无 UV 的面
+            # 无 UV 的面 — 反转卷绕方向
             for i in range(0, len(indices) - 2, 3):
-                a, b, c = indices[i]+1, indices[i+1]+1, indices[i+2]+1
+                a, b, c = indices[i]+1, indices[i+2]+1, indices[i+1]+1
                 f.write(f"f {a} {b} {c}\n")
 
     xs = [v[0] for v in vertices]

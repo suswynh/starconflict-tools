@@ -8,8 +8,8 @@ Star Conflict（星际争端）资源提取与格式转换工具。游戏由 Sta
 |------|------|------|
 | `tpak_extract.py` | TPAK v7/v8 容器解包（844 .pak 全部支持） | Python 3.7+ |
 | `msh_to_obj_v3.py` | MSH 网格 → OBJ（VBytes 20-44，覆盖 000~1308） | Python 3.7+ |
-| `msh2fbx/` | ⚡ **MSH → FBX 独立转换器** — 纯 C，零依赖，~183 files/s | Visual Studio 2019+ |
-| `blender_plugin/` | 🎨 **Blender 导入插件** — 直接导入 .mdl-msh*，支持 4.2 LTS / 5.0+ | Blender 4.2+ |
+| `msh2fbx/` | ⚡ **MSH → FBX 独立转换器** — 纯 C，零依赖，~175 files/s | Visual Studio 2019+ |
+| `blender_plugin/` | 🎨 **Blender 导入插件** — 基础版 + Pro版(MDF材质)，支持 4.2 LTS / 5.0+ | Blender 4.2+ |
 | `tex_targem_py.py` | 🔥 **主力纹理转换器** — 纯 Python，基于 PHP TargemImage 逻辑，支持全格式 | Python 3.7+ |
 | `rawtex_py.py` | 简单 TFH+DDSx 纹理 → 标准 DDS（已被 `tex_targem_py.py` 取代） | Python 3.7+ |
 | `batch_tex_all.py` | 批量转换全部 .tfh → .dds，多进程，保持源目录结构 | Python 3.7+ |
@@ -92,7 +92,8 @@ Star Conflict（星际争端）资源提取与格式转换工具。游戏由 Sta
 |------|------|
 | 速度 | ~183 files/s（单线程，I/O 绑定） |
 | 格式 | FBX 7400 Binary |
-| 范围 | `.mdl-msh000` ~ `.msh1308`（VBytes 20/24/28/32/36/40/44） |
+| 范围 | `.mdl-msh000` ~ `.mdl-msh1308`（VBytes 20/24/28/32/36/40/44） |
+| 编号含义 | ⚠️ 非传统LOD编号，见下方 LOD 说明 |
 | 实测 | 62,825 文件 → 100% 成功率，1.65 GB |
 
 ```powershell
@@ -117,6 +118,21 @@ cd msh2fbx; .\build.bat
 | 顶点色 | ❌ MSH 格式不含顶点色数据 |
 
 **安装**：打包为 `.zip` → Blender Preferences → Add-ons → Install from Disk。
+
+## `.mdl-mshXXX` 编号含义
+
+**编号不是传统 LOD 层级**。不同模型使用不同约定：
+
+| 模型类型 | 命名规律 | 示例 |
+|---------|------|------|
+| 简单模型（炮塔/武器） | 编号递增 = 精度递减 | `物体_01/02/03_mshxxx` = LOD1/2/3 |
+| 复杂无畏舰 | 命名差异大 | `bigship_fed`=LOD0, `bigship_fed_2`=LOD1 |
+| | | `bigship_jer_03`=LOD0, `bigship_jer`=LOD1, `bigship_jer_2`=LOD2 |
+| 多部件模型 | 间隔编号对应子网格 | `r1_h_t1` msh000/004/008 是 3 个部件高精度 |
+| 变体 | `_mod1~4` / `_s1~3` | 装备升级 / 皮肤（仅 MDF） |
+
+> **已知问题**：部分 LOD 长度不一致（低精度简化了延展结构），旋转值可能不统一。
+> 详见 [`blender_plugin/io_import_starconflict_msh_pro/README_PRO.md`](blender_plugin/io_import_starconflict_msh_pro/README_PRO.md)
 
 ## Noesis 插件包（`noesis_plugins/`）
 
@@ -296,8 +312,20 @@ python batch_msh_export.py --root ./extracted              # OBJ
 .\msh2fbx\msh2fbx.exe --batch extracted fbx_output         # FBX
 
 # 4. Preview in Blender
-# Install blender_plugin/, then File → Import → Star Conflict MSH
+# Install blender_plugin/ (基础版 io_import_starconflict_msh 或 Pro版 io_import_starconflict_msh_pro)
+# File → Import → Star Conflict MSH / Star Conflict MSH Pro
 ```
+
+### v1.1 更新 (2026-06)
+
+修复三角形卷绕方向导致的面法线反转问题，影响范围：
+
+| 工具 | 修改 | 说明 |
+|------|------|------|
+| `msh2fbx/msh2fbx.c` | 索引反转 `[i0,i1,i2]→[i0,i2,i1]` | 重新编译后可覆盖转换 |
+| `blender_plugin/*/__init__.py` | 面构建反转 | 直接生效 |
+| `blender_plugin/*/msh_importer.py` | 面构建反转（Pro版） | 直接生效 |
+| `msh_to_obj_v3.py` | OBJ 面输出反转 | 直接生效 |
 
 ### Progress
 

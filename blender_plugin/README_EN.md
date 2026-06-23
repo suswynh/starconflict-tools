@@ -4,6 +4,9 @@ Import Hammer Engine (Star Conflict) `.mdl-mshXXX` static meshes into Blender.
 
 **Compatible Versions**: Blender 4.2 LTS, Blender 5.0+
 
+> **v2.0** (2026-06) — Fixed triangle winding order (face normal inversion). MSH winding is opposite to Blender standard; now auto-reverses.
+> **Pro Edition** (`io_import_starconflict_msh_pro`) available: MDF material parsing, auto texture linking, Principled BSDF networks.
+
 ## Installation
 
 ### Method 1: ZIP Install (Recommended)
@@ -75,8 +78,18 @@ Recommended settings:
 ## File Structure
 
 ```
-io_import_starconflict_msh/
-└── __init__.py    # All plugin logic (MSH parsing + Blender import + batch)
+blender_plugin/
+├── io_import_starconflict_msh/          # Basic edition (mesh import only)
+│   └── __init__.py
+├── io_import_starconflict_msh_pro/      # Pro edition (material pipeline)
+│   ├── __init__.py
+│   ├── msh_parser.py
+│   ├── msh_importer.py
+│   ├── mdf_parser.py
+│   ├── material_builder.py
+│   └── ...
+├── io_import_starconflict_msh_pro.zip   # Pro edition ZIP package
+└── README.md
 ```
 
 ## Using with msh2fbx
@@ -87,3 +100,66 @@ io_import_starconflict_msh/
 | Preview a single model | Blender add-on |
 | Manual editing/rigging needed | Blender add-on |
 | Automated pipeline | `msh2fbx.exe` |
+
+## Pro Edition Path Configuration
+
+The Pro edition (`io_import_starconflict_msh_pro`) supports automatic texture linking with recursive sub-folder search.
+
+| Setting | Recommended Path | Description |
+|---------|-----------------|-------------|
+| Texture Search Paths | `scunpack\tex_universe_check\` | Converted DDS textures |
+| MDF Search Paths | `scunpack\output\` | MDF material definitions |
+| Texture Extensions | `.dds,.png,.tga` | Extension priority |
+
+> Pro edition uses **recursive search** (`os.walk`) — specify top-level directory only.
+> See `io_import_starconflict_msh_pro/README_PRO.md` for full documentation.
+
+---
+
+## Pro Edition Notes
+
+### Installation
+
+| Item | Notes |
+|------|-------|
+| **Separate addon** | Pro and Basic are **separate addons** — do not bundle in same zip |
+| **Can coexist** | Both can be enabled simultaneously without conflicts |
+| **Folder name** | Pro: `io_import_starconflict_msh_pro`, install same as Basic |
+
+### Prerequisites
+
+Pro edition requires these resources for automatic material creation:
+
+| Resource | Path | How to generate |
+|----------|------|-----------------|
+| DDS textures | `scunpack\tex_universe_check\` | `python batch_tex_all.py` |
+| MDF files | `scunpack\output\` | `tpak_extract.py` extraction |
+
+> ⚠️ Without textures, Pro edition still imports meshes but won't create materials (same as Basic).
+
+### First-Time Setup
+
+1. Install and enable the addon
+2. **Edit → Preferences → Add-ons → Star Conflict MSH Importer Pro** → expand
+3. Add **Texture Search Paths**: `<project>\scunpack\tex_universe_check`
+4. Add **MDF Search Paths**: `<project>\scunpack\output`
+5. Import MSH → enable **Auto-Link Materials**
+
+> First import builds texture index (~11,628 DDS files), takes 5-10 seconds. Subsequent imports use cache.
+
+### Known Limitations
+
+| Limitation | Notes |
+|------------|-------|
+| Material slot mapping | MSH lacks face-material mapping; assigned by MDF block↔MSH index order |
+| Shader restoration | Manual preset mapping, not automatic .fx parsing |
+| Cubemap | EnvSampler / ReflectionsSampler not yet implemented |
+| DDS compatibility | Some RGBA DDS may require Honeyview/GIMP |
+
+### Troubleshooting
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Pink/purple model | Textures not found | Check Texture Search Paths, clear cache |
+| No materials created | MDF not found | Verify MDF is alongside MSH, or add MDF Search Path |
+| Wrong textures | Cache stale | Sidebar → **Clear Texture Cache** |

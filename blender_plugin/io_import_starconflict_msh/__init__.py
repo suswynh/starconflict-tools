@@ -149,9 +149,11 @@ def build_mesh(name, positions, uvs, indices):
     Returns a bpy.types.Mesh ready to be linked to an Object.
     """
     # Build face list (every 3 indices = 1 triangle)
+    # 反转三角形卷绕方向：Hammer Engine 的卷绕与 Blender 正面约定相反。
+    # 交换每个三角形的第二和第三索引以匹配 Noesis RPGOPT_TRIWINDBACKWARD 行为。
     faces = []
     for i in range(0, len(indices) - 2, 3):
-        faces.append((indices[i], indices[i+1], indices[i+2]))
+        faces.append((indices[i], indices[i+2], indices[i+1]))
 
     # Create mesh
     mesh = bpy.data.meshes.new(name=name)
