@@ -38,10 +38,12 @@ def build_mesh(name, positions, uvs, indices):
         bpy.types.Mesh
     """
     faces = []
-    # 反转三角形卷绕方向：Hammer Engine 的卷绕与 Blender 正面约定相反。
-    # 交换每个三角形的第二和第三索引以匹配 Noesis RPGOPT_TRIWINDBACKWARD 行为。
+    # X 轴取反已同步翻转卷绕方向（与 Noesis v1.1 修复一致）
     for i in range(0, len(indices) - 2, 3):
-        faces.append((indices[i], indices[i+2], indices[i+1]))
+        faces.append((indices[i], indices[i+1], indices[i+2]))
+
+    # 修复前向轴：MSH 前向 -Z → +Z（与 Noesis v1.2 一致）
+    positions = [(x, y, -z) for x, y, z in positions]
 
     mesh = bpy.data.meshes.new(name=name)
     mesh.from_pydata(positions, [], faces)

@@ -120,7 +120,7 @@ static int parse_msh(const uint8_t *data, size_t size,
         memcpy(&pz, v + 8,  4);
         (*out_positions)[i*3 + 0] = px;
         (*out_positions)[i*3 + 1] = py;
-        (*out_positions)[i*3 + 2] = pz;
+        (*out_positions)[i*3 + 2] = -pz;  /* 修复前向轴：MSH -Z→+Z 适配 Maya */
 
         /* UV: 2 floats (8 bytes) at uv_off */
         if (uv_off >= 0) {
@@ -249,16 +249,8 @@ static int export_fbx(const char *input_path, const char *output_path)
         free(fbx_uvs);
     }
 
-    /* 三角形索引 — 反转卷绕方向以匹配 FBX 正面约定
-     * Hammer Engine 的三角形卷绕方向与 Noesis/FBX/Blender 相反。
-     * Noesis 通过 RPGOPT_TRIWINDBACKWARD=1 处理此问题，
-     * 此处手动交换每个三角形的第二、第三索引来反转卷绕。 */
+    /* 三角形索引 — X 轴取反已同步翻转卷绕方向，无需额外处理 */
     {
-        for (uint32_t i = 0; i + 2 < icount; i += 3) {
-            int32_t tmp = indices[i + 1];
-            indices[i + 1] = indices[i + 2];
-            indices[i + 2] = tmp;
-        }
         ufbxw_int_buffer idx_buf = ufbxw_view_int_array(scene, indices, icount);
         ufbxw_mesh_set_triangles(scene, mesh, idx_buf);
     }

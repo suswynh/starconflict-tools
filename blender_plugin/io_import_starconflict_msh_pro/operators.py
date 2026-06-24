@@ -65,7 +65,7 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
             ('NOESIS_COMPAT', "Noesis Compat", "Match Noesis preview"),
             ('AUTO_FLIP_YZ', "Auto (Flip Y/Z)", "Swap Y and Z coordinates"),
         ],
-        default='Y_UP_TO_Z_UP',
+        default='Z_UP_TO_Y_UP',
     )
 
     # ── Material settings ──
@@ -210,7 +210,7 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
             ('NOESIS_COMPAT', "Noesis Compat", ""),
             ('AUTO_FLIP_YZ', "Auto (Flip Y/Z)", ""),
         ],
-        default='Y_UP_TO_Z_UP',
+        default='Z_UP_TO_Y_UP',
     )
 
     auto_link_materials: BoolProperty(

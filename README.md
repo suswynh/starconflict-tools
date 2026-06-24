@@ -316,16 +316,26 @@ python batch_msh_export.py --root ./extracted              # OBJ
 # File → Import → Star Conflict MSH / Star Conflict MSH Pro
 ```
 
-### v1.1 更新 (2026-06)
+### 版本历史
 
-修复三角形卷绕方向导致的面法线反转问题，影响范围：
+#### v1.2 (当前, 2026-06-23) — 修复前向轴
 
-| 工具 | 修改 | 说明 |
+> **结论**：MSH 的前向轴是 **-Z**，与 Maya（前=+Z）相反。对 Z 坐标取反即可同时解决法线翻转和轴向问题。
+
+| 工具 | 修改 | 效果 |
 |------|------|------|
-| `msh2fbx/msh2fbx.c` | 索引反转 `[i0,i1,i2]→[i0,i2,i1]` | 重新编译后可覆盖转换 |
-| `blender_plugin/*/__init__.py` | 面构建反转 | 直接生效 |
-| `blender_plugin/*/msh_importer.py` | 面构建反转（Pro版） | 直接生效 |
-| `msh_to_obj_v3.py` | OBJ 面输出反转 | 直接生效 |
+| `msh2fbx/msh2fbx.c` | Z 取反：`pz→-pz` | Maya 即开即用，Blender 走标准 FBX 导入 |
+| `NOESIS/plugins/.../inc_starconflict_msh.py` | offset+8 Z 取反 | v1.2 |
+| `blender_plugin/*/__init__.py` + `msh_importer.py` | `(x,y,z)→(x,y,-z)`，默认 Z-up→Y-up | Blender 直接导入即标准姿势 |
+| `msh_to_obj_v3.py` | `(x,y,z)→(x,y,-z)` | OBJ 前向正确 |
+
+#### v1.1 (2026-06-22) — 试错：X 镜像 + 卷绕反转
+
+尝试通过 X 轴取反和三角形索引反转修复法线。**部分有效但 Maya 仍需 Y180° 旋转**。
+
+#### v1.0 (初始)
+
+面法线翻转，模型在 Blender/Maya 中显示异常。Noesis 通过 `RPGOPT_TRIWINDBACKWARD=1` 内部修正。
 
 ### Progress
 

@@ -4,7 +4,7 @@
 
 **兼容版本**：Blender 4.2 LTS、Blender 5.0+
 
-> **v2.0** (2026-06) — 修复三角形卷绕方向（面法线反转问题）。MSH 原始卷绕与 Blender 正面约定相反，现已自动反转。
+> **v2.1** (2026-06) — 修复前向轴：MSH 前向 -Z→+Z，默认坐标系改为 Z-up→Y-up。Blender 直接导入即标准姿势。
 > **Pro 版** (`io_import_starconflict_msh_pro`) 已发布：支持 MDF 材质解析、自动贴图链接、Principled BSDF 节点网络。
 
 ## 安装

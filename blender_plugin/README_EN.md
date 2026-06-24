@@ -4,7 +4,7 @@ Import Hammer Engine (Star Conflict) `.mdl-mshXXX` static meshes into Blender.
 
 **Compatible Versions**: Blender 4.2 LTS, Blender 5.0+
 
-> **v2.0** (2026-06) — Fixed triangle winding order (face normal inversion). MSH winding is opposite to Blender standard; now auto-reverses.
+> **v2.1** (2026-06) — Fixed front axis: MSH front -Z→+Z, default up-axis changed to Z-up→Y-up. Import-ready for Blender.
 > **Pro Edition** (`io_import_starconflict_msh_pro`) available: MDF material parsing, auto texture linking, Principled BSDF networks.
 
 ## Installation

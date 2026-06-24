@@ -28,7 +28,7 @@
 bl_info = {
     "name": "Star Conflict MSH Importer Pro",
     "author": "Sisyphus",
-    "version": (2, 0, 0),
+    "version": (2, 1, 0),
     "blender": (4, 2, 0),
     "location": "File > Import, 3D View > Sidebar > Star Conflict",
     "description": (

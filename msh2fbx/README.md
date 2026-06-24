@@ -3,7 +3,7 @@
 纯 C 命令行工具，将 Hammer Engine 的 `.mdl-mshXXX` 静态网格转换为 Autodesk FBX 格式。
 零外部依赖，无需 Noesis 或 Autodesk SDK。
 
-> **v1.1** (2026-06) — 修复三角形卷绕方向（面法线反转问题）。批量模式默认覆盖已存在文件。
+> **v1.2** (2026-06) — 修复前向轴：MSH 模型前向为 -Z，取反后前向为 +Z（Maya/FBX 兼容）。批量模式默认覆盖。
 
 ## 编译
 
@@ -70,7 +70,7 @@ fbx_output/
             └── map002.fbx
 ```
 
-**覆盖模式**：v1.1 起默认覆盖已存在文件。如需断点续传（跳过已转换文件），请先重命名或移动已有输出。
+**覆盖模式**：v1.1+ 默认覆盖已存在文件。如需断点续传请先备份。
 
 ## 转换流程
 
@@ -84,12 +84,12 @@ fbx_output/
 导出内容：
 - 顶点位置 (position xyz)
 - UV 坐标 (set 0, per-vertex mapping, V 自动翻转)
-- 三角形面索引（**v1.1: 自动反转卷绕方向**以匹配 FBX 正面约定）
+- 三角形面索引（**v1.2: Z 轴取反**，前向 -Z→+Z 以匹配 Maya/FBX 正面约定）
 
-> **关于法线**：Hammer Engine 的三角形卷绕方向与 FBX/Blender/OBJ 正面约定相反。
-> Noesis 通过 `RPGOPT_TRIWINDBACKWARD=1` 内部处理此问题。
-> v1.1 起 msh2fbx 在写入 FBX 前自动交换每三角形第二、第三索引来反转卷绕，
-> 使导入 Blender/Maya 时面法线正常朝外。
+> **关于轴向**：Hammer Engine MSH 模型使用 Y-up 坐标系，前向为 -Z。
+> 导入 Maya（Y-up, 前=+Z）时模型朝后；导入 Blender（Z-up）需额外旋转。
+> v1.2 起 msh2fbx 对 Z 坐标取反，使模型前向变为 +Z，Maya 即开即用，
+> Blender 通过标准 FBX 导入器的 Y→Z 转换即可正常显示。
 
 不包含（MSH 格式无此数据）：
 - 骨骼/蒙皮

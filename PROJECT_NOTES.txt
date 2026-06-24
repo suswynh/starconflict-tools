@@ -1,0 +1,52 @@
+Star Conflict 资源提取 — 项目总结
+===============================
+
+解包: scunpack.exe (846 PAK) + tpak_extract.py (844 .pak)
+模型: Noesis 26插件 (.msh000-987, 99.5%) + msh_to_obj_v3.py (OBJ+UV)
+纹理: tex_targem_py.py (纯Python, PHP逻辑迁移) + batch_tex_all.py (批量)
+
+纹理支持现状 (2026-06-18):
+  ✅ _d, _nm       — DXT1/3/5, 全覆盖
+  ✅ _s (新旧版)   — DXT1/5/RGBA, format 0x07→DXT1
+  ✅ _s1           — DXT1/5/RGBA, format 0x07→DXT1, 非方形支持
+  ✅ mapskit/decorative — DXT1/3/5/RGBA, 全覆盖
+  ✅ fonts         — R8/L8/ARGB, 70/70 (Noesis v2/v3, 纯Python不支持)
+  ✅ ui/particles/reaper — 全量
+  ✅ levels        — 基本覆盖 (irradiance cubemap缺TFD)
+  
+批量转换结果: 11,671个TFH → 11,623个DDS成功 (99.6%), 11.2GB
+输出目录: scunpack/tex_universe_check/ (保持源层级)
+
+核心工具:
+  tex_targem_py.py            — 主力纹理转换 (PHP TargemImage逻辑)
+  batch_tex_all.py            — 批量转换, 多进程, 保持目录结构
+  tex_StarConflict_tfh_tfd_v3.py — Noesis插件 (PHP mip表 + fallback)
+  tex_StarConflict_tfh_tfd_v4_php.py — Noesis插件 (纯PHP对比验证)
+
+已知限制:
+  ⚠️ Noesis RGBA渲染: B/R通道互换 (DDS导出正常)
+  ⚠️ RGBA DDS兼容性: 部分查看器不支持无压缩RGBA (用Honeyview/GIMP/PS)
+  ⚠️ 极小尺寸纹理: 部分mip级仅几个像素, 属正常现象
+  ⚠️ irradiance cubemap: 缺TFD文件
+  ⚠️ VBytes=40角色模型: UV偏移待修正
+
+版本历史:
+  v1: rawtex_py.py (简单TFH启发式) + tex_v1 (简单位流)
+  v2: tex_v2 (NoeBitStream + guess_size fallback + font)
+  v3: tex_v3 (PHP mip表精确计算 + v2 fallback, 当前主力)
+  v4: tex_v4_php (纯PHP逻辑迁移, 对比验证用)
+
+  ── 模型转换工具版本历史 ──
+
+  v1.0 (初始): 面法线翻转，模型在 Blender/Maya 方向异常。
+      Noesis 用 RPGOPT_TRIWINDBACKWARD=1 内部修正，其他工具未处理。
+
+  v1.1 (2026-06-22, 试错): 三角形索引反转 + X 镜像
+      错误假设左右镜像导致法线问题。索引改为 [i0,i2,i1]，X 轴取反。
+      结果: 法线正常，但模型仍左右颠倒，且 Maya 仍需 Y180 旋转。
+
+  v1.2 (2026-06-23, 正确): Z 轴取反 — 前向轴修复
+      根因: MSH 前向轴是 -Z，Maya/FBX 前向是 +Z。
+      Z 取反 (x,y,z)→(x,y,-z) 一次性解决法线翻转+前向问题。
+      修改: msh2fbx.c, Noesis inc_starconflict_msh.py,
+            blender_plugin 基础版/Pro版, msh_to_obj_v3.py

@@ -2,7 +2,7 @@
 
 A pure C command-line tool that converts Hammer Engine `.mdl-mshXXX` static meshes to Autodesk FBX format. Zero external dependencies — no Noesis or Autodesk SDK required.
 
-> **v1.1** (2026-06) — Fixed triangle winding order (face normal inversion issue). Batch mode now overwrites existing files by default.
+> **v1.2** (2026-06) — Fixed front axis: MSH models face -Z, negated to +Z for Maya/FBX compatibility. Batch mode overwrites by default.
 
 ## Building
 

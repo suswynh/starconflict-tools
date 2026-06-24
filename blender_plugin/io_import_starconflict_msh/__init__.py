@@ -17,7 +17,7 @@
 bl_info = {
     "name": "Star Conflict MSH Importer",
     "author": "Sisyphus",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (4, 2, 0),
     "location": "File > Import",
     "description": "Import Star Conflict Hammer Engine .mdl-mshXXX mesh files",
@@ -149,11 +149,13 @@ def build_mesh(name, positions, uvs, indices):
     Returns a bpy.types.Mesh ready to be linked to an Object.
     """
     # Build face list (every 3 indices = 1 triangle)
-    # 反转三角形卷绕方向：Hammer Engine 的卷绕与 Blender 正面约定相反。
-    # 交换每个三角形的第二和第三索引以匹配 Noesis RPGOPT_TRIWINDBACKWARD 行为。
+    # X 轴取反已同步翻转卷绕方向（与 Noesis v1.1 修复一致）
     faces = []
     for i in range(0, len(indices) - 2, 3):
-        faces.append((indices[i], indices[i+2], indices[i+1]))
+        faces.append((indices[i], indices[i+1], indices[i+2]))
+
+    # 修复前向轴：MSH 前向 -Z → +Z（与 Noesis v1.2 一致）
+    positions = [(x, y, -z) for x, y, z in positions]
 
     # Create mesh
     mesh = bpy.data.meshes.new(name=name)
@@ -254,7 +256,7 @@ class SC_OT_import_msh(Operator, ImportHelper):
             ('NOESIS_COMPAT', "Noesis Compat", "Match Noesis preview orientation (~0, 290, 130)"),
             ('AUTO_FLIP_YZ', "Auto (Flip Y/Z)", "Swap Y and Z coordinates"),
         ],
-        default='Y_UP_TO_Z_UP',
+        default='Z_UP_TO_Y_UP',
     )
 
     def execute(self, context):
@@ -425,7 +427,7 @@ class SC_OT_import_msh_batch(Operator, ImportHelper):
             ('NOESIS_COMPAT', "Noesis Compat", "Match Noesis preview orientation"),
             ('AUTO_FLIP_YZ', "Auto (Flip Y/Z)", "Swap Y and Z coordinates"),
         ],
-        default='Y_UP_TO_Z_UP',
+        default='Z_UP_TO_Y_UP',
     )
 
     def execute(self, context):
