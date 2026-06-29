@@ -1,0 +1,51 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, docks",6
+1,object_norm,jer_plates01_wreck,"docks, jer_plates01_wreck, jer_plates01_wreck_msk",5
+2,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, docks",6
+3,object_norm,bs_center,"bs_center, bs_center_msk, docks",6
+4,object_norm,js_individual_details,"docks, js_individual_details",6
+5,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_03",6
+6,object_norm,jer_plates01,"jer_plates01, jer_plates01_msk, station_03",5
+7,object_norm,jer_plates01_wreck,"jer_plates01_wreck, jer_plates01_wreck_msk, station_03",5
+8,object_norm,js_individual_details,"js_individual_details, station_03",6
+9,object_norm,wreckstile01,"station_03, wreckstile01, wreckstile01_msk",6
+10,object_norm,jer_plates01,"docks, jer_plates01, jer_plates01_msk",5
+11,object_norm,jer_plates01_wreck,"jer_plates01_wreck, jer_plates01_wreck_msk, station_04",5
+12,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_04",6
+13,object_norm,js_individual_details,"js_individual_details, station_04",6
+14,object_norm,jer_plates01,"jer_plates01, jer_plates01_msk, station_04",5
+15,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_04",6
+16,object_norm,bs_center,"bs_center, bs_center_msk, station_04",6
+17,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_03",6
+18,object_norm,bs_center,"bs_center, bs_center_msk, station_03",6
+19,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_04",6
+20,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_03",6
+21,object_norm,jerichonec,"jerichonec, jerichonec_msk, station_03",6
+22,object_norm,wreckstile01,"docks, wreckstile01, wreckstile01_msk",6
+23,object_norm,prec_alpha_assets,"prec_alpha_assets, station_03",3
+24,object_norm,wreckstile01,"station_04, wreckstile01, wreckstile01_msk",6
+25,object_norm,jerichonec,"jerichonec, jerichonec_msk, station_01",6
+26,object_norm,wreckstile01,"station_01, wreckstile01, wreckstile01_msk",6
+27,object_norm,jerichonec,"jerichonec, jerichonec_msk, station_02",6
+28,object_norm,wreckstile01,"station_02, wreckstile01, wreckstile01_msk",6
+29,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_01",6
+30,object_norm,jer_plates01,"jer_plates01, jer_plates01_msk, station_01",5
+31,object_norm,jer_plates01_wreck,"jer_plates01_wreck, jer_plates01_wreck_msk, station_01",5
+32,object_norm,js_individual_details,"js_individual_details, station_01",6
+33,object_norm,jer_plates01_wreck,"jer_plates01_wreck, jer_plates01_wreck_msk, station_02",5
+34,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_02",6
+35,object_norm,js_individual_details,"js_individual_details, station_02",6
+36,object_norm,jer_plates01,"jer_plates01, jer_plates01_msk, station_02",5
+37,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_02",6
+38,object_norm,bs_center,"bs_center, bs_center_msk, station_02",6
+39,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_01",6
+40,object_norm,bs_center,"bs_center, bs_center_msk, station_01",6
+41,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_02",6
+42,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_01",6
+43,object_norm,prec_alpha_assets,"prec_alpha_assets, station_01",3
+44,animated_mock,affect_animate,"affect, affect_animate",2
+45,animated_mock,affect_animate,"affect, affect_animate",2
+46,object_norm,jer_plates01_wreck,"jer_plates01_wreck, jer_plates01_wreck_msk",4
+47,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+48,animated_mock,affect_animate,"affect_animate, gate_scroll_red",2
+49,object_norm,bs_center,"bs_center, bs_center_msk",5

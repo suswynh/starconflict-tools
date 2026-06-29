@@ -1,0 +1,30 @@
+{
+  "_comment": "材质映射模板: paper_airplanes/beacon",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "5337004032433a6d",
+  "label": "paper_airplanes/beacon",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\event\\paper_airplanes\\beacon",
+  "mdf_file": "paper_beacon.mdf",
+  "mdf_blocks": 3,
+  "msh_count": 9,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | color"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | color"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | color"
+    }
+  }
+}

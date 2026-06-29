@@ -1,0 +1,84 @@
+{
+  "_comment": "材质映射模板: area2/thar_alienruins",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "4a882a78a15cf104",
+  "label": "area2/thar_alienruins",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\thar_alienruins",
+  "mdf_file": "map.mdf",
+  "mdf_blocks": 12,
+  "msh_count": 703,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm_blend | prec_bscgr_rock"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_basic_gray_rock2"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm_blend | prec_bscgr_rock"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_basic_gray_rock2"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm_blend | prec_bscgr_rock"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_basic_gray_rock2"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_crck_gr_rck"
+    }
+  }
+}

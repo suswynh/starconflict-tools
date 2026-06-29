@@ -1,0 +1,60 @@
+{
+  "_comment": "材质映射模板: area3/ceres3_asteroidcity",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "84321fa702991cb6",
+  "label": "area3/ceres3_asteroidcity",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area3\\ceres3_asteroidcity",
+  "mdf_file": "ceres3_asteroidcity.mdf",
+  "mdf_blocks": 8,
+  "msh_count": 136,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_hole01"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates03"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates02"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates02"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_container01"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_lava01"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | crs_plates03"
+    }
+  }
+}

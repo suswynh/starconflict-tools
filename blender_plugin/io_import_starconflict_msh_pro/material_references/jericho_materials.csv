@@ -1,0 +1,16 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,is_panels,"dreadnoughtbattle_01, is_panels, is_panels_msk",5
+1,object_norm,jer_bigship,"dreadnoughtbattle_01, jer_bigship, jer_bigship_white",5
+2,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, dreadnoughtbattle_01",6
+3,object_norm,bs_center,"bs_center, bs_center_msk, dreadnoughtbattle_01",6
+4,object_norm,is_panels,"dreadnoughtbattle_01, is_panels, is_panels_msk",5
+5,object_norm,jer_bigship,"dreadnoughtbattle_01, jer_bigship, jer_bigship_white",5
+6,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, dreadnoughtbattle_01",6
+7,object_norm,bs_center,"bs_center, bs_center_msk, dreadnoughtbattle_01",6
+8,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_02, bs_imper_engines_msk, dreadnoughtbattle_01",6
+9,object_norm,jer_bigship,"dreadnoughtbattle_01, jer_bigship, jer_bigship_white",5
+10,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_02, bs_imper_engines_dark_msk, dreadnoughtbattle_01",6
+11,object_norm,jer_engines,"dreadnoughtbattle_01, jer_engines",6
+12,object_norm,is_panels,"dreadnoughtbattle_01, is_panels, is_panels_msk",5
+13,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, dreadnoughtbattle_01",6
+14,object_norm,bs_center,"bs_center, bs_center_msk, dreadnoughtbattle_01",6

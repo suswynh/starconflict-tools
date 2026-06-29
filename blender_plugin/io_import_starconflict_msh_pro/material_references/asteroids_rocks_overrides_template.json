@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: models/asteroids_rocks",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "6cab135627e36729",
+  "label": "models/asteroids_rocks",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\asteroids_rocks",
+  "mdf_file": "asteroid_1.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 31,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | asteroid_broken"
+    }
+  }
+}

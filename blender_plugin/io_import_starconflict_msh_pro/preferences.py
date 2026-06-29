@@ -84,8 +84,51 @@ class SC_ProPreferences(bpy.types.AddonPreferences):
         default=True,
     )
 
+    # ── Unpack root & Material Library ──
+    unpack_root_default: StringProperty(
+        name="Default Unpack Root",
+        description="Default Star Conflict unpack root directory. "
+                    "Used for material library, name resolution, and Collection organization.",
+        subtype='DIR_PATH',
+        default="",
+    )
+
+    material_library_path: StringProperty(
+        name="Material Library JSON",
+        description="Path to pre-generated material library JSON file. "
+                    "Leave empty to use embedded default library.",
+        subtype='FILE_PATH',
+        default="",
+    )
+
+    # ── Name Resolution ──
+    collection_depth: IntProperty(
+        name="Collection Depth",
+        description="How many directory levels to create as Blender Collections "
+                    "(-1=all levels mirror folder tree, 0=no collections, "
+                    "2=recommended for limited depth)",
+        default=-1,
+        min=-1,
+        max=10,
+    )
+
+    use_abbreviations: BoolProperty(
+        name="Use Abbreviations",
+        description="Use game-internal abbreviations for long directory names "
+                    "(empire→emp, federation→fed, jericho→jer, etc.)",
+        default=False,
+    )
+
     def draw(self, context):
         layout = self.layout
+
+        # ── Unpack Root ──
+        box = layout.box()
+        box.label(text="Unpack Root & Material Library", icon='FILE_FOLDER')
+        box.prop(self, "unpack_root_default")
+        box.prop(self, "material_library_path")
+        row = box.row()
+        row.label(text="💡 指定解包根目录以获得最佳材质匹配和冲突检测", icon='INFO')
 
         # ── Texture Search Paths ──
         box = layout.box()
@@ -119,6 +162,21 @@ class SC_ProPreferences(bpy.types.AddonPreferences):
         box = layout.box()
         box.label(text="Texture Settings", icon='TEXTURE')
         box.prop(self, "tex_extensions")
+
+        # ── Name Resolution ──
+        box = layout.box()
+        box.label(text="Name Resolution", icon='OUTLINER_COLLECTION')
+        box.prop(self, "collection_depth")
+        if self.collection_depth == -1:
+            box.label(text="  → 全层级：镜像完整文件夹目录树作为 Collection 层级")
+        elif self.collection_depth == 0:
+            box.label(text="  → 不创建 Collection")
+        else:
+            box.label(text=f"  → 使用最近 {self.collection_depth} 层目录")
+        box.prop(self, "use_abbreviations")
+        if self.use_abbreviations:
+            box.label(text="Abbreviations: empire→emp, federation→fed, "
+                          "jericho→jer, dreadnought→dred, etc.")
 
         # ── Defaults ──
         box = layout.box()

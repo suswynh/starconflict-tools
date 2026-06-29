@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: models/jer_outpost",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "6dc8338228891e4e",
+  "label": "models/jer_outpost",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\jer_outpost",
+  "mdf_file": "jer_outpost_p12.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 5,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | jer_container01"
+    }
+  }
+}

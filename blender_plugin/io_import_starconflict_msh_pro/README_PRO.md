@@ -4,7 +4,8 @@
 
 **区别于基础版**：基础版 (`io_import_starconflict_msh`) 仅导入网格，Pro 版增加了完整的材质管线。
 
-> **v2.1** (2026-06) — 修复前向轴：MSH 前向 -Z→+Z，默认坐标系改为 Z-up→Y-up。导入即标准姿势。
+> **v2.2** (2026-06) — 材质静态映射库、UV2 Lightmap、Collection 全层级树、LOD 命名修复。
+> **v2.1** (2026-06) — 修复前向轴：MSH 前向 -Z→+Z，默认坐标系改为 Z-up→Y-up。
 
 **兼容版本**：Blender 4.2 LTS、Blender 5.0+
 
@@ -15,7 +16,8 @@
 | 功能 | 基础版 | Pro 版 |
 |------|:---:|:---:|
 | MSH 网格导入 | ✅ | ✅ |
-| UV 坐标导入 | ✅ | ✅ |
+| UV 坐标导入 (diffuse) | ✅ | ✅ |
+| **UV2 Lightmap 导入** | ❌ | ✅ |
 | 批量目录导入 | ✅ | ✅ |
 | 坐标系转换 | ✅ | ✅ |
 | **MDF 材质解析** | ❌ | ✅ |
@@ -23,8 +25,48 @@
 | **Principled BSDF 节点网络** | ❌ | ✅ |
 | **按材质类型还原着色器** | ❌ | ✅ |
 | **AO/Lightmap 混合** | ❌ | ✅ |
+| **Collection 层级自动组织** | ❌ | ✅ |
+| **模型命名冲突检测与重命名** | ❌ | ✅ |
+| **材质静态库 (去重复用)** | ❌ | ✅ |
+| **Map 材质映射覆盖表** | ❌ | ✅ |
 | **偏好设置面板** | ❌ | ✅ |
 | **工具侧边栏** | ❌ | ✅ |
+
+---
+
+## 新增功能 (v2.2)
+
+### UV2 Lightmap
+
+MSH 文件包含第二套 UV (lightmap)。插件自动导入为 `lightmap` UV 层。顶点格式 `VBytes=36/40/44` 时自动检测 `uint16_unorm` 或 `float2` 编码。
+
+### Collection 自动组织
+
+导入时自动按文件夹目录层级创建 Blender Collection 树。`collection_depth` 设置：
+- **-1 (全层级)**：完整镜像文件夹树，不跳过任何目录（推荐）
+- **N > 0**：仅使用最近 N 层有意义目录
+- **0**：不创建 Collection
+
+重名子文件夹自动使用 Blender 命名规则 (`.001`, `.002`)。
+
+### 模型命名冲突检测
+
+批量导入时自动检测同名模型，从路径层级生成前缀以区分。同目录 LOD 变体（`_000`, `_001`）不会触发额外前缀。
+
+### 材质静态库与注册表
+
+- `MaterialLibrary`: 预生成的 JSON 材质定义库，支持按模型名反查材质
+- `MaterialRegistry`: 运行时去重复用，基于贴图指纹 (MD5) 生成唯一材质名 `SC_{shader}_{hash[:8]}`
+- 同一贴图组合跨批次、跨 session 自动复用
+
+### Map 材质映射覆盖表
+
+Map 场景下 MSH 数量远超 MDF block 数量，1:1 索引映射不适用。插件使用 modulo 分散 + 静态映射覆盖表：
+
+1. `material_references/` 下每个地图一对 CSV + JSON 模板
+2. CSV 为明码材质参照表（block → shader → 贴图名）
+3. JSON 为 overrides 模板，人工校验后粘贴到 `material_mapping_db.json`
+4. 导入时优先查库，日志标记 `[DB:verified]` / `[fallback]`
 
 ---
 
@@ -63,10 +105,10 @@
 
 #### 贴图搜索路径（Texture Search Paths）
 
-指向已转换的纹理目录。本项目转换产物位于：
+指向已转换的纹理目录。以本项目为例，转换产物位于：
 
 ```
-D:\starconflict upcak\scunpack\tex_universe_check\
+<unpack_root>/tex_universe_check/
 ```
 
 该目录结构：
@@ -93,7 +135,7 @@ tex_universe_check/
 MDF 材质定义文件与 MSH 模型文件位于同一目录树中：
 
 ```
-D:\starconflict upcak\scunpack\output\
+<unpack_root>/output/
 ```
 
 目录结构示例：
@@ -178,15 +220,16 @@ output/
 
 ### MSH 网格格式
 
-| VBytes | 用途 |
-|--------|------|
-| 20 | 基础网格 |
-| 24 | 扩展网格 |
-| 28 | 场景物体 |
-| 32 | 中型网格 |
-| 36 | 大型网格 |
-| 40 | 角色模型 |
-| 44 | 装饰模型 |
+| VBytes | 用途 | UV1 | UV2(Lightmap) |
+|--------|------|:---:|:---:|
+| 20 | 基础网格 | ✅ | ❌ |
+| 24 | 扩展网格 | ✅ | ❌ |
+| 28 | 场景物体 | ✅ | ❌ |
+| 32 | 中型网格 (bigship/map) | ✅ | ✅ (v2.2新增) |
+| 36 | 大型网格 | ✅ | ✅ |
+| 40 | 角色模型 | ✅ | ✅ |
+| 44 | 装饰模型 | ✅ | ✅ |
+| 48 | 扩展格式 | ✅ | ✅ |
 
 ### MDF 材质类型（21 种）
 
@@ -206,17 +249,58 @@ output/
 | `sky` / `skybackground` | 天空 | 1-2 |
 | 其他 | `fresnel`, `planets`, `grassbase` 等 | 0-1 |
 
-### 贴图后缀映射
+| 贴图后缀 | 对应的 Sampler | Blender 节点连接 | 颜色空间 | 通道说明 |
+|---------|---------------|-----------------|---------|---------|
+| `_d` | DiffuseSampler | Base Color | sRGB | RGB=漫反射颜色 |
+| `_nm` | NormalSampler | Normal (DX→GL) + AO | Non-Color | **DXT5nm**: R=**AO** (FetchBumpOccl.z), G=NormalY, A=NormalX |
+| `_sc` | SpecularColorSampler | Specular IOR Level | sRGB | RGB=高光颜色, A=Gloss(部分模式) |
+| `_msk_sc` | SpecularColorSampler | Specular IOR Level | sRGB | bigship/map命名变体, 同_sc |
+| **`_msk`** | AmbOcclSampler | **G→AO** / **B→Gloss→Roughness** | Non-Color | 详见下方 [PBR Mask通道拆解](#pbr-mask通道拆解_msk) |
+| `_s1` | ColormapSampler | (染色遮罩) | sRGB | RGB=染色颜色, A=混合权重 |
+| `_glow` | Diffuse2Sampler | Emission Color | sRGB | RGB=自发光颜色 |
+| `_pdo` | LightmapSampler | AO混合 (**R通道**, UV2) | Non-Color | R=余弦加权AO (object.fx L629), G=PDO方向Y, Z=方向, W=强度 |
 
-| MDF Sampler | 后缀 | Blender 节点 | 颜色空间 |
-|------------|------|-------------|---------|
-| DiffuseSampler | `_d` | Base Color | sRGB |
-| NormalSampler | `_nm` | Normal Map (DX→GL fix) | Non-Color |
-| SpecularColorSampler | `_sc` | Specular | sRGB |
-| ColormapSampler | `_s1` | (染色遮罩) | sRGB |
-| Diffuse2Sampler | `_glow` | Emission | sRGB |
-| LightmapSampler | `_pdo` | AO混合 (R通道) | Non-Color |
-| AmbOcclSampler | `_msk` | AO混合 (R通道) | Non-Color |
+### UV 通道说明
+
+| UV 通道 | 名称 | 用途 |
+|--------|------|------|
+| UV1 | `map1` | 漫反射/法线/高光等通用贴图 (所有模型) |
+| UV2 | `lightmap` | 预计算光照贴图 `_pdo` (VBytes≥32 的模型) |
+
+> **UV2 支持范围**：VBytes=32/36/40/44/48 的模型自动解析 lightmap UV2 通道。VBytes=28 的模型因顶点格式不含 UV2 空间，lightmap 使用 UV1 采样 (PD_OCCL Type=0 模式)。
+
+### PBR Mask通道拆解 (_msk)
+
+> ⚠️ **v2.3 重大修正**：通道映射已通过着色器源码 `object.fx` 第422-428行验证，废弃此前错误的ORM假设。
+
+Star Conflict 使用 **Specular-Gloss** 工作流（Blinn-Phong 高光模型，`specPower = exp2(9*gloss+2)`），`_msk` 贴图通道含义如下：
+
+| 通道 | PBR 参数 | 值域 | 说明 |
+|------|---------|------|------|
+| **R** (红) | Height (Parallax) | 0=平, 1=最大高度 | 仅在 PARALLAX 模式用于视差高度偏移；默认模式下不使用 |
+| **G** (绿) | **AO / Occlusion** | 0=遮蔽, 1=开放 | 纹理级环境光遮蔽，与 Base Color 相乘。`object.fx L428`: `texOcclusion = masks.g` |
+| **B** (蓝) | **Glossiness** | 0=粗糙, 1=光滑 | 高光锐度，转换为 Blender Roughness = 1-Gloss。`object.fx L427`: `glossFactor = masks.b` |
+
+**已验证案例** — `fed_plates01_msk.dds` (1024×1024 DXT1):
+- R: 全黑 (avg=0) → 无视差高度
+- G: 亮绿 (avg=209-251) → AO≈0.82-0.98 (大部分区域无遮蔽)
+- B: 暗蓝 (avg=32-55) → Gloss≈0.12-0.22 → Roughness≈0.78-0.88 (粗糙板材)
+
+### _msk 双用途总结（着色器源码验证）
+
+| 着色器模式 | `_msk` 用途 | 触发条件 |
+|----------|-----------|---------|
+| **默认模式** | R=未使用, **G=AO**, **B=Gloss** | 大多数材质 |
+| `PARALLAX` | **R=高度偏移**, G/B=同上 | 视差贴图启用时 |
+| `BL2_DETAIL` | **RGB=细节反射率** (用于 albedo 混合) | 混合细节模式 |
+| `SHIP_DECAL` | **G=AO** (单通道) | 舰船贴花 |
+
+### _nm 法线贴图的 AO
+
+法线贴图 `_nm` (DXT5nm) 的 R 通道也包含 AO 数据：
+- `FetchBumpOccl(NormalSampler, uv).z` = R 通道 AO
+- 在 `BL2_DETAIL` 或 `PD_OCCL` 模式下，法线贴图 AO **会覆盖** `_msk` 的 G 通道 AO (`object.fx L550`)
+- 插件同时提取两处 AO 并全部与 Base Color 相乘
 
 ### 透明材质类型
 
@@ -230,17 +314,23 @@ output/
 
 ```
 io_import_starconflict_msh_pro/
-├── __init__.py           # 插件入口 + bl_info + register/unregister
-├── msh_parser.py         # MSH 二进制格式解析
-├── msh_importer.py       # Blender 网格构建 + 导入编排
-├── mdf_parser.py         # MDF 材质定义文件解析
-├── texture_finder.py     # 多目录贴图搜索引擎
-├── shader_presets.py     # 材质类型→Sampler映射 + 节点网络预设
-├── material_builder.py   # Blender 材质/节点创建
-├── properties.py         # Scene 级自定义属性
-├── preferences.py        # AddonPreferences 全局设置
-├── operators.py          # 导入操作符 + 工具操作符
-└── panels.py             # UI 面板（导入菜单 + 侧边栏）
+├── __init__.py              # 插件入口 + bl_info + register/unregister
+├── msh_parser.py            # MSH 二进制格式解析 (含 UV2 lightmap)
+├── msh_importer.py          # Blender 网格构建 + 导入编排
+├── mdf_parser.py            # MDF 材质定义文件解析
+├── texture_finder.py        # 多目录贴图搜索引擎
+├── shader_presets.py        # 材质类型→Sampler映射 + 节点网络预设
+├── material_builder.py      # Blender 材质/节点创建 + MSH→MDF 映射
+├── material_library.py      # 预生成静态材质库 (加载/校验/查询)
+├── material_registry.py     # 运行时材质注册表 (去重复用)
+├── material_mapping.py      # 静态 MSH→MDF 映射覆盖表
+├── material_mapping_db.json # 映射覆盖数据 (初始为空)
+├── name_resolver.py         # 命名冲突检测 + Collection 层级生成
+├── properties.py            # Scene 级自定义属性
+├── preferences.py           # AddonPreferences 全局设置
+├── operators.py             # 导入操作符 + 工具操作符
+├── panels.py                # UI 面板（导入菜单 + 侧边栏）
+└── material_references/     # 各地图材质参照表 (CSV + JSON模板)
 ```
 
 ---
@@ -252,8 +342,14 @@ io_import_starconflict_msh_pro/
     │
     ▼
 ┌──────────────────┐
-│ MSH 解析         │ → 顶点、UV、面索引
+│ MSH 解析         │ → 顶点、UV1、UV2(lightmap)、面索引
 │ (msh_parser.py)  │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│ 命名解析         │ → 冲突检测 + Collection 路径
+│ (name_resolver)  │
 └──────┬───────────┘
        │
        ▼
@@ -264,8 +360,8 @@ io_import_starconflict_msh_pro/
        │
        ▼
 ┌──────────────────┐
-│ MDF 解析         │ → MaterialBlock 列表
-│ (mdf_parser.py)  │
+│ Block 映射       │ → DB覆盖 > 1:1索引 > modulo回退
+│ (material_builder)│
 └──────┬───────────┘
        │
        ▼
@@ -276,12 +372,12 @@ io_import_starconflict_msh_pro/
        │
        ▼
 ┌──────────────────┐
-│ 材质构建         │ → Blender Material + 节点网络
-│ (material_builder)│
+│ 材质创建         │ → Registry去重 → Blender Material
+│ (material_registry)│
 └──────┬───────────┘
        │
        ▼
-   ✅ 完成：网格 + UV + 材质 + 贴图
+   ✅ 完成：网格 + UV1/UV2 + Collection + 材质 + 贴图
 ```
 
 ---
@@ -373,10 +469,10 @@ io_import_starconflict_msh_pro/
 Preferences → Star Conflict MSH Importer Pro
 
 Texture Search Paths:
-  + D:\starconflict upcak\scunpack\tex_universe_check
+  + <unpack_root>/tex_universe_check
 
 MDF Search Paths:
-  + D:\starconflict upcak\scunpack\output
+  + <unpack_root>/output
 
 Texture Extensions: .dds,.png,.tga
 Auto-Link by Default: ☑

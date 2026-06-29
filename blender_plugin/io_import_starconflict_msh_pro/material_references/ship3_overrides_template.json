@@ -1,0 +1,42 @@
+{
+  "_comment": "材质映射模板: ship/ship3",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "7c91be96668b09b1",
+  "label": "ship/ship3",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\event\\paper_airplanes\\ship\\ship3",
+  "mdf_file": "paper_ship_03.mdf",
+  "mdf_blocks": 5,
+  "msh_count": 5,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | ship3"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "ship_static_decals | decal"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "ship_decals | ?"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "ship_hull | paper"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "ship_static_decals | decal"
+    }
+  }
+}

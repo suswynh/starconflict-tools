@@ -1,0 +1,72 @@
+{
+  "_comment": "材质映射模板: area2/thar_threshold2",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "143789c2dfbac41f",
+  "label": "area2/thar_threshold2",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\thar_threshold2",
+  "mdf_file": "thar_threshold2.mdf",
+  "mdf_blocks": 10,
+  "msh_count": 305,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_cubes02"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates_full"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_cubes02"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object | gray"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates_full"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_hole01"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_shippart"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates_blue"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | sc_cubes02"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | sc_cubes02"
+    }
+  }
+}

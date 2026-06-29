@@ -1,0 +1,51 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm_blend,bs_communications_02_wreck,"bs_communications_02, bs_communications_02_wreck, bs_communications_02_wreck_msk, planet_rock_06, ship",7
+1,object_norm_blend,bs_shell_01_wreck,"bs_shell_01, bs_shell_01_wreck, bs_shell_01_wreck_msk, planet_rock_06, ship",7
+2,object_norm_blend,bs_shell_01_brown,"bs_shell_01, bs_shell_01_brown, bs_shell_01_msk, planet_rock_06, ship",6
+3,object_norm_blend,bs_communications_01_wreck2,"bs_communications_01, bs_communications_01_wreck2, bs_communications_01_wreck2_msk, planet_rock_06, ship",7
+4,object_norm_blend,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, planet_rock_06, ship",7
+5,object_norm_blend,bs_shell_02,"bs_shell_02, bs_shell_02_msk, planet_rock_06, ship",7
+6,object_norm,bs_shell_02_brown,"bs_shell_02, bs_shell_02_brown, bs_shell_02_msk, ship",5
+7,object_norm_blend,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, planet_rock_06, ship",7
+8,object_norm_blend,bs_center_wreck,"bs_center, bs_center_wreck, bs_center_wreck_msk, planet_rock_06, ship",7
+9,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, ship",6
+10,object_norm_blend,planet_rock_04,"planet_rock_04, planet_rock_04_msk, planet_rock_06, terr",6
+11,object_norm,is_details,"is_details, is_details_msk, station",6
+12,object_norm,is_communications,"is_communications, is_communications_msk, station",5
+13,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station",5
+14,object_norm,jer_plates02,"jer_plates02, jer_plates02_msk, station",5
+15,object_norm,is_communications,"is_communications, is_communications_msk, station_2",5
+16,object_norm,is_panels,"is_panels, is_panels_msk, station_2",5
+17,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_2",5
+18,object_norm,crs_plates04,"crs_plates04, station_2",5
+19,object_norm,crs_plates03,"crs_plates03, crs_plates03_msk, station_2",6
+20,object_norm,is_details,"is_details, is_details_msk, station_2",6
+21,object_norm,crs_plates02,"crs_plates02, crs_plates02_msk, station_2",5
+22,object_norm_blend,planet_rock_10,"planet_rock_06, planet_rock_10, planet_rock_10_msk",5
+23,animated_mock,planet_tech,planet_tech,1
+24,animated_mock,planet_image,planet_image,1
+25,object_norm,crs_plates03,"crs_plates03, crs_plates03_msk, station",6
+26,object_norm,is_panels,"is_panels, is_panels_msk, station",5
+27,object_norm,crs_plates04,"crs_plates04, station",5
+28,object_norm,jer_plates02,"jer_plates02, jer_plates02_msk, station_2",5
+29,blank_object,-,-,0
+30,object_norm_blend,bs_communications_02_wreck,"bs_communications_02, bs_communications_02_wreck, bs_communications_02_wreck_msk, planet_rock_06, station_2",7
+31,animated_mock,planet_image,planet_image,1
+32,animated_mock,planet_tech,planet_tech,1
+33,animated_mock,planet_image,planet_image,1
+34,animated_mock,planet_tech,planet_tech,1
+35,object_norm_blend,planet_rock_10_2,"planet_rock_06, planet_rock_10, planet_rock_10_2, terr",5
+36,object_norm_blend,planet_rock_12,"kamni, planet_rock_06, planet_rock_12, planet_rock_12_msk",6
+37,object_norm_blend,planet_rock_10_2,"planet_rock_06, planet_rock_10, planet_rock_10_2",4
+38,object_norm_blend,planet_rock_09,"planet_rock_06, planet_rock_09",5
+39,animated_mock,planet_tech,planet_tech,1
+40,animated_mock,planet_tech,planet_tech,2
+41,animated_mock,planet_image,planet_image,1
+42,object_norm,is_details,"is_details, is_details_msk",5
+43,object_norm,is_communications,"is_communications, is_communications_msk",4
+44,animated_mock,gate_scroll_orange,"gate_mask03, gate_scroll_orange",2
+45,animated_mock,gate_scroll_orange,gate_scroll_orange,1
+46,object_norm_blend,bs_shell_01_wreck,"bs_shell_01, bs_shell_01_wreck, bs_shell_01_wreck_msk, planet_rock_06",6
+47,object_norm,flags,"flags, flags_msk",4
+48,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, station_2",6
+49,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk",5

@@ -1,0 +1,19 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,asteroid_lava01,"asteroid_detail01, asteroid_hole01, asteroid_lava01, asteroids",6
+1,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+2,object_norm,crs_plates_brk01,"crs_plates_brk01, crs_plates_brk01_msk, plates_detail, shipwreck",6
+3,object_norm,crs_detplates,"crs_detplates, crs_detplates_msk, shipwreck",6
+4,object_norm,crs_plates04,"crs_plates04, plates_detail, shipwreck",5
+5,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, shipwreck",6
+6,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail, shipwreck",6
+7,object_norm,crs_set03,"crs_set03, crs_set03_msk, plates_detail, shipwreck",6
+8,object_norm,sc_cubes02,"construction, plates_detail, sc_cubes02, sc_cubes02_msk",7
+9,object_norm,sc_cubes,"construction, plates_detail, sc_cubes, sc_cubes_msk",6
+10,object_norm,sc_plates01,"construction, plates_detail, sc_plates01, sc_plates01_msk",6
+11,object_norm,sc_plates02,"construction, plates_detail, sc_plates02, sc_plates02_msk",6
+12,object_norm,sc_crack_plates,"construction, sc_crack_plates, sc_crack_plates_msk",5
+13,object_norm,sc_elements01,"construction, sc_elements01, sc_elements01_msk",5
+14,skybackground,asteroids_02,asteroids_02,2
+15,skybackground,asteroids_04,asteroids_04,2
+16,skybackground,asteroids_01,asteroids_01,2
+17,skybackground,asteroids_03,asteroids_03,2

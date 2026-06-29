@@ -1,0 +1,24 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,planet_ilay1,"planet_ilay1, planet_ilay1_msk",4
+1,sky,planet_aura,planet_aura,1
+2,skybackground,asteroids_04,asteroids_04,2
+3,skybackground,asteroids_02,asteroids_02,2
+4,skybackground,asteroids_03,asteroids_03,2
+5,skybackground,asteroids_01,asteroids_01,2
+6,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+7,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, wrecks2",6
+8,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, wrecks2",6
+9,object_norm,crs_plates03,"crs_plates03, crs_plates03_msk, wrecks2",6
+10,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, wrecks2",6
+11,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, wrecks2",6
+12,object_norm,bs_shell_01_yellow,"bs_shell_01, bs_shell_01_msk, bs_shell_01_yellow, wrecks2",6
+13,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, wrecks2",6
+14,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, wrecks2",6
+15,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, wrecks2",6
+16,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, wrecks2",6
+17,object_norm,bs_shell_01_yellow,"bs_shell_01, bs_shell_01_msk, bs_shell_01_yellow, wrecks2",6
+18,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, wrecks2",6
+19,object_norm,bs_center,"bs_center, bs_center_msk, wrecks2",6
+20,object_norm,cable01,"cable01, wrecks2",5
+21,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, wrecks2",6
+22,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, wrecks2",6

@@ -112,12 +112,73 @@ cd msh2fbx; .\build.bat
 | 特性 | 说明 |
 |------|------|
 | 导入方式 | File → Import → Star Conflict MSH (.mdl-msh*) |
-| UV 支持 | ✅ UV 通道（命名 "map1"） |
+| UV 支持 | ✅ UV1 (`map1`) + UV2 光照贴图 (`lightmap`, VBytes≥32) |
 | 坐标系 | 5 种预设（默认 Y-up → Z-up） |
 | 批量 | 支持目录批量导入 |
 | 顶点色 | ❌ MSH 格式不含顶点色数据 |
 
 **安装**：打包为 `.zip` → Blender Preferences → Add-ons → Install from Disk。
+
+## PBR 贴图通道参考
+
+> ⚠️ **v2.3 重大修正**：通道映射已通过着色器源码 `object.fx` 验证（第422-428行），废弃此前错误的 ORM 假设。
+
+Star Conflict 使用 **Specular-Gloss** 工作流（Blinn-Phong: `specPower = exp2(9*gloss+2)`），非 Metallic-Roughness PBR。
+
+### 贴图类型速查
+
+| 后缀 | 示例 | 格式 | 颜色空间 | 通道与用途 |
+|------|------|------|:---:|------|
+| `_d` | `ship_d.dds` | DXT1/5 | sRGB | RGB=漫反射颜色 |
+| `_nm` | `ship_nm.dds` | DXT5 | Non-Color | **R**=AO(FetchBumpOccl.z), G=NormalY, A=NormalX |
+| `_sc` | `ship_sc.dds` | DXT1/5 | sRGB | RGB=高光颜色, A=Gloss(部分模式) |
+| `_msk_sc` | `plates_msk_sc.dds` | DXT1/5 | sRGB | RGB=高光颜色 (bigship/map命名变体) |
+| **`_msk`** | `plates_msk.dds` | DXT1/5 | Non-Color | R=高度(视差), **G=AO**, **B=Gloss** |
+| `_glow` | `ship_glow.dds` | DXT1/5 | sRGB | RGB=自发光颜色 |
+| `_pdo` | `model_pdo.dds` | DXT1/5 | Non-Color | **R**=余弦加权AO (UV2), G=PDO方向Y |
+| `_s1` | `ship_s1.dds` | DXT1/5 | sRGB | RGB=染色颜色, A=混合权重 |
+
+### _msk Mask 通道拆解（着色器源码验证）
+
+```hlsl
+// object.fx 第422-428行 — 权威证据
+float3 masks = tex2D( AmbOcclSampler, baseUv ).rgb;
+float glossFactor = masks.b;         // B = Glossiness
+texOcclusion = masks.g * ...;        // G = AO / Occlusion
+```
+
+| 通道 | 参数 | 范例值 (`fed_plates01_msk`) | 说明 |
+|------|------|------|------|
+| **R** | Height | 全黑 (avg=0) | 视差高度偏移（仅 PARALLAX 模式使用） |
+| **G** | **AO / Occlusion** | 亮绿 (avg=209-251) | 纹理级遮蔽，与漫反射相乘 |
+| **B** | **Glossiness** | 暗蓝 (avg=32-55) | 高光锐度，Roughness = 1 - Gloss |
+
+### _msk 双用途（同一贴图，不同着色器模式）
+
+| 着色器模式 | `_msk` 用途 | 触发条件 |
+|----------|-----------|---------|
+| 默认模式 | R=未使用, **G=AO**, **B=Gloss** | 大多数材质 |
+| `PARALLAX` | **R=高度偏移**, G/B=同上 | 视差贴图 |
+| `BL2_DETAIL` | **RGB=细节反射率颜色** | 混合细节模式 |
+| `SHIP_DECAL` | **G=AO** (单通道) | 舰船贴花 |
+
+### 法线贴图 AO 与 _msk AO 的优先级
+
+```hlsl
+// object.fx 第549-550行
+#if BL2_DETAIL || PD_OCCL && !STATIC && !DECAL
+    texOcclusion = bumpOccl.z;  // _nm的R通道AO 覆盖 _msk的G通道AO
+#endif
+```
+
+### Lightmap (_pdo)
+
+```hlsl
+// object.fx 第628-629行
+globalOcclusion = pdoTex.x;  // R通道 = 余弦加权AO
+```
+
+> 详见 [Pro 插件文档](blender_plugin/io_import_starconflict_msh_pro/README_PRO.md#pbr-mask通道拆解_msk)
 
 ## `.mdl-mshXXX` 编号含义
 

@@ -3,7 +3,8 @@
 纯 C 命令行工具，将 Hammer Engine 的 `.mdl-mshXXX` 静态网格转换为 Autodesk FBX 格式。
 零外部依赖，无需 Noesis 或 Autodesk SDK。
 
-> **v1.2** (2026-06) — 修复前向轴：MSH 模型前向为 -Z，取反后前向为 +Z（Maya/FBX 兼容）。批量模式默认覆盖。
+> **v1.3** (2026-06) — 修复 Blender 4.2 LTS FBX 导入 UV 不可见问题：UV 映射从 `ByVertice` 改为 `ByPolygonVertex`。
+> **v1.2** (2026-06) — 修复前向轴：MSH 模型前向为 -Z，取反后前向为 +Z。
 
 ## 编译
 
@@ -83,8 +84,13 @@ fbx_output/
 
 导出内容：
 - 顶点位置 (position xyz)
-- UV 坐标 (set 0, per-vertex mapping, V 自动翻转)
-- 三角形面索引（**v1.2: Z 轴取反**，前向 -Z→+Z 以匹配 Maya/FBX 正面约定）
+- UV 坐标 (set 0, ByPolygonVertex, V 自动翻转)
+- **UV2 Lightmap** (set 1, VBytes≥36 时自动导出，uint16_unorm/float2 自动检测)
+- 三角形面索引（Z 轴取反，前向 -Z→+Z）
+- 平滑法线 (flat normals)
+
+> **Blender 4.2 LTS UV 可见性**: v1.3 起 UV 映射改为 `ByPolygonVertex` 模式，
+> 兼容 Blender 4.2/5.0 和 Maya。旧版 binary FBX 在 Blender 4.2 中 UV 不可见。
 
 > **关于轴向**：Hammer Engine MSH 模型使用 Y-up 坐标系，前向为 -Z。
 > 导入 Maya（Y-up, 前=+Z）时模型朝后；导入 Blender（Z-up）需额外旋转。

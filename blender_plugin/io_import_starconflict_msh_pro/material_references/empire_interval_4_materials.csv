@@ -1,0 +1,12 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,sky,fed_planet_aura_back,fed_planet_aura_back,1
+1,object_norm,planet_moon,"detail_moon01, planet_moon",4
+2,sky,planet_aura,planet_aura,1
+3,sky,fed_planet_aura_back,fed_planet_aura_back,1
+4,object_norm,planet_ilay2,planet_ilay2,3
+5,sky,planet_aura,planet_aura,1
+6,skybackground,asteroids_02,asteroids_02,2
+7,skybackground,asteroids_04,asteroids_04,2
+8,skybackground,asteroids_01,asteroids_01,2
+9,skybackground,asteroids_03,asteroids_03,2
+10,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5

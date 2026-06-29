@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: allidium/allidium_yard",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "a0bfe7172f311ff7",
+  "label": "allidium/allidium_yard",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\dreadnoughtbattle\\allidium\\allidium_yard",
+  "mdf_file": "allidium_glass_01.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 193,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_glass | ?"
+    }
+  }
+}

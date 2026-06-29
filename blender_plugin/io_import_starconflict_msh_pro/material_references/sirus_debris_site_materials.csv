@@ -1,0 +1,43 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+1,object_norm,bs_center,"bs_center, bs_center_msk, station_4",6
+2,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_4",6
+3,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_4",5
+4,object_norm,is_panels,"is_panels, is_panels_msk, station_4",5
+5,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_4",6
+6,object_norm,is_communications,"is_communications, is_communications_msk, station_4",5
+7,object_norm,is_details,"is_details, is_details_msk, station_4",6
+8,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_4",6
+9,object_norm,is_details,"is_details, is_details_msk, station_4",6
+10,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_1",6
+11,object_norm,is_details,"is_details, is_details_msk, station_1",6
+12,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, station_1",6
+13,object_norm,is_communications,"is_communications, is_communications_msk, station_1",5
+14,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_1",6
+15,object_norm,bs_center,"bs_center, bs_center_msk, station_1",6
+16,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_1",5
+17,object_norm,is_panels,"is_panels, is_panels_msk, station_1",5
+18,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, station_4",6
+19,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail, station_4",6
+20,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail, station_1",6
+21,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, station_1",6
+22,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail, ship_wrecks",6
+23,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, ship_wrecks",6
+24,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, ship_wrecks",6
+25,skybackground,asteroids_02,asteroids_02,2
+26,skybackground,asteroids_04,asteroids_04,2
+27,skybackground,asteroids_01,asteroids_01,2
+28,skybackground,asteroids_03,asteroids_03,2
+29,object_norm,bs_center,"bs_center, bs_center_msk, ship_wrecks",6
+30,object_norm,is_communications,"is_communications, is_communications_msk, ship_wrecks",5
+31,object_norm,is_details,"is_details, is_details_msk, ship_wrecks",6
+32,object_norm,is_panels,"is_panels, is_panels_msk, ship_wrecks",5
+33,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, ship_wrecks",5
+34,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, ship_wrecks",6
+35,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, ship_wrecks",6
+36,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, ship_wrecks",6
+37,object_norm,bs_shell_01_yellow,"bs_shell_01, bs_shell_01_msk, bs_shell_01_yellow, ship_wrecks",6
+38,object_norm,crs_plates03,"crs_plates03, crs_plates03_msk, ship_wrecks",6
+39,animated_mock,empire_monitor,"empire_monitor, fed_elluminate",2
+40,object_norm,is_details,"is_details, is_details_msk",5
+41,object_norm,is_communications,"is_communications, is_communications_msk",4

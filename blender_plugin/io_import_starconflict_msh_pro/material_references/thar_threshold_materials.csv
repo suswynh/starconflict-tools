@@ -1,0 +1,16 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroidus",5
+1,object_norm,sc_crack_plates_blue,"carcasius, sc_crack_plates, sc_crack_plates_blue, sc_crack_plates_blue_msk",5
+2,object_norm,sc_crack_plates_full,"carcasius, sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",5
+3,object_norm,prec_shippart,"carcasius, prec_shippart, prec_shippart_msk",5
+4,object_norm,sc_cubes02,"carcasius, sc_cubes02, sc_cubes02_msk",6
+5,object_norm,sc_crack_plates_full,"carcasius, sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",5
+6,object_norm,sc_crack_plates_full,"plates, sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",5
+7,object_norm,prec_tail_arch,prec_tail_arch,3
+8,object_norm,prec_shippart,"prec_shippart, prec_shippart_msk",4
+9,object_norm,sc_crack_plates_blue,"sc_crack_plates, sc_crack_plates_blue, sc_crack_plates_msk",4
+10,object_norm,sc_crack_plates_full,"sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",4
+11,object_norm,sc_cubes02,"carcasius, sc_cubes02, sc_cubes02_msk",6
+12,object,orange,"carcasius, orange",4
+13,object_norm,sc_crack_plates_full,"carcasius, sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",5
+14,animated_mock,sc_cubes02,sc_cubes02,2

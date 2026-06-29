@@ -1,0 +1,23 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, fm_right",5
+1,object_norm,is_details,"fm_right, is_details, is_details_msk",6
+2,object_norm,is_communications,"fm_right, is_communications, is_communications_msk",5
+3,blank_object,-,-,0
+4,object_norm,is_communications,"fm_left, is_communications, is_communications_msk",5
+5,object_norm,is_details,"fm_left, is_details, is_details_msk",6
+6,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, fm_left",5
+7,blank_object,-,-,0
+8,object_norm,is_communications,"fm_center, is_communications, is_communications_msk",5
+9,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, fm_center",5
+10,object_norm,is_details,"fm_center, is_details, is_details_msk",6
+11,object_norm,prec_alpha_assets,"plates, prec_alpha_assets",3
+12,object_norm,sc_plates01b,"plates, plates_detail02, sc_plates01b, sc_plates01b_msk",6
+13,object_norm,is_details,"is_details, is_details_msk, plates",6
+14,animated_mock,ancientcomplex_gen_fx1_scroll,"ancientcomplex_gen, ancientcomplex_gen_fx1_scroll",2
+15,animated_mock,ancientcomplex_gen_fx2_scroll,"ancientcomplex_gen, ancientcomplex_gen_fx2_scroll",2
+16,animated_mock,ancientcomplex_gen_fx2_scroll,"ancientcomplex_gen_fx2_scroll, ancientcomplex_gen_msk2",2
+17,animated_mock,ancientcomplex_gen_fx1_scroll,"ancientcomplex_gen_fx1_scroll, ancientcomplex_gen_msk2",2
+18,object_norm,is_communications,"fm_right, is_communications, is_communications_msk",5
+19,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, fm_right",5
+20,object_norm,is_communications,"fm_left, is_communications, is_communications_msk",5
+21,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, fm_left",5

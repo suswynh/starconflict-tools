@@ -1,0 +1,10 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_animated_mock,static_shield02,static_shield02,1
+1,dyn_animated_mock,static_shield01,static_shield01,1
+2,dyn_animated_mock,gate_scroll,gate_scroll,2
+3,dyn_object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+4,dyn_object_norm,jer_plates01,"jer_plates01, jer_plates01_msk",4
+5,dyn_object_norm,is_details,"is_details, is_details_msk",5
+6,dyn_object_norm,crystal01_mineral,"crystal01_mineral, crystal01_mineral_msk",5
+7,dyn_animated_mock,affect_animate,"affect_animate, crystal01_mineral",2
+8,dyn_animated_mock,ui_jugle_planet,ui_jugle_planet,1

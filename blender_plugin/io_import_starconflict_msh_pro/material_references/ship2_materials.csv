@@ -1,0 +1,5 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,ship_decals,-,"paper_ship_02, race3_m_t1",2
+1,dyn_object_norm,ship2,"paper_ship_02, ship2, ship2_msk",5
+2,ship_hull,paper,"paper, paper_ship, paper_ship_02, papers, papers_msk, race2_s_t1",6
+3,ship_static_decals,decal,"decal, paper_ship_02, papers",3

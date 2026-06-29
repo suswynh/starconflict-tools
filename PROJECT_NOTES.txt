@@ -13,6 +13,31 @@ Star Conflict 资源提取 — 项目总结
   ✅ fonts         — R8/L8/ARGB, 70/70 (Noesis v2/v3, 纯Python不支持)
   ✅ ui/particles/reaper — 全量
   ✅ levels        — 基本覆盖 (irradiance cubemap缺TFD)
+
+PBR 贴图通道分析 (2026-06-30 — 着色器源码验证):
+  ⚠️ v2.3 重大修正：通过 object.fx 着色器源码验证，废弃此前 ORM 假设
+  ✅ _d            — RGB=漫反射 (sRGB)
+  ✅ _nm           — DXT5nm: R=AO(FetchBumpOccl.z), G=NormalY, A=NormalX (Non-Color)
+  ✅ _sc / _msk_sc — RGB=高光颜色, A=Gloss(部分模式) (sRGB)
+  ✅ _msk          — R=Height(Parallax), G=AO, B=Glossiness (Non-Color)
+                     object.fx L422-428: masks = tex2D(AmbOcclSampler).rgb
+                     glossFactor = masks.b; texOcclusion = masks.g
+  ✅ _pdo          — R=余弦加权AO, G=PDO方向Y, Z=方向, W=强度 (Non-Color, UV2)
+                     object.fx L629: globalOcclusion = pdoTex.x
+  ✅ _glow         — RGB=自发光 (sRGB)
+  ✅ _s1           — RGB=染色颜色, A=混合权重 (sRGB)
+  
+  游戏使用 Specular-Gloss 工作流 (Blinn-Phong):
+    specPower = exp2( 9 * glossFactor + 2 )  (object.fx L683)
+    
+  _msk 双用途 (已确认):
+    默认模式:  R=未使用, G=AO, B=Gloss
+    PARALLAX:  R=高度偏移
+    BL2_DETAIL: RGB=细节反射率
+    SHIP_DECAL: G=AO
+  
+  _nm AO vs _msk AO 优先级:
+    BL2_DETAIL或PD_OCCL时, _nm的R通道AO覆盖_msk的G通道AO (object.fx L550)
   
 批量转换结果: 11,671个TFH → 11,623个DDS成功 (99.6%), 11.2GB
 输出目录: scunpack/tex_universe_check/ (保持源层级)
@@ -29,6 +54,9 @@ Star Conflict 资源提取 — 项目总结
   ⚠️ 极小尺寸纹理: 部分mip级仅几个像素, 属正常现象
   ⚠️ irradiance cubemap: 缺TFD文件
   ⚠️ VBytes=40角色模型: UV偏移待修正
+  ⚠️ VBytes=28模型: 无UV2空间, lightmap使用UV1采样 (PD_OCCL Type=0)
+  ✅ fed_plates01_msk 通道: 已通过着色器源码确认为 G=AO, B=Glossiness
+  ⚠️ Blender Principled BSDF 与 Blinn-Phong 不完全匹配: Gloss→Roughness 转换为近似
 
 版本历史:
   v1: rawtex_py.py (简单TFH启发式) + tex_v1 (简单位流)
@@ -50,3 +78,20 @@ Star Conflict 资源提取 — 项目总结
       Z 取反 (x,y,z)→(x,y,-z) 一次性解决法线翻转+前向问题。
       修改: msh2fbx.c, Noesis inc_starconflict_msh.py,
             blender_plugin 基础版/Pro版, msh_to_obj_v3.py
+
+  v2.3 (2026-06-30): PBR 通道修正 — 着色器源码验证
+      **重大修正**: 通过 object.fx 第422-428行着色器源码验证，废弃此前错误的ORM假设
+      _msk 通道: G=AO (非Roughness), B=Glossiness→Roughness (非Metallic)
+      _pdo 通道: R=余弦AO (object.fx L629)
+      _nm R通道: AO提取 (FetchBumpOccl.z, object.fx L493)
+      确认游戏使用 Specular-Gloss 工作流 (Blinn-Phong)
+      修改: material_builder.py, shader_presets.py, README.md, README_PRO.md
+
+  v2.2 (2026-06-29): UV2 Lightmap + PBR _msk 通道完整解析
+      UV2: msh_parser.py 新增 VBytes=32 的 UV2 解析 (offset=28, uint16_unorm)
+           dreadnought_control_cab_imp 等 bigship/map 模型现在正确导入 lightmap UV 通道
+      _msk: material_builder.py AmbOcclSampler 从单通道(R)改为三通道(R/G/B)提取
+            R→AO/Cavity, G→Roughness, B→Metallic (完整 PBR 还原)
+            ⚠️ 以上通道映射已在 v2.3 中通过着色器源码纠正
+      shader_presets.py: 更新 object_norm/dyn_object_norm 采样器列表
+      README/README_PRO: 新增 PBR 贴图通道分析与 UV2 文档

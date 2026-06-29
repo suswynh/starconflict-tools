@@ -1,0 +1,8 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,solid_rock01,"rock01_detail, solid, solid_rock01",5
+1,object_norm,layed_rock,"layed_rock, rock01_detail, rocks",5
+2,object_norm,sc_plates02,"cpasecity, plates_detail, sc_plates02, sc_plates02_msk",6
+3,object_norm,sc_cubes,"cpasecity, plates_detail, sc_cubes, sc_cubes_msk",6
+4,object_norm,sc_cubes02,"cpasecity, plates_detail, sc_cubes02, sc_cubes02_msk",7
+5,object_norm,sc_plates01,"cpasecity, plates_detail, sc_plates01, sc_plates01_msk",6
+6,animated_mock,sc_cubes02,sc_cubes02,2

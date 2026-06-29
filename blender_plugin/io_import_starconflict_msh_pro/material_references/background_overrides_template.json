@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: paper_airplanes/background",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "ffc9d01898c7eaba",
+  "label": "paper_airplanes/background",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\event\\paper_airplanes\\background",
+  "mdf_file": "event_background.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 1,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | background"
+    }
+  }
+}

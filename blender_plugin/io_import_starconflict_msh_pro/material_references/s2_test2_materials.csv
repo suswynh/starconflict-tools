@@ -1,0 +1,30 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,blank_object,-,-,0
+1,animated_mock,smocke,smocke,2
+2,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01",4
+3,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail",5
+4,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail",5
+5,object_norm,crs_set03,"crs_set03, crs_set03_msk, plates_detail",5
+6,object_norm,crs_plates_brk01,"crs_plates_brk01, crs_plates_brk01_msk, plates_detail",5
+7,object_norm,crs_plates04,"crs_plates04, plates_detail",4
+8,object_norm,crs_detplates,"crs_detplates, crs_detplates_msk",5
+9,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+10,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk",5
+11,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk",5
+12,object_norm,bs_center,"bs_center, bs_center_msk",5
+13,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk",5
+14,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk",5
+15,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk",5
+16,skybackground,sun,"gasplanet, sun",4
+17,skybackground,ganymede,ganymede,2
+18,skybackground,planet,"ganymede_02, planet",2
+19,object_norm,cs_shell_01,"bs_shell_01, bs_shell_01_msk, control_tower, cs_shell_01",5
+20,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, control_station_glow_enemy, control_tower",6
+21,object_norm,cs_shell_01,"bs_shell_01, bs_shell_01_msk, control_station, cs_shell_01",5
+22,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, control_station, control_station_glow_enemy",6
+23,animated_mock,ui,ui,2
+24,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, control_station_glow_enemy, pirat_blockpost_02",6
+25,object_norm,blockpost_details,"blockpost_details, blockpost_details_msk, pirat_blockpost_02",6
+26,object_norm,prt_plate01,"pirat_blockpost_02, prt_plate01",5
+27,sky,aura,aura,1
+28,sky,aura,aura,1

@@ -1,0 +1,5 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,asteroid_hole01,asteroid_hole01,3
+1,dyn_object,lava_asteroid,lava_asteroid,2
+2,dyn_animated_mock,lava_06,lava_06,2
+3,dyn_animated_mock,asteroid_hole01,asteroid_hole01,2

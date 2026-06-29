@@ -1,0 +1,222 @@
+{
+  "_comment": "材质映射模板: area2/thar_concourse",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "8793ed0858916ff7",
+  "label": "area2/thar_concourse",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\thar_concourse",
+  "mdf_file": "thar_concourse.mdf",
+  "mdf_blocks": 35,
+  "msh_count": 889,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | prec_shippart_02"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crystal01_mineral"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates_full_02"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_yellow"
+    },
+    "12": {
+      "block": 12,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "13": {
+      "block": 13,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_red"
+    },
+    "14": {
+      "block": 14,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | static_shield02"
+    },
+    "15": {
+      "block": 15,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | static_shield01"
+    },
+    "16": {
+      "block": 16,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | gate_scroll"
+    },
+    "17": {
+      "block": 17,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02_white"
+    },
+    "18": {
+      "block": 18,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "19": {
+      "block": 19,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_yellow"
+    },
+    "20": {
+      "block": 20,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crystal01_mineral"
+    },
+    "21": {
+      "block": 21,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_cubes02"
+    },
+    "22": {
+      "block": 22,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    },
+    "23": {
+      "block": 23,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object | orange"
+    },
+    "24": {
+      "block": 24,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "25": {
+      "block": 25,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_red"
+    },
+    "26": {
+      "block": 26,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "27": {
+      "block": 27,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crystal01_mineralrock"
+    },
+    "28": {
+      "block": 28,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crystal01_mineral"
+    },
+    "29": {
+      "block": 29,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "30": {
+      "block": 30,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "31": {
+      "block": 31,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "32": {
+      "block": 32,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | shild"
+    },
+    "33": {
+      "block": 33,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object | lava_asteroid"
+    },
+    "34": {
+      "block": 34,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | lava_asteroid"
+    }
+  }
+}

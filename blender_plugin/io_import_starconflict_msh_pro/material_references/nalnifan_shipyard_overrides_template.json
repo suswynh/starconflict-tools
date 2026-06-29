@@ -1,0 +1,324 @@
+{
+  "_comment": "材质映射模板: federation/nalnifan_shipyard",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "679862373769ed1b",
+  "label": "federation/nalnifan_shipyard",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\open_world\\federation\\nalnifan_shipyard",
+  "mdf_file": "map.mdf",
+  "mdf_blocks": 52,
+  "msh_count": 375,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | temperate_surface_det"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | mainlands_cm"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | clouds_shadow"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | clouds"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | atmosphere"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | ceres_aura"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | fed_station_01"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | fed_station_02"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_hole01"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "12": {
+      "block": 12,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "13": {
+      "block": 13,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "14": {
+      "block": 14,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "15": {
+      "block": 15,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "16": {
+      "block": 16,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "17": {
+      "block": 17,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "18": {
+      "block": 18,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "19": {
+      "block": 19,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "20": {
+      "block": 20,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "21": {
+      "block": 21,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "22": {
+      "block": 22,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "23": {
+      "block": 23,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "24": {
+      "block": 24,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "25": {
+      "block": 25,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "26": {
+      "block": 26,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "27": {
+      "block": 27,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "28": {
+      "block": 28,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "29": {
+      "block": 29,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "30": {
+      "block": 30,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "31": {
+      "block": 31,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "32": {
+      "block": 32,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "33": {
+      "block": 33,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "34": {
+      "block": 34,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "35": {
+      "block": 35,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "36": {
+      "block": 36,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "37": {
+      "block": 37,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "38": {
+      "block": 38,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_set01"
+    },
+    "39": {
+      "block": 39,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_set02"
+    },
+    "40": {
+      "block": 40,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates_brk01"
+    },
+    "41": {
+      "block": 41,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates04"
+    },
+    "42": {
+      "block": 42,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_detplates"
+    },
+    "43": {
+      "block": 43,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_set03"
+    },
+    "44": {
+      "block": 44,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "45": {
+      "block": 45,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | inner"
+    },
+    "46": {
+      "block": 46,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | gate_scroll"
+    },
+    "47": {
+      "block": 47,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02_inner"
+    },
+    "48": {
+      "block": 48,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_city01"
+    },
+    "49": {
+      "block": 49,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | inner"
+    },
+    "50": {
+      "block": 50,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | gate_scroll"
+    },
+    "51": {
+      "block": 51,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    }
+  }
+}

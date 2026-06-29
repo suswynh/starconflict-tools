@@ -1,0 +1,9 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,is_details,"assets1, is_details, is_details_msk",6
+1,dyn_object_norm,is_communications,"assets1, is_communications, is_communications_msk",5
+2,dyn_object_norm,crs_plates04,"assets1, crs_plates04",5
+3,dyn_object_norm,fed_plates01,"assets1, fed_plates01, fed_plates01_msk",5
+4,dyn_object_norm,is_panels,"assets1, is_panels, is_panels_msk",5
+5,dyn_object_norm,crs_plates03,"assets1, crs_plates03, crs_plates03_msk",6
+6,dyn_object_norm,jer_plates02,"assets1, jer_plates02, jer_plates02_msk",5
+7,dyn_animated_mock,planet_tech,planet_tech,1

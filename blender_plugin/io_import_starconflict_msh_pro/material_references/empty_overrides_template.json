@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: dreadnoughtbattle/empty",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "90f0708ede9d0ad5",
+  "label": "dreadnoughtbattle/empty",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\dreadnoughtbattle\\empty",
+  "mdf_file": "emptymap1.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 25,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crystal_rock_04"
+    }
+  }
+}

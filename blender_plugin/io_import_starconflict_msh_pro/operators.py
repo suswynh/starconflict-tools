@@ -25,6 +25,7 @@ from bpy.types import Operator
 
 from . import msh_importer
 from . import texture_finder
+from . import material_builder
 
 
 # ──────────────────────────────────────────────────────────────
@@ -68,6 +69,19 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
         default='Z_UP_TO_Y_UP',
     )
 
+    auto_smooth: BoolProperty(
+        name="Auto Smooth",
+        description="Automatically split normals based on face angle (matching in-game shading)",
+        default=True,
+    )
+
+    smooth_angle: FloatProperty(
+        name="Smooth Angle",
+        description="Face angle threshold for auto-smooth (degrees). Default 30° matches typical game settings",
+        default=30.0,
+        min=1.0, max=180.0,
+    )
+
     # ── Material settings ──
     auto_link_materials: BoolProperty(
         name="Auto-Link Materials",
@@ -95,6 +109,16 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
         default="",
     )
 
+    # ── Unpack root (for material library & name resolution) ──
+    unpack_root: StringProperty(
+        name="Unpack Root",
+        description="Star Conflict unpack root directory (e.g. /path/to/unpack/output). "
+                    "Used for material library lookup, name conflict resolution, "
+                    "and Collection organization. Leave empty to use embedded library.",
+        default="",
+        subtype='DIR_PATH',
+    )
+
     # ── Shader ──
     shader_complexity: EnumProperty(
         name="Shader Nodes",
@@ -106,13 +130,58 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
     )
 
     def execute(self, context):
+        # ── Initialize resolver & registry ──
+        resolver = None
+        registry = None
+        mapping_db = None
+
+        prefs = self._get_prefs(context)
+
+        # Determine unpack root
+        unpack_root = self.unpack_root
+        if not unpack_root and prefs:
+            unpack_root = prefs.unpack_root_default
+
+        if unpack_root and os.path.isdir(unpack_root):
+            from . import name_resolver
+            from . import material_registry
+            from . import material_library
+
+            # Library
+            lib = material_library.MaterialLibrary()
+            lib_path = prefs.material_library_path if prefs else ""
+            if lib_path and os.path.isfile(lib_path):
+                lib.load(lib_path)
+
+            registry = material_registry.MaterialRegistry(
+                library=lib,
+                unpack_root=unpack_root
+            )
+
+            # Resolver
+            resolver = name_resolver.NameResolver(
+                common_root=unpack_root,
+                collection_depth=prefs.collection_depth if prefs else 2,
+                use_abbreviations=prefs.use_abbreviations if prefs else False,
+            )
+
+        # ── Load static material mapping database ──
+        mapping_db = None
+        try:
+            from . import material_mapping
+            db_path = os.path.join(os.path.dirname(__file__), 'material_mapping_db.json')
+            mapping_db = material_mapping.MaterialMappingDB.load(db_path)
+            if not mapping_db.is_empty:
+                print(f"  [MSH Pro] MappingDB: {mapping_db.map_count} maps, "
+                      f"{mapping_db.total_overrides} overrides")
+        except Exception as e:
+            pass  # DB optional — fail silently
+
         # Collect texture search dirs
         tex_dirs = []
         if self.tex_search_dir and os.path.isdir(self.tex_search_dir):
             tex_dirs.append(self.tex_search_dir)
 
-        # Also include paths from preferences
-        prefs = self._get_prefs(context)
         if prefs:
             for item in prefs.default_tex_paths:
                 if item.path and os.path.isdir(item.path):
@@ -145,6 +214,11 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
                 mdf_search_dirs=mdf_dirs,
                 tex_extensions=self.tex_extensions,
                 complexity=self.shader_complexity,
+                resolver=resolver,
+                registry=registry,
+                unpack_root=unpack_root,
+                mapping_db=mapping_db,
+                smooth_angle=self.smooth_angle if self.auto_smooth else 0.0,
             )
             if obj:
                 imported += 1
@@ -218,6 +292,19 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
         default=True,
     )
 
+    auto_smooth: BoolProperty(
+        name="Auto Smooth",
+        description="Automatically split normals based on face angle",
+        default=True,
+    )
+
+    smooth_angle: FloatProperty(
+        name="Smooth Angle",
+        description="Face angle threshold in degrees (default 30°)",
+        default=30.0,
+        min=1.0, max=180.0,
+    )
+
     show_details: BoolProperty(
         name="Show Details",
         default=False,
@@ -242,6 +329,15 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
         default="",
     )
 
+    # ── Unpack root ──
+    unpack_root: StringProperty(
+        name="Unpack Root",
+        description="Star Conflict unpack root directory. Used for material library, "
+                    "name conflict resolution, and Collection organization.",
+        default="",
+        subtype='DIR_PATH',
+    )
+
     shader_complexity: EnumProperty(
         name="Shader Nodes",
         items=[
@@ -257,6 +353,7 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
     def _batch_import(self, context):
         imported = 0
         failed = 0
+        mapping_db = None  # 初始化默认值
 
         # Get search paths: operator fields first, then preferences
         tex_dirs = []
@@ -278,37 +375,110 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
                 if item.path and os.path.isdir(item.path):
                     mdf_dirs.append(item.path)
 
+        # ── Initialize resolver & registry ──
+        resolver = None
+        registry = None
+        unpack_root = self.unpack_root
+        if not unpack_root and prefs:
+            unpack_root = prefs.unpack_root_default
+
+        if unpack_root and os.path.isdir(unpack_root):
+            from . import name_resolver
+            from . import material_registry
+            from . import material_library
+
+            lib = material_library.MaterialLibrary()
+            lib_path = prefs.material_library_path if prefs else ""
+            if lib_path and os.path.isfile(lib_path):
+                lib.load(lib_path)
+
+            registry = material_registry.MaterialRegistry(
+                library=lib, unpack_root=unpack_root
+            )
+            resolver = name_resolver.NameResolver(
+                common_root=unpack_root,
+                collection_depth=prefs.collection_depth if prefs else 2,
+                use_abbreviations=prefs.use_abbreviations if prefs else False,
+            )
+
+        # ── Load static material mapping database ──
+        mapping_db = None
+        try:
+            from . import material_mapping
+            db_path = os.path.join(os.path.dirname(__file__), 'material_mapping_db.json')
+            mapping_db = material_mapping.MaterialMappingDB.load(db_path)
+            if not mapping_db.is_empty:
+                print(f"  [MSH Pro] MappingDB: {mapping_db.map_count} maps, "
+                      f"{mapping_db.total_overrides} overrides")
+        except Exception:
+            pass
+
+        # ── Collect & scan all MSH files ──
+        all_msh = []
         for root, dirs, filenames in os.walk(self.directory):
             for fname in filenames:
-                if ".mdl-msh" not in fname:
-                    continue
-                if self.max_files > 0 and imported + failed >= self.max_files:
-                    break
+                if ".mdl-msh" in fname:
+                    all_msh.append(os.path.join(root, fname))
 
-                fpath = os.path.join(root, fname)
-                obj = msh_importer.import_msh_with_materials(
-                    fpath, context,
-                    scale=self.scale,
-                    up_axis=self.up_axis,
-                    auto_link=self.auto_link_materials,
-                    tex_search_dirs=tex_dirs,
-                    mdf_search_dirs=mdf_dirs,
-                    tex_extensions=tex_ext,
-                    complexity=self.shader_complexity,
-                )
-                if obj:
-                    imported += 1
-                    if self.show_details:
-                        print(f"  ✓ {fname}")
-                else:
-                    failed += 1
-                    if self.show_details:
-                        print(f"  ✗ {fname}")
+        if self.max_files > 0:
+            all_msh = all_msh[:self.max_files]
 
+        if resolver is not None and len(all_msh) > 1:
+            resolver.scan(all_msh)
+            conflicts = resolver.get_conflicts()
+            if conflicts:
+                print(f"  [MSH Pro] Batch: {len(conflicts)} conflict groups detected")
+
+        # Import files
+        total = len(all_msh)
+        for i, fpath in enumerate(all_msh):
             if self.max_files > 0 and imported + failed >= self.max_files:
                 break
+            fname = os.path.basename(fpath)
 
-        self.report({'INFO'}, f"Imported {imported}, failed {failed}")
+            # ── 进度提示 ──
+            progress_pct = int((i / total) * 100) if total > 0 else 0
+            status_msg = f"Star Conflict MSH Pro: Importing {i+1}/{total} ({progress_pct}%) — {fname}"
+            context.workspace.status_text_set(status_msg)
+            # 每10个文件刷新一次 UI 避免过慢
+            if i % 10 == 0:
+                bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
+
+            obj = msh_importer.import_msh_with_materials(
+                fpath, context,
+                scale=self.scale,
+                up_axis=self.up_axis,
+                auto_link=self.auto_link_materials,
+                tex_search_dirs=tex_dirs,
+                mdf_search_dirs=mdf_dirs,
+                tex_extensions=tex_ext,
+                complexity=self.shader_complexity,
+                resolver=resolver,
+                registry=registry,
+                unpack_root=unpack_root,
+                mapping_db=mapping_db,
+                smooth_angle=self.smooth_angle if self.auto_smooth else 0.0,
+            )
+            if obj:
+                imported += 1
+                if self.show_details:
+                    print(f"  ✓ {fname}")
+            else:
+                failed += 1
+                if self.show_details:
+                    print(f"  ✗ {fname}")
+
+        msg = f"Imported {imported}"
+        if failed > 0:
+            msg += f", failed {failed}"
+        if resolver and resolver.conflict_count > 0:
+            msg += f", {resolver.conflict_count} conflict groups resolved"
+        if registry:
+            msg += f", {registry.stats()['created_count']} materials created"
+        self.report({'INFO'}, msg)
+
+        # 清除进度提示
+        context.workspace.status_text_set(None)
         return {'FINISHED'}
 
 

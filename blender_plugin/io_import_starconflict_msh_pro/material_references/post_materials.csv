@@ -1,0 +1,8 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,is_details,"is_details, is_details_msk",5
+1,dyn_object_norm,is_communications,"is_communications, is_communications_msk",4
+2,dyn_object_norm,is_panels,"is_panels, is_panels_msk",4
+3,dyn_object_norm,bs_center,"bs_center, bs_center_msk",5
+4,dyn_object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+5,dyn_object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk",5
+6,dyn_object_norm,bs_shell_02_green,"bs_shell_02, bs_shell_02_green, bs_shell_02_msk",5

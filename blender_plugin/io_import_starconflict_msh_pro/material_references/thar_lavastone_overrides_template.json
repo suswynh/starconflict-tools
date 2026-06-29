@@ -1,0 +1,36 @@
+{
+  "_comment": "材质映射模板: area2/thar_lavastone",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "e8c53b42609f7945",
+  "label": "area2/thar_lavastone",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\thar_lavastone",
+  "mdf_file": "thar_lavastone.mdf",
+  "mdf_blocks": 4,
+  "msh_count": 281,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | solid_rock01"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | layed_rock"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates_full"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_cubes02"
+    }
+  }
+}

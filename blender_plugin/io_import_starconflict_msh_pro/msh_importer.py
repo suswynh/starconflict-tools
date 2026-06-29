@@ -7,6 +7,8 @@ Handles:
   - Building Blender meshes from parsed MSH data
   - Coordinate system conversion
   - MDF lookup and material linking
+  - Name resolution (prefix + Collection) via NameResolver
+  - Material deduplication via MaterialRegistry
 """
 
 import os
@@ -25,14 +27,15 @@ from . import material_builder
 # Mesh Builder
 # ──────────────────────────────────────────────────────────────
 
-def build_mesh(name, positions, uvs, indices):
+def build_mesh(name, positions, uvs, indices, uvs2=None):
     """Create a Blender mesh from parsed MSH data.
 
     Args:
         name: Mesh name.
         positions: List of (x,y,z) tuples.
-        uvs: List of (u,v) tuples.
+        uvs: List of (u,v) tuples (UV1 / diffuse).
         indices: List of triangle indices.
+        uvs2: Optional list of (u,v) tuples (UV2 / lightmap).
 
     Returns:
         bpy.types.Mesh
@@ -48,6 +51,7 @@ def build_mesh(name, positions, uvs, indices):
     mesh = bpy.data.meshes.new(name=name)
     mesh.from_pydata(positions, [], faces)
 
+    # UV1 (diffuse/color) — "map1"
     if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
         uv_layer = mesh.uv_layers.new(name="map1")
         loop_idx = 0
@@ -55,6 +59,16 @@ def build_mesh(name, positions, uvs, indices):
             for vert_idx in face:
                 if vert_idx < len(uvs):
                     uv_layer.data[loop_idx].uv = uvs[vert_idx]
+                loop_idx += 1
+
+    # UV2 (lightmap) — "lightmap"
+    if uvs2 and any(u != 0.0 or v != 0.0 for u, v in uvs2):
+        uv2_layer = mesh.uv_layers.new(name="lightmap")
+        loop_idx = 0
+        for face in faces:
+            for vert_idx in face:
+                if vert_idx < len(uvs2):
+                    uv2_layer.data[loop_idx].uv = uvs2[vert_idx]
                 loop_idx += 1
 
     mesh.validate()
@@ -179,7 +193,12 @@ def import_msh_with_materials(filepath, context,
                                tex_search_dirs=None,
                                mdf_search_dirs=None,
                                tex_extensions=".dds,.png,.tga",
-                               complexity='FULL'):
+                               complexity='FULL',
+                               resolver=None,
+                               registry=None,
+                               unpack_root=None,
+                               smooth_angle=30.0,
+                               mapping_db=None):
     """Import a single MSH file with optional material linking.
 
     Args:
@@ -192,6 +211,10 @@ def import_msh_with_materials(filepath, context,
         mdf_search_dirs: MDF search directories.
         tex_extensions: Comma-separated extensions.
         complexity: 'FULL' or 'SIMPLE'.
+        resolver: NameResolver 实例（可选）
+        registry: MaterialRegistry 实例（可选，推荐）
+        unpack_root: 解包根目录（用于库反查）
+        smooth_angle: Auto-smooth angle in degrees (0=flat shading)
 
     Returns:
         bpy.types.Object or None
@@ -199,68 +222,55 @@ def import_msh_with_materials(filepath, context,
     try:
         with open(filepath, 'rb') as f:
             data = f.read()
-        positions, uvs, indices = msh_parser.parse_msh(data)
+        positions, uvs, uvs2, indices = msh_parser.parse_msh(data)
 
-        name = clean_name(os.path.basename(filepath))
-        mesh = build_mesh(name, positions, uvs, indices)
+        raw_name = os.path.basename(filepath)
 
-        obj = bpy.data.objects.new(name=name, object_data=mesh)
+        # ── Name resolution ──
+        if resolver is not None:
+            obj_name = resolver.resolve_name(filepath)
+            coll_path = resolver.get_collection_path(filepath)
+        else:
+            obj_name = clean_name(raw_name)
+            coll_path = []
+
+        mesh = build_mesh(obj_name, positions, uvs, indices, uvs2)
+
+        # ── Auto-smooth (matching in-game normal splitting) ──
+        if smooth_angle > 0.0:
+            mesh.use_auto_smooth = True
+            mesh.auto_smooth_angle = math.radians(smooth_angle)
+
+        # ── Compute tangents (must be AFTER auto_smooth) ──
+        if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
+            try:
+                mesh.calc_tangents(uvmap="map1")
+            except Exception:
+                pass
+
+        obj = bpy.data.objects.new(name=obj_name, object_data=mesh)
         apply_up_axis(obj, up_axis)
 
         if scale != 1.0:
             obj.scale = (scale, scale, scale)
 
-        collection = context.collection or context.scene.collection
-        collection.objects.link(obj)
+        # ── Collection linking ──
+        if resolver is not None and coll_path:
+            target_coll = resolver.create_collections(coll_path)
+        else:
+            target_coll = context.collection or context.scene.collection
+        target_coll.objects.link(obj)
 
         obj.select_set(True)
         context.view_layer.objects.active = obj
 
         # ── Material linking ──
         if auto_link:
-            mdf_path = find_mdf_for_msh(filepath, mdf_search_dirs)
-            if mdf_path:
-                try:
-                    blocks = mdf_parser.parse_mdf(mdf_path)
-                    extensions = texture_finder._get_search_extensions(tex_extensions)
-
-                    # Build texture maps for each block
-                    texture_maps = []
-                    for block in blocks:
-                        tex_map = texture_finder.find_textures_for_material(
-                            block, tex_search_dirs or [], extensions
-                        )
-                        texture_maps.append(tex_map)
-
-                    # ── Material linking (cross-object deduplicated) ──
-                    # MDF blocks map to MSH files by order:
-                    #   deduped block 0 → .mdl-msh000
-                    #   deduped block 1 → .mdl-msh001
-                    # Identical blocks across different MSH files share
-                    # the same Blender material via the global cache.
-                    msh_idx = extract_msh_index(os.path.basename(filepath))
-                    target_block = material_builder.get_block_for_msh(blocks, msh_idx)
-
-                    if target_block is not None:
-                        # Get the texture map for this specific block
-                        block_idx = blocks.index(target_block)
-                        tex_map = texture_maps[block_idx] if block_idx < len(texture_maps) else {}
-
-                        mat = material_builder.get_or_create_material(
-                            target_block, tex_map,
-                            mesh_name=name,
-                            complexity=complexity,
-                        )
-                        obj.data.materials.append(mat)
-                        print(f"  [MSH Pro] msh{msh_idx:03d} → {mat.name} "
-                              f"({len(blocks)} blocks → {len(material_builder.get_deduplicated_blocks(blocks))} unique, "
-                              f"cache={len(material_builder._material_cache)})")
-                    else:
-                        print(f"  [MSH Pro] msh{msh_idx:03d}: no matching material block")
-                except Exception as e:
-                    print(f"  [MSH Pro] Material link warning: {e}")
-            else:
-                print(f"  [MSH Pro] No MDF found for {os.path.basename(filepath)}")
+            _link_materials(obj, filepath, obj_name, raw_name,
+                           tex_search_dirs, mdf_search_dirs,
+                           tex_extensions, complexity,
+                           registry, unpack_root,
+                           mapping_db=mapping_db)
 
         return obj
 
@@ -270,3 +280,141 @@ def import_msh_with_materials(filepath, context,
     except Exception as e:
         print(f"  [MSH Pro] Unexpected error [{filepath}]: {e}")
         return None
+
+
+def _link_materials(obj, filepath, obj_name, raw_name,
+                    tex_search_dirs, mdf_search_dirs,
+                    tex_extensions, complexity,
+                    registry, unpack_root,
+                    mapping_db=None):
+    """材质链接逻辑（独立函数，便于维护）。
+
+    优先级:
+      1. 本地 MDF → 直接解析
+      2. 本地无 MDF → 库反查 → registry.get_materials_for_model()
+      3. 库无记录 → 降级材质
+    """
+    extensions = texture_finder._get_search_extensions(tex_extensions)
+    msh_idx = extract_msh_index(raw_name)
+
+    # ── 策略1: 查找本地 MDF ──
+    mdf_path = find_mdf_for_msh(filepath, mdf_search_dirs)
+
+    if mdf_path:
+        # 有 MDF → 正常解析
+        try:
+            blocks = mdf_parser.parse_mdf(mdf_path)
+            texture_maps = []
+            for block in blocks:
+                tex_map = texture_finder.find_textures_for_material(
+                    block, tex_search_dirs or [], extensions
+                )
+                texture_maps.append(tex_map)
+
+            # 检测是否为 map 场景（MSH 数量远超 MDF block 数量）
+            is_map = 'map.mdf' in mdf_path.lower() or 'map_' in mdf_path.lower()
+            target_block, is_fallback, db_confidence = material_builder.get_block_for_msh(
+                blocks, msh_idx, is_map=is_map,
+                mapping_db=mapping_db, mdf_path=mdf_path
+            )
+            if target_block is not None:
+                block_idx = blocks.index(target_block)
+                tex_map = texture_maps[block_idx] if block_idx < len(texture_maps) else {}
+
+                mat = material_builder.get_or_create_material(
+                    target_block, tex_map,
+                    mesh_name=obj_name,
+                    complexity=complexity,
+                    registry=registry,
+                )
+                obj.data.materials.append(mat)
+
+                deduped = material_builder.get_deduplicated_blocks(blocks)
+                cache_info = ""
+                if registry:
+                    cache_info = f"registry={registry.stats()['cache_size']}"
+                else:
+                    cache_info = f"cache={len(material_builder._material_cache)}"
+
+                fallback_tag = ""
+                if db_confidence:
+                    fallback_tag = f" [DB:{db_confidence}]"
+                elif is_fallback:
+                    fallback_tag = " [fallback]"
+                print(f"  [MSH Pro] msh{msh_idx:03d} → {mat.name}{fallback_tag} "
+                      f"({len(blocks)} blocks, {len(deduped)} unique, {cache_info})")
+            else:
+                print(f"  [MSH Pro] msh{msh_idx:03d}: no matching material block")
+        except Exception as e:
+            print(f"  [MSH Pro] Material link warning: {e}")
+
+    elif registry is not None:
+        # ── 策略2: 无本地 MDF → 库反查 ──
+        _link_from_library(obj, raw_name, msh_idx, registry,
+                          tex_search_dirs, extensions, complexity)
+
+    else:
+        # ── 策略3: 既无 MDF 也无库 → 降级 ──
+        fallback = material_builder.build_fallback_material(
+            name=f"SC_Fallback_{obj_name}",
+            color=(0.4, 0.4, 0.5, 1.0)
+        )
+        obj.data.materials.append(fallback)
+        print(f"  [MSH Pro] msh{msh_idx:03d}: No MDF/library → fallback material")
+
+
+def _link_from_library(obj, raw_name, msh_idx, registry,
+                       tex_search_dirs, extensions, complexity):
+    """通过 MaterialRegistry 从静态库反查材质。
+
+    适用场景: 用户只有 MSH，没有 MDF 文件。
+    """
+    basename = extract_base_name(raw_name)
+
+    # 构建 texture_map_builder
+    def _find_texture(rel_path):
+        if not tex_search_dirs:
+            return None
+        # 从 MDF 的 sampler 路径查找实际贴图
+        base = os.path.basename(rel_path)
+        name_no_ext = os.path.splitext(base)[0]
+        for sdir in tex_search_dirs:
+            if not os.path.isdir(sdir):
+                continue
+            for root, dirs, files in os.walk(sdir):
+                for f in files:
+                    fname_no_ext = os.path.splitext(f)[0]
+                    if fname_no_ext.lower() == name_no_ext.lower():
+                        ext = os.path.splitext(f)[1].lower()
+                        if ext in extensions:
+                            return os.path.join(root, f)
+
+        # 尝试后缀匹配（_d, _nm 等）
+        from . import shader_presets
+        for suffix in ['_d', '_nm', '_sc', '_glow', '_pdo', '_msk']:
+            for sdir in tex_search_dirs:
+                if not os.path.isdir(sdir):
+                    continue
+                for root, dirs, files in os.walk(sdir):
+                    for f in files:
+                        fname_no_ext = os.path.splitext(f)[0]
+                        if fname_no_ext.lower() == (name_no_ext + suffix).lower():
+                            ext = os.path.splitext(f)[1].lower()
+                            if ext in extensions:
+                                return os.path.join(root, f)
+        return None
+
+    # 从库获取材质列表
+    materials = registry.get_materials_for_model(basename, texture_map_builder=_find_texture)
+
+    if materials and materials[msh_idx % len(materials)]:
+        obj.data.materials.append(materials[msh_idx % len(materials)])
+        print(f"  [MSH Pro] msh{msh_idx:03d}: library → {materials[msh_idx % len(materials)].name}")
+    else:
+        # 库也无 → 降级
+        fallback = material_builder.build_fallback_material(
+            name=f"SC_Fallback_{obj_name}",
+            color=(0.4, 0.5, 0.4, 1.0)
+        )
+        obj.data.materials.append(fallback)
+        print(f"  [MSH Pro] msh{msh_idx:03d}: library miss → fallback material")

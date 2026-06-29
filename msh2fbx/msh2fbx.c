@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <math.h>
 
 #ifdef _WIN32
   #define WIN32_LEAN_AND_MEAN
@@ -56,9 +57,135 @@ static int get_uv_offset(uint32_t vbytes, uint32_t flag)
         case 32: return 20;
         case 36: return 20;
         case 40: return 24;   /* VBytes=40: UV at offset 24 */
-        case 44: return 24;   /* VBytes=44: assume UV at offset 24 */
+        case 44: return 20;   /* VBytes=44: UV1 at offset 20 (not 24) */
         default: return -1;   /* unknown layout, export position only */
     }
+}
+
+/* UV2 格式枚举 */
+typedef enum { UV2_NONE, UV2_FLOAT2, UV2_UINT16_UNORM } uv2_format_t;
+
+/* 获取 UV2 (lightmap) 的字节偏移和格式。
+   返回 (offset, format)，如无 UV2 空间则 format=UV2_NONE。 */
+static void get_uv2_info(uint32_t vbytes, uint32_t flag, int *out_offset, uv2_format_t *out_format)
+{
+    *out_format = UV2_NONE;
+    *out_offset = -1;
+
+    if (vbytes < 36) return;  /* 无 UV2 空间 */
+
+    if (vbytes == 36) {
+        *out_offset = 28;
+        *out_format = UV2_UINT16_UNORM;  /* VBytes=36: UV2 is uint16 UNORM, not float2 */
+    } else if (vbytes == 40) {
+        *out_offset = 32;
+        if (flag == 0x1C || flag == 0x10)
+            *out_format = UV2_UINT16_UNORM;
+        else if (flag == 0x13)
+            *out_format = UV2_FLOAT2;
+        else
+            *out_format = UV2_FLOAT2;
+    } else if (vbytes == 44) {
+        *out_offset = 28;
+        *out_format = UV2_UINT16_UNORM;
+    }
+}
+
+/* =========================================================================
+ * 顶点法线计算 — 平均相邻面法线
+ * ========================================================================= */
+
+static void compute_vertex_normals(const float *positions, const int32_t *indices,
+                                   uint32_t vcount, uint32_t icount,
+                                   float *out_normals)
+{
+    memset(out_normals, 0, vcount * 3 * sizeof(float));
+
+    for (uint32_t i = 0; i < icount; i += 3) {
+        int32_t i0 = indices[i+0], i1 = indices[i+1], i2 = indices[i+2];
+        if (i0 < 0 || i1 < 0 || i2 < 0 ||
+            (uint32_t)i0 >= vcount || (uint32_t)i1 >= vcount || (uint32_t)i2 >= vcount)
+            continue;
+
+        float e1x = positions[i0*3+0] - positions[i1*3+0];
+        float e1y = positions[i0*3+1] - positions[i1*3+1];
+        float e1z = positions[i0*3+2] - positions[i1*3+2];
+        float e2x = positions[i2*3+0] - positions[i1*3+0];
+        float e2y = positions[i2*3+1] - positions[i1*3+1];
+        float e2z = positions[i2*3+2] - positions[i1*3+2];
+
+        float nx = e1y*e2z - e1z*e2y;
+        float ny = e1z*e2x - e1x*e2z;
+        float nz = e1x*e2y - e1y*e2x;
+        float len = sqrtf(nx*nx + ny*ny + nz*nz);
+        if (len < 1e-10f) continue;
+        nx /= len; ny /= len; nz /= len;
+
+        out_normals[i0*3+0] += nx; out_normals[i0*3+1] += ny; out_normals[i0*3+2] += nz;
+        out_normals[i1*3+0] += nx; out_normals[i1*3+1] += ny; out_normals[i1*3+2] += nz;
+        out_normals[i2*3+0] += nx; out_normals[i2*3+1] += ny; out_normals[i2*3+2] += nz;
+    }
+
+    for (uint32_t i = 0; i < vcount; i++) {
+        float nx = out_normals[i*3+0], ny = out_normals[i*3+1], nz = out_normals[i*3+2];
+        float len = sqrtf(nx*nx + ny*ny + nz*nz);
+        if (len > 1e-10f) {
+            out_normals[i*3+0] = nx/len; out_normals[i*3+1] = ny/len; out_normals[i*3+2] = nz/len;
+        } else {
+            out_normals[i*3+0] = 0.0f; out_normals[i*3+1] = 1.0f; out_normals[i*3+2] = 0.0f;
+        }
+    }
+}
+
+/* =========================================================================
+ * MDF 材质名解析
+ * ========================================================================= */
+
+static int find_mdf_for_msh(const char *msh_path, char *out_mdf_path, size_t out_size)
+{
+    char base[MAX_PATH];
+    {
+        const char *fname = strrchr(msh_path, PATH_SEP);
+        fname = fname ? fname + 1 : msh_path;
+        const char *dot = strstr(fname, ".mdl-msh");
+        if (dot) {
+            size_t len = (size_t)(dot - fname);
+            memcpy(base, fname, len); base[len] = '\0';
+        } else {
+            snprintf(base, sizeof(base), "%s", fname);
+        }
+    }
+    const char *sep = strrchr(msh_path, PATH_SEP);
+    size_t dir_len = sep ? (size_t)(sep - msh_path + 1) : 0;
+    snprintf(out_mdf_path, out_size, "%.*s%s.mdf", (int)dir_len, msh_path, base);
+    FILE *fp = fopen(out_mdf_path, "r");
+    if (fp) { fclose(fp); return 1; }
+    return 0;
+}
+
+static int parse_mdf_material_name(const char *mdf_path, char *out_name, size_t out_size)
+{
+    FILE *fp = fopen(mdf_path, "r");
+    if (!fp) return 0;
+    char line[1024];
+    while (fgets(line, sizeof(line), fp)) {
+        char *p = line;
+        while (*p == ' ' || *p == '\t') p++;
+        if (*p == '/' || *p == '\n' || *p == '\r' || *p == '\0') continue;
+        if (strncmp(p, "material", 8) == 0 && (p[8] == ' ' || p[8] == '\t')) {
+            p += 8;
+            while (*p == ' ' || *p == '\t') p++;
+            char *end = p;
+            while (*end != ' ' && *end != '\t' && *end != '\n' && *end != '\r' && *end != '\0') end++;
+            size_t len = (size_t)(end - p);
+            if (len > 0 && len < out_size) {
+                memcpy(out_name, p, len); out_name[len] = '\0';
+                fclose(fp); return 1;
+            }
+        }
+    }
+    fclose(fp);
+    return 0;
 }
 
 /*
@@ -78,7 +205,8 @@ static int get_uv_offset(uint32_t vbytes, uint32_t flag)
  */
 static int parse_msh(const uint8_t *data, size_t size,
                      float **out_positions,  /* [vcount*3] */
-                     float **out_uvs,        /* [vcount*2], 可为 NULL */
+                     float **out_uvs,        /* [vcount*2], UV1 */
+                     float **out_uvs2,       /* [vcount*2], UV2 (lightmap), 可为 NULL */
                      int32_t **out_indices,  /* [icount] */
                      uint32_t *out_vcount,
                      uint32_t *out_icount)
@@ -108,6 +236,11 @@ static int parse_msh(const uint8_t *data, size_t size,
     *out_uvs       = (float*)malloc(vcount * 2 * sizeof(float));
 
     int uv_off = get_uv_offset(vbytes, flag);
+    int uv2_off;
+    uv2_format_t uv2_fmt;
+    get_uv2_info(vbytes, flag, &uv2_off, &uv2_fmt);
+    int has_uv2 = (uv2_fmt != UV2_NONE);
+
     const uint8_t *vert_base = data + 0x44;
 
     for (uint32_t i = 0; i < vcount; i++) {
@@ -122,7 +255,7 @@ static int parse_msh(const uint8_t *data, size_t size,
         (*out_positions)[i*3 + 1] = py;
         (*out_positions)[i*3 + 2] = -pz;  /* 修复前向轴：MSH -Z→+Z 适配 Maya */
 
-        /* UV: 2 floats (8 bytes) at uv_off */
+        /* UV1: 2 floats (8 bytes) at uv_off */
         if (uv_off >= 0) {
             float u, vv;
             memcpy(&u,  v + uv_off + 0, 4);
@@ -132,6 +265,23 @@ static int parse_msh(const uint8_t *data, size_t size,
         } else {
             (*out_uvs)[i*2 + 0] = 0.0f;
             (*out_uvs)[i*2 + 1] = 0.0f;
+        }
+
+        /* UV2 (lightmap) */
+        if (out_uvs2 && has_uv2) {
+            if (uv2_fmt == UV2_FLOAT2) {
+                float u2, v2;
+                memcpy(&u2, v + uv2_off + 0, 4);
+                memcpy(&v2, v + uv2_off + 4, 4);
+                (*out_uvs2)[i*2 + 0] = u2;
+                (*out_uvs2)[i*2 + 1] = 1.0f - v2;
+            } else if (uv2_fmt == UV2_UINT16_UNORM) {
+                uint16_t u2_raw, v2_raw;
+                memcpy(&u2_raw, v + uv2_off + 0, 2);
+                memcpy(&v2_raw, v + uv2_off + 2, 2);
+                (*out_uvs2)[i*2 + 0] = u2_raw / 32767.0f;
+                (*out_uvs2)[i*2 + 1] = 1.0f - (v2_raw / 32767.0f);
+            }
         }
     }
 
@@ -176,29 +326,56 @@ static int export_fbx(const char *input_path, const char *output_path)
     /* 解析 MSH */
     float   *positions = NULL;
     float   *uvs       = NULL;
+    float   *uvs2      = NULL;
     int32_t *indices   = NULL;
     uint32_t vcount, icount;
 
+    /* 预读 header 获取 vcount 以预分配 UV2 缓冲区 */
+    {
+        uint32_t tmp_vbytes = *(const uint32_t*)(raw_data + 0x08);
+        uint32_t tmp_flag   = *(const uint32_t*)(raw_data + 0x04);
+        uint32_t tmp_vcount = *(const uint32_t*)(raw_data + 0x0C);
+        int tmp_off;
+        uv2_format_t tmp_fmt;
+        get_uv2_info(tmp_vbytes, tmp_flag, &tmp_off, &tmp_fmt);
+        if (tmp_fmt != UV2_NONE)
+            uvs2 = (float*)malloc(tmp_vcount * 2 * sizeof(float));
+    }
+
     if (parse_msh(raw_data, file_size,
-                  &positions, &uvs, &indices,
+                  &positions, &uvs, &uvs2, &indices,
                   &vcount, &icount) != 0) {
         fprintf(stderr, "ERROR: Unsupported MSH format: %s\n", input_path);
         free(raw_data);
+        free(uvs2);
         return 1;
     }
-    free(raw_data);  /* no longer needed */
+    free(raw_data);
 
-    /* 提取模型名（移去 .mdl-mshXXX 扩展名，保留编号） */
+    /* ── 计算顶点法线 ── */
+    float *normals = (float*)malloc(vcount * 3 * sizeof(float));
+    compute_vertex_normals(positions, indices, vcount, icount, normals);
+
+    /* ── 查找并解析 MDF 材质 ── */
+    char mdf_path[MAX_PATH * 2] = "";
+    char material_name[256] = "";
+    int has_mdf = find_mdf_for_msh(input_path, mdf_path, sizeof(mdf_path));
+    if (has_mdf) {
+        if (!parse_mdf_material_name(mdf_path, material_name, sizeof(material_name))) {
+            has_mdf = 0;
+        }
+    }
+
+    /* 提取模型名 */
     const char *fname = strrchr(input_path, PATH_SEP);
     fname = fname ? fname + 1 : input_path;
     char model_name[512];
     {
         size_t len = strlen(fname);
-        /* 查找 ".mdl-msh" */
         const char *dot = strstr(fname, ".mdl-msh");
         if (dot) {
             size_t base_len = (size_t)(dot - fname);
-            const char *num_part = dot + 8;  /* after ".mdl-msh" */
+            const char *num_part = dot + 8;
             size_t num_len = len - (size_t)(num_part - fname);
             if (base_len + num_len < sizeof(model_name)) {
                 memcpy(model_name, fname, base_len);
@@ -212,7 +389,7 @@ static int export_fbx(const char *input_path, const char *output_path)
         }
     }
 
-    /* 构建 FBX */
+    /* ── 构建 FBX ── */
     ufbxw_scene *scene = ufbxw_create_scene(NULL);
 
     /* 节点 */
@@ -224,32 +401,80 @@ static int export_fbx(const char *input_path, const char *output_path)
     ufbxw_set_name(scene, mesh.id, model_name);
     ufbxw_node_set_attribute(scene, node, mesh.id);
 
-    /* 顶点位置 → ufbxw_vec3 buffer */
+    /* ── 材质 (从 MDF) ── */
+    ufbxw_material mat = ufbxw_null_material;
+    if (has_mdf) {
+        mat = ufbxw_create_material(scene, UFBXW_MATERIAL_FBX_LAMBERT);
+        ufbxw_set_name(scene, mat.id, material_name);
+        /* 链接材质到节点 */
+        ufbxw_node_set_material(scene, node, 0, mat);
+        ufbxw_mesh_set_single_material(scene, mesh, 0);
+    }
+
+    /* ── 顶点位置 ── */
     {
         ufbxw_vec3 *fbx_positions = (ufbxw_vec3*)malloc(vcount * sizeof(ufbxw_vec3));
         for (uint32_t i = 0; i < vcount; i++) {
-            fbx_positions[i].x = (ufbxw_real)positions[i*3 + 0];
-            fbx_positions[i].y = (ufbxw_real)positions[i*3 + 1];
-            fbx_positions[i].z = (ufbxw_real)positions[i*3 + 2];
+            fbx_positions[i].x = (ufbxw_real)positions[i*3+0];
+            fbx_positions[i].y = (ufbxw_real)positions[i*3+1];
+            fbx_positions[i].z = (ufbxw_real)positions[i*3+2];
         }
         ufbxw_vec3_buffer pos_buf = ufbxw_view_vec3_array(scene, fbx_positions, vcount);
         ufbxw_mesh_set_vertices(scene, mesh, pos_buf);
         free(fbx_positions);
     }
 
-    /* UV → ufbxw_vec2 buffer (per-vertex mapping) */
+    /* ── 法线 ── */
     {
-        ufbxw_vec2 *fbx_uvs = (ufbxw_vec2*)malloc(vcount * sizeof(ufbxw_vec2));
+        ufbxw_vec3 *fbx_normals = (ufbxw_vec3*)malloc(vcount * sizeof(ufbxw_vec3));
         for (uint32_t i = 0; i < vcount; i++) {
-            fbx_uvs[i].x = (ufbxw_real)uvs[i*2 + 0];
-            fbx_uvs[i].y = (ufbxw_real)uvs[i*2 + 1];
+            fbx_normals[i].x = (ufbxw_real)normals[i*3+0];
+            fbx_normals[i].y = (ufbxw_real)normals[i*3+1];
+            fbx_normals[i].z = (ufbxw_real)normals[i*3+2];
         }
-        ufbxw_vec2_buffer uv_buf = ufbxw_view_vec2_array(scene, fbx_uvs, vcount);
-        ufbxw_mesh_set_uvs(scene, mesh, 0, uv_buf, UFBXW_ATTRIBUTE_MAPPING_VERTEX);
+        ufbxw_vec3_buffer nrm_buf = ufbxw_view_vec3_array(scene, fbx_normals, vcount);
+        ufbxw_mesh_set_normals(scene, mesh, nrm_buf, UFBXW_ATTRIBUTE_MAPPING_VERTEX);
+        free(fbx_normals);
+    }
+
+    /* UV1 → ufbxw_vec2 buffer, ByPolygonVertex (Blender 4.2 兼容) */
+    {
+        /* 展开到 per-polygon-vertex: 每个三角形顶点一个 UV */
+        ufbxw_vec2 *fbx_uvs = (ufbxw_vec2*)malloc(icount * sizeof(ufbxw_vec2));
+        for (uint32_t i = 0; i < icount; i++) {
+            uint32_t vi = indices[i];
+            if (vi < vcount) {
+                fbx_uvs[i].x = (ufbxw_real)uvs[vi*2+0];
+                fbx_uvs[i].y = (ufbxw_real)uvs[vi*2+1];
+            } else {
+                fbx_uvs[i].x = 0.0f;
+                fbx_uvs[i].y = 0.0f;
+            }
+        }
+        ufbxw_vec2_buffer uv_buf = ufbxw_view_vec2_array(scene, fbx_uvs, icount);
+        ufbxw_mesh_set_uvs(scene, mesh, 0, uv_buf, UFBXW_ATTRIBUTE_MAPPING_POLYGON_VERTEX);
         free(fbx_uvs);
     }
 
-    /* 三角形索引 — X 轴取反已同步翻转卷绕方向，无需额外处理 */
+    /* UV2 (lightmap), ByPolygonVertex */
+    if (uvs2) {
+        ufbxw_vec2 *fbx_uvs2 = (ufbxw_vec2*)malloc(icount * sizeof(ufbxw_vec2));
+        for (uint32_t i = 0; i < icount; i++) {
+            uint32_t vi = indices[i];
+            if (vi < vcount) {
+                fbx_uvs2[i].x = (ufbxw_real)uvs2[vi*2+0];
+                fbx_uvs2[i].y = (ufbxw_real)uvs2[vi*2+1];
+            } else {
+                fbx_uvs2[i].x = 0.0f;
+                fbx_uvs2[i].y = 0.0f;
+            }
+        }
+        ufbxw_vec2_buffer uv2_buf = ufbxw_view_vec2_array(scene, fbx_uvs2, icount);
+        ufbxw_mesh_set_uvs(scene, mesh, 1, uv2_buf, UFBXW_ATTRIBUTE_MAPPING_POLYGON_VERTEX);
+        free(fbx_uvs2);
+    }
+
+    /* 三角形索引 */
     {
         ufbxw_int_buffer idx_buf = ufbxw_view_int_array(scene, indices, icount);
         ufbxw_mesh_set_triangles(scene, mesh, idx_buf);
@@ -274,7 +499,9 @@ static int export_fbx(const char *input_path, const char *output_path)
     ufbxw_free_scene(scene);
     free(positions);
     free(uvs);
+    free(uvs2);
     free(indices);
+    free(normals);
 
     return ok ? 0 : 1;
 }

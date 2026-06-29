@@ -1,0 +1,13 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm_blend,prec_bscgr_rock,"center, prec_basic_gray_rock2, prec_bscgr_rock, prec_gr_rck_msk",6
+1,object_norm,prec_crck_gr_rck,"center, prec_basic_gray_rock2, prec_bscrock_msk, prec_crck_gr_rck, prec_gr_rck_msk, prec_green",6
+2,object_norm,prec_basic_gray_rock2,"center, prec_basic_gray_rock2, prec_basic_gray_rock_msk, prec_bsc_rck, prec_bscrock_msk",6
+3,object_norm,prec_crck_gr_rck,"center, prec_basic_gray_rock2, prec_basic_white_rock, prec_crck_gr_rck, prec_gr_rck_msk, prec_gr_side",6
+4,object_norm_blend,prec_bscgr_rock,"prec_basic_gray_rock2, prec_bscgr_rock, prec_gr_rck_msk, right",6
+5,object_norm,prec_crck_gr_rck,"prec_basic_gray_rock2, prec_bscrock_msk, prec_crck_gr_rck, prec_gr_rck_msk, prec_green, right",6
+6,object_norm,prec_basic_gray_rock2,"prec_basic_gray_rock2, prec_basic_gray_rock_msk, prec_bsc_rck, prec_bscrock_msk, right",6
+7,object_norm,prec_crck_gr_rck,"prec_basic_gray_rock2, prec_basic_white_rock, prec_crck_gr_rck, prec_gr_rck_msk, prec_gr_side, right",6
+8,object_norm_blend,prec_bscgr_rock,"left, prec_basic_gray_rock2, prec_bscgr_rock, prec_gr_rck_msk",6
+9,object_norm,prec_crck_gr_rck,"left, prec_basic_gray_rock2, prec_bscrock_msk, prec_crck_gr_rck, prec_gr_rck_msk, prec_green",6
+10,object_norm,prec_basic_gray_rock2,"left, prec_basic_gray_rock2, prec_basic_gray_rock_msk, prec_bsc_rck, prec_bscrock_msk",6
+11,object_norm,prec_crck_gr_rck,"left, prec_basic_gray_rock2, prec_basic_white_rock, prec_crck_gr_rck, prec_gr_rck_msk, prec_gr_side",6

@@ -1,0 +1,17 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,sky,fed_planet_aura_back,fed_planet_aura_back,1
+1,object_norm,planet_ilay1,"planet_ilay1, planet_ilay1_msk",4
+2,sky,planet_aura,planet_aura,1
+3,skybackground,asteroids_02,asteroids_02,2
+4,skybackground,asteroids_04,asteroids_04,2
+5,skybackground,asteroids_01,asteroids_01,2
+6,skybackground,asteroids_03,asteroids_03,2
+7,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+8,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, wrecks",6
+9,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, wrecks",6
+10,object_norm,crs_plates03,"crs_plates03, crs_plates03_msk, wrecks",6
+11,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, wrecks",6
+12,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, wrecks",6
+13,object_norm,bs_center,"bs_center, bs_center_msk, wrecks",6
+14,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, wrecks",6
+15,object_norm,bs_shell_01_yellow,"bs_shell_01, bs_shell_01_msk, bs_shell_01_yellow, wrecks",6

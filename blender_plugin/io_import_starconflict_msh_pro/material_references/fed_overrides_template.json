@@ -1,0 +1,24 @@
+{
+  "_comment": "材质映射模板: bigship/fed",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "0617ff8cf3c7a567",
+  "label": "bigship/fed",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\bigship\\fed",
+  "mdf_file": "fed_bs_element1.mdf",
+  "mdf_blocks": 2,
+  "msh_count": 13,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | bs_communications_02_fed"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | bs_imper_engines"
+    }
+  }
+}

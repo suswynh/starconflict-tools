@@ -1,0 +1,7 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,rectrock,"rectrock, rectrock_msk",5
+1,dyn_object_norm,imper_engine,"green, imper_engine, imper_engine_msk",5
+2,dyn_object_norm,sci_fi_2,"minning_light_green, sci_fi_2, sci_fi_msk_2",5
+3,dyn_object_norm,aliencity,aliencity,5
+4,dyn_object_norm,precglow,precglow,5
+5,dyn_object_norm_blend,precglow,"precglow, rectrock",6

@@ -11,7 +11,7 @@ def parse_msh_header(data):
     .mdl-msh000 ~ .mdl-msh009 格式:
       [0x00] version  (0/1/2/3)
       [0x04] flag
-      [0x08] VBytes   (每顶点字节数: 24/28/32/36)
+      [0x08] VBytes   (每顶点字节数: 20/24/28/32/36/40/44)
       [0x0C] VCount   (顶点数)
       [0x10] FCount   (面索引数)
       [0x14-0x43] ?   (未知/保留)
@@ -29,7 +29,7 @@ def parse_msh_header(data):
     # 基本校验
     if version > 200:
         return None
-    if vbytes not in (20, 24, 28, 32, 36, 40):
+    if vbytes not in (20, 24, 28, 32, 36, 40, 44):
         return None
     if vcount < 3 or vcount > 500000:
         return None
@@ -89,7 +89,7 @@ def detect_format_legacy(data):
 
 
 def get_uv_offset(vbytes, flag):
-    """获取 UV 坐标在顶点结构中的字节偏移"""
+    """获取 UV1 坐标在顶点结构中的字节偏移"""
     if vbytes == 20:
         return 12   # pos@0(12B), UV@12(8B)
     elif vbytes == 24:
@@ -107,11 +107,33 @@ def get_uv_offset(vbytes, flag):
         return 20   # pos@0(12B), ?(8B), UV@20(8B), ?(8B)
     elif vbytes == 40:
         return 24   # pos@0(12B), ?(12B), UV@24(8B), ?(8B)
+    elif vbytes == 44:
+        return 20   # pos@0(12B), ?(8B), UV@20(8B), UV2@28(4B), ?(12B)
+    return None
+
+
+def get_uv2_info(vbytes, flag):
+    """获取 UV2 (lightmap) 的字节偏移和格式。
+    返回 (offset, format) 或 None。
+    format: 'float2' 或 'uint16_unorm'
+    """
+    if vbytes < 36:
+        return None
+    if vbytes == 36:
+        return (28, 'uint16_unorm')  # VBytes=36: UV2 is uint16 UNORM, not float2
+    if vbytes == 40:
+        if flag in (0x1C, 0x10):
+            return (32, 'uint16_unorm')
+        elif flag == 0x13:
+            return (32, 'float2')
+        return (32, 'float2')
+    if vbytes == 44:
+        return (28, 'uint16_unorm')
     return None
 
 
 def parse_msh(data):
-    """解析 MSH，返回 (vertices_xyz, vertices_uv, indices, format_info)"""
+    """解析 MSH，返回 (vertices_xyz, vertices_uv, vertices_uv2, indices, format_info)"""
     fmt = parse_msh_header(data)
     if fmt is None:
         fmt = detect_format_legacy(data)
@@ -125,12 +147,14 @@ def parse_msh(data):
     io = fmt['idx_off']
 
     uv_off = get_uv_offset(vb, fmt['flag'])
+    uv2_info = get_uv2_info(vb, fmt['flag'])
 
     print(f"  Format: v{fmt['version']} flag=0x{fmt['flag']:X} "
           f"{vc}verts×{vb}B {ic}indices header=0x{vo:X}")
 
     vertices = []
     uvs = []
+    uvs2 = [] if uv2_info else None
     for i in range(vc):
         off = vo + i * vb
         # 修复前向轴：MSH 前向 -Z → +Z（与 Noesis v1.2 一致）
@@ -139,18 +163,34 @@ def parse_msh(data):
         if uv_off is not None:
             u, v = struct.unpack_from("<ff", data, off + uv_off)
             uvs.append((u, v))
+        # UV2 (lightmap)
+        if uv2_info:
+            uv2_off, uv2_fmt = uv2_info
+            if uv2_fmt == 'float2':
+                u2, v2 = struct.unpack_from("<ff", data, off + uv2_off)
+                uvs2.append((u2, v2))
+            elif uv2_fmt == 'uint16_unorm':
+                u2_raw = struct.unpack_from("<H", data, off + uv2_off)[0]
+                v2_raw = struct.unpack_from("<H", data, off + uv2_off + 2)[0]
+                uvs2.append((u2_raw / 32767.0, v2_raw / 32767.0))
 
     indices = list(struct.unpack_from(f"<{ic}H", data, io))
 
-    return vertices, uvs, indices, fmt
+    return vertices, uvs, uvs2, indices, fmt
 
 
-def write_obj(vertices, uvs, indices, output_path, name="model"):
-    """写出 Wavefront OBJ 文件 (含 UV)"""
+def write_obj(vertices, uvs, indices, output_path, name="model", uvs2=None):
+    """写出 Wavefront OBJ 文件 (含 UV)。
+    如果提供 uvs2 (lightmap UV)，额外生成 name_lightmap.obj。
+    """
+    # ── 主 OBJ（UV1/diffuse）──
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(f"# Star Conflict MSH → OBJ v3\n")
+        f.write(f"# Star Conflict MSH → OBJ v4\n")
         f.write(f"# Model: {name}\n")
-        f.write(f"# Vertices: {len(vertices)}  Triangles: {len(indices)//3}\n\n")
+        f.write(f"# Vertices: {len(vertices)}  Triangles: {len(indices)//3}\n")
+        if uvs2:
+            f.write(f"# UV2 (lightmap) exported to: {name}_lightmap.obj\n")
+        f.write("\n")
 
         for v in vertices:
             f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
@@ -169,6 +209,28 @@ def write_obj(vertices, uvs, indices, output_path, name="model"):
             for i in range(0, len(indices) - 2, 3):
                 a, b, c = indices[i]+1, indices[i+1]+1, indices[i+2]+1
                 f.write(f"f {a} {b} {c}\n")
+
+    # ── Lightmap OBJ（UV2）──
+    if uvs2 and any(u != 0.0 or v != 0.0 for u, v in uvs2):
+        base, ext = os.path.splitext(output_path)
+        lm_path = f"{base}_lightmap{ext}"
+        with open(lm_path, "w", encoding="utf-8") as f:
+            f.write(f"# Star Conflict MSH → OBJ v4 — Lightmap UV\n")
+            f.write(f"# Model: {name}\n")
+            f.write(f"# Vertices: {len(vertices)}  Triangles: {len(indices)//3}\n\n")
+
+            for v in vertices:
+                f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
+            f.write("\n")
+
+            for uv in uvs2:
+                f.write(f"vt {uv[0]:.6f} {1.0 - uv[1]:.6f}\n")
+            f.write("\n")
+
+            for i in range(0, len(indices) - 2, 3):
+                a, b, c = indices[i]+1, indices[i+1]+1, indices[i+2]+1
+                f.write(f"f {a}/{a} {b}/{b} {c}/{c}\n")
+        print(f"  Lightmap OBJ: {lm_path}")
 
     xs = [v[0] for v in vertices]
     ys = [v[1] for v in vertices]
@@ -191,11 +253,11 @@ if __name__ == '__main__':
         data = f.read()
 
     try:
-        vertices, uvs, indices, fmt = parse_msh(data)
+        vertices, uvs, uvs2, indices, fmt = parse_msh(data)
     except ValueError as e:
         print(f"ERROR: {e}")
         sys.exit(1)
 
     output = args.output or (args.input + '.obj')
     name = os.path.splitext(os.path.basename(args.input))[0]
-    write_obj(vertices, uvs, indices, output, name)
+    write_obj(vertices, uvs, indices, output, name, uvs2)

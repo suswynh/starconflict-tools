@@ -1,0 +1,42 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,is_communications,"building, is_communications, is_communications_msk",5
+1,object_norm,is_details,"building, is_details, is_details_msk",6
+2,object_norm,is_panels,"building, is_panels, is_panels_msk",5
+3,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, building",6
+4,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, building",6
+5,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, building",6
+6,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, building",6
+7,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, building",6
+8,object_norm,bs_center,"bs_center, bs_center_msk, building",6
+9,object_norm,da_rock3,"da_cliff, da_rock3",5
+10,object_norm,da_rock48,"da_cliff, da_rock48, rocks_big",6
+11,object_norm,is_panels,"is_panels, is_panels_msk, tonnel_build",5
+12,object_norm,is_details,"is_details, is_details_msk, tonnel_build",6
+13,object_norm,is_communications,"is_communications, is_communications_msk, tonnel_build",5
+14,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, tonnel_build",6
+15,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, tonnel_build",6
+16,object_norm,bs_center,"bs_center, bs_center_msk, tonnel_build",6
+17,animated_mock,center_det,"center, center_det",2
+18,object_norm,da_tunnel,"da_cliff, da_tunnel, tonnel",6
+19,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, bs_imper_elements_red, rocks_big",6
+20,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_green, bs_imper_elements_msk, rocks_big",6
+21,object_norm,da_rock9,"da_cliff, da_rock9, rocks_big",6
+22,object_norm,da_rock2,"da_cliff, da_rock2",5
+23,object_norm,da_rock1,"da_cliff, da_rock1",5
+24,object_norm,da_rock3,"da_cliff, da_rock3, rocks_big",6
+25,object_norm,da_rock48,"da_cliff, da_rock48",5
+26,object_norm,da_rock2,"da_cliff, da_rock2, rocks_big",6
+27,object_norm,da_rock1,"da_cliff, da_rock1, rocks_big",6
+28,object_norm,da_bigcrystal,"da_bigcrystal, da_cliff",5
+29,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, ships",5
+30,object_norm,bs_shell_01_blue,"bs_shell_01, bs_shell_01_blue, bs_shell_01_msk, ships",6
+31,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, ships",6
+32,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, ships",6
+33,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, ships",6
+34,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, ships",6
+35,object_norm,bs_imper_elements,"bs_imper_elements, bs_imper_elements_msk, ships",6
+36,object_norm,cable01,"cable01, ships",5
+37,animated_mock,affect_animate,"affect_animate, cable01",2
+38,object_norm,is_details,"is_details, is_details_glow_red, is_details_msk",5
+39,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+40,object_norm,is_details,"is_details, is_details_msk",5

@@ -1,0 +1,4 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,bluecrystal,bluecrystal,5
+1,dyn_object_norm,da_rock2,"da_cliff, da_rock2",5
+2,dyn_object_norm,da_rock1,"da_cliff, da_rock1",5

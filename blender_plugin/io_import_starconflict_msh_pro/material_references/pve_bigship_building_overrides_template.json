@@ -1,0 +1,354 @@
+{
+  "_comment": "材质映射模板: area3/pve_bigship_building",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "6d1ff40119a36e63",
+  "label": "area3/pve_bigship_building",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area3\\pve_bigship_building",
+  "mdf_file": "pve_bigship_building.mdf",
+  "mdf_blocks": 57,
+  "msh_count": 604,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_engines"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | wall05"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | gates"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | wall01"
+    },
+    "12": {
+      "block": 12,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | wires"
+    },
+    "13": {
+      "block": 13,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | linewind"
+    },
+    "14": {
+      "block": 14,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | wall06"
+    },
+    "15": {
+      "block": 15,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "16": {
+      "block": 16,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | wall02"
+    },
+    "17": {
+      "block": 17,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | cockpit"
+    },
+    "18": {
+      "block": 18,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | runway"
+    },
+    "19": {
+      "block": 19,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | ceiling01"
+    },
+    "20": {
+      "block": 20,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates02"
+    },
+    "21": {
+      "block": 21,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "22": {
+      "block": 22,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "23": {
+      "block": 23,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_yellow"
+    },
+    "24": {
+      "block": 24,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "25": {
+      "block": 25,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "26": {
+      "block": 26,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates03"
+    },
+    "27": {
+      "block": 27,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "28": {
+      "block": 28,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_yellow"
+    },
+    "29": {
+      "block": 29,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "30": {
+      "block": 30,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates03"
+    },
+    "31": {
+      "block": 31,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "32": {
+      "block": 32,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "33": {
+      "block": 33,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01_yellow"
+    },
+    "34": {
+      "block": 34,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | cable01"
+    },
+    "35": {
+      "block": 35,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "36": {
+      "block": 36,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "37": {
+      "block": 37,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "38": {
+      "block": 38,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "39": {
+      "block": 39,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_engines"
+    },
+    "40": {
+      "block": 40,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_hole01"
+    },
+    "41": {
+      "block": 41,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | crs_plates03"
+    },
+    "42": {
+      "block": 42,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "43": {
+      "block": 43,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "44": {
+      "block": 44,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "45": {
+      "block": 45,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "46": {
+      "block": 46,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "47": {
+      "block": 47,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "48": {
+      "block": 48,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "49": {
+      "block": 49,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "50": {
+      "block": 50,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "51": {
+      "block": 51,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "52": {
+      "block": 52,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "53": {
+      "block": 53,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "54": {
+      "block": 54,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    },
+    "55": {
+      "block": 55,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | energy_scroll_blue"
+    },
+    "56": {
+      "block": 56,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    }
+  }
+}

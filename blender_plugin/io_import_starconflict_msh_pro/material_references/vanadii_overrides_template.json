@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: mining_rocks/vanadii",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "d7b771461f627f52",
+  "label": "mining_rocks/vanadii",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\asteroids_rocks\\mining_rocks\\vanadii",
+  "mdf_file": "vanadii.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 5,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | vanadii"
+    }
+  }
+}

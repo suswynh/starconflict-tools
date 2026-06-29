@@ -1,0 +1,13 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,animated_mock,inner,inner,1
+1,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+2,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk",5
+3,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk",4
+4,animated_mock,gate_scroll,"gate_mask02, gate_scroll",2
+5,object_norm,fed_city01,"fed_city01, fed_city01_msk",5
+6,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01",4
+7,object_norm,bs_center,"bs_center, bs_center_msk",5
+8,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk",5
+9,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
+10,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk",5
+11,object_norm,bs_communications_02_inner,"bs_communications_02, bs_communications_02_inner, bs_communications_02_msk",4

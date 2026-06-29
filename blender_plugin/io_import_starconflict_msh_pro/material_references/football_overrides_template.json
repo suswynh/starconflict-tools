@@ -1,0 +1,180 @@
+{
+  "_comment": "材质映射模板: area1/football",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "afe9589494998fc3",
+  "label": "area1/football",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area1\\football",
+  "mdf_file": "map.mdf",
+  "mdf_blocks": 28,
+  "msh_count": 146,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | planet_moon"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix01"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | inner"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | gate_scroll"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_city01"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02_inner"
+    },
+    "12": {
+      "block": 12,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | aladium_plates_01_red"
+    },
+    "13": {
+      "block": 13,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_plates_04_gold"
+    },
+    "14": {
+      "block": 14,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "15": {
+      "block": 15,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | aladium_plates_01_gold"
+    },
+    "16": {
+      "block": 16,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | gate_animated_01"
+    },
+    "17": {
+      "block": 17,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | fraction"
+    },
+    "18": {
+      "block": 18,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | plitka"
+    },
+    "19": {
+      "block": 19,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | aladium_plates_01"
+    },
+    "20": {
+      "block": 20,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_01"
+    },
+    "21": {
+      "block": 21,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_plates_04_gray"
+    },
+    "22": {
+      "block": 22,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_plates_04"
+    },
+    "23": {
+      "block": 23,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_mix_window"
+    },
+    "24": {
+      "block": 24,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | pattern_01"
+    },
+    "25": {
+      "block": 25,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | gate_animated_02"
+    },
+    "26": {
+      "block": 26,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | pole"
+    },
+    "27": {
+      "block": 27,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | football_team"
+    }
+  }
+}

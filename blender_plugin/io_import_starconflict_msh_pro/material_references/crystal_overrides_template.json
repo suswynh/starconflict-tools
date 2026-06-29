@@ -1,0 +1,30 @@
+{
+  "_comment": "材质映射模板: models/crystal",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "714e7828e3fc12c7",
+  "label": "models/crystal",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\crystal",
+  "mdf_file": "big_crystal.mdf",
+  "mdf_blocks": 3,
+  "msh_count": 6,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | bluecrystal"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | da_rock2"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | da_rock1"
+    }
+  }
+}

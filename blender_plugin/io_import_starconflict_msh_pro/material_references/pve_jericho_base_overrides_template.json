@@ -1,0 +1,414 @@
+{
+  "_comment": "材质映射模板: area3/pve_jericho_base",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "5d2bc4cd91e8828a",
+  "label": "area3/pve_jericho_base",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area3\\pve_jericho_base",
+  "mdf_file": "map.mdf",
+  "mdf_blocks": 67,
+  "msh_count": 280,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | jer_main"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | aura"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | gasgiant_close"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | gasgiant_gas"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | gasgiant_rings"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "sky | gas_aura"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "9": {
+      "block": 9,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | js_individual_details"
+    },
+    "10": {
+      "block": 10,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "11": {
+      "block": 11,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "12": {
+      "block": 12,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "13": {
+      "block": 13,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "14": {
+      "block": 14,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_lava01"
+    },
+    "15": {
+      "block": 15,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "16": {
+      "block": 16,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | asteroid_minnig01"
+    },
+    "17": {
+      "block": 17,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_engines"
+    },
+    "18": {
+      "block": 18,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "19": {
+      "block": 19,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "20": {
+      "block": 20,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_engines"
+    },
+    "21": {
+      "block": 21,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "22": {
+      "block": 22,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "23": {
+      "block": 23,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "24": {
+      "block": 24,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "25": {
+      "block": 25,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "26": {
+      "block": 26,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | minig_room"
+    },
+    "27": {
+      "block": 27,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "28": {
+      "block": 28,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "29": {
+      "block": 29,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "30": {
+      "block": 30,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "31": {
+      "block": 31,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_communications"
+    },
+    "32": {
+      "block": 32,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "33": {
+      "block": 33,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "34": {
+      "block": 34,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | fed_plates01"
+    },
+    "35": {
+      "block": 35,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | js_individual_details"
+    },
+    "36": {
+      "block": 36,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "37": {
+      "block": 37,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    },
+    "38": {
+      "block": 38,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | js_individual_details"
+    },
+    "39": {
+      "block": 39,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | asteroids_02"
+    },
+    "40": {
+      "block": 40,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | jer_station"
+    },
+    "41": {
+      "block": 41,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | asteroids_01"
+    },
+    "42": {
+      "block": 42,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | asteroids_04"
+    },
+    "43": {
+      "block": 43,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "skybackground | asteroids_03"
+    },
+    "44": {
+      "block": 44,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    },
+    "45": {
+      "block": 45,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | minig_room"
+    },
+    "46": {
+      "block": 46,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | minig_room02"
+    },
+    "47": {
+      "block": 47,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_01"
+    },
+    "48": {
+      "block": 48,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | truba_01"
+    },
+    "49": {
+      "block": 49,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_02"
+    },
+    "50": {
+      "block": 50,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | jer_plates01"
+    },
+    "51": {
+      "block": 51,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | js_individual_details"
+    },
+    "52": {
+      "block": 52,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_center"
+    },
+    "53": {
+      "block": 53,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | affect_animate"
+    },
+    "54": {
+      "block": 54,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_shell_01"
+    },
+    "55": {
+      "block": 55,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02"
+    },
+    "56": {
+      "block": 56,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_details"
+    },
+    "57": {
+      "block": 57,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_engines"
+    },
+    "58": {
+      "block": 58,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | is_panels"
+    },
+    "59": {
+      "block": 59,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_communications_02_white"
+    },
+    "60": {
+      "block": 60,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | minig_room"
+    },
+    "61": {
+      "block": 61,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | bs_imper_elements"
+    },
+    "62": {
+      "block": 62,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | city_lights"
+    },
+    "63": {
+      "block": 63,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | city_lights"
+    },
+    "64": {
+      "block": 64,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | city_lights"
+    },
+    "65": {
+      "block": 65,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | city_lights"
+    },
+    "66": {
+      "block": 66,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "animated_mock | energy_scroll"
+    }
+  }
+}

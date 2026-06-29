@@ -1,0 +1,7 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,bs_communications_02_fed,"bs_communications_02, bs_communications_02_fed, bs_communications_02_msk, dreadnought_01",6
+1,object_norm,fed_mix01,"dreadnought_01, fed_mix01, fed_mix01_msk",6
+2,object_norm,fed_mix01,"dreadnought_01, fed_mix01, fed_mix01_msk",6
+3,object_norm,bs_communications_02_fed,"bs_communications_02, bs_communications_02_fed, bs_communications_02_msk, dreadnought_01",6
+4,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, dreadnought_01",6
+5,object_norm,is_communications_fed,"dreadnought_01, is_communications, is_communications_fed, is_communications_msk",5

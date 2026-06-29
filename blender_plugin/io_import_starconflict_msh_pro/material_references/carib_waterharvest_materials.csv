@@ -1,0 +1,55 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+1,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, station_03",6
+2,object_norm,bs_center,"bs_center, bs_center_msk, station_03",6
+3,object_norm,is_details,"is_details, is_details_msk, station_03",6
+4,object_norm,is_communications,"is_communications, is_communications_msk, station_03",5
+5,object_norm,is_panels,"is_panels, is_panels_msk, station_03",5
+6,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_03",6
+7,object_norm,is_panels,"is_panels, is_panels_msk, station_03",5
+8,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk, station_03",6
+9,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_03",5
+10,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_03",6
+11,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_03",6
+12,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_03",6
+13,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_03",6
+14,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_03",6
+15,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_03",6
+16,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk, station_02",6
+17,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_02",6
+18,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_02",5
+19,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_02",6
+20,animated_mock,gate_scroll,"gate_mask02, gate_scroll",2
+21,animated_mock,inner,inner,1
+22,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_02",6
+23,object_norm,fed_city01,"fed_city01, fed_city01_msk, station_02",6
+24,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_01",5
+25,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_01",6
+26,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_01",6
+27,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk, station_01",6
+28,animated_mock,gate_scroll,"gate_mask02, gate_scroll",2
+29,animated_mock,inner,inner,1
+30,object_norm,fed_city01,"fed_city01, fed_city01_msk, station_01",6
+31,object_norm,bs_communications_02_inner,"bs_communications_02, bs_communications_02_inner, bs_communications_02_msk, station_01",5
+32,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk, station_05",6
+33,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_05",6
+34,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_05",5
+35,object_norm,is_details,"is_details, is_details_msk, station_05",6
+36,object_norm,is_communications,"is_communications, is_communications_msk, station_05",5
+37,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_05",6
+38,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, station_05",5
+39,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_05",6
+40,object_norm,is_communications,"is_communications, is_communications_msk, station_04",5
+41,object_norm,bs_center,"bs_center, bs_center_msk, station_04",6
+42,object_norm,is_panels,"is_panels, is_panels_msk, station_04",5
+43,object_norm,is_details,"is_details, is_details_msk, station_04",6
+44,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_04",6
+45,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, station_04",6
+46,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_04",6
+47,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, station_04",6
+48,object_norm,fed_plates01,"fed_plates01, fed_plates01_msk, station_04",5
+49,object_norm,fed_mix01,"fed_mix01, fed_mix01_msk, station_04",6
+50,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_04",6
+51,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk, station_05",6
+52,object_norm,bs_center,"bs_center, bs_center_msk, station_05",6
+53,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, station_01",6

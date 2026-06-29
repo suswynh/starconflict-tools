@@ -46,7 +46,10 @@ from bpy.types import Operator
 # ============================================================================
 
 def get_uv_offset(vbytes, flag):
-    """Calculate UV byte offset within vertex structure."""
+    """Calculate UV1 byte offset within vertex structure.
+    
+    For VBytes=44 flag=0x16, UV1 is at offset 20 (not 24).
+    """
     if vbytes == 20:
         return 12
     elif vbytes == 24:
@@ -64,8 +67,33 @@ def get_uv_offset(vbytes, flag):
     elif vbytes == 40:
         return 24
     elif vbytes == 44:
-        return 24  # assumed
+        return 20   # Fixed: was 24, UV1 starts at offset 20 for flag=0x16
     return -1
+
+
+def get_uv2_info(vbytes, flag):
+    """Get UV2 (lightmap) byte offset and format within vertex structure.
+    
+    Returns (offset, format) or None if no UV2 space.
+    format: 'float2' or 'uint16_unorm'
+    """
+    if vbytes < 36:
+        return None
+    
+    if vbytes == 36:
+        return (28, 'uint16_unorm')  # Fixed: was 'float2', but UV2 is uint16 UNORM
+    
+    if vbytes == 40:
+        if flag == 0x1C or flag == 0x10:
+            return (32, 'uint16_unorm')
+        elif flag == 0x13:
+            return (32, 'float2')
+        return (32, 'float2')
+    
+    if vbytes == 44:
+        return (28, 'uint16_unorm')
+    
+    return None
 
 
 def parse_msh(data):
@@ -86,9 +114,10 @@ def parse_msh(data):
     beyond position+UV in VBytes=40/44 are bone indices/weights and
     possibly compressed normals/tangents.
 
-    Returns (positions, uvs, indices) or raises ValueError.
+    Returns (positions, uvs, uvs2, indices) or raises ValueError.
     positions: list of (x,y,z) tuples
-    uvs:       list of (u,v) tuples, same length as positions
+    uvs:       list of (u,v) tuples, same length as positions (UV1 / diffuse)
+    uvs2:      list of (u,v) tuples or None (UV2 / lightmap)
     indices:   list of int (triangle list, every 3 = 1 triangle)
     """
     if len(data) < 0x44 + 12:
@@ -115,34 +144,50 @@ def parse_msh(data):
         raise ValueError(f"Size mismatch: expected {expected}, got {len(data)}")
 
     uv_off = get_uv_offset(vbytes, flag)
+    uv2_info = get_uv2_info(vbytes, flag)
 
     # Parse vertices
     vert_base = 0x44
     positions = []
     uvs = []
+    uvs2 = [] if uv2_info else None
     for i in range(vcount):
         off = vert_base + i * vbytes
         px, py, pz = struct.unpack_from("<fff", data, off)
         positions.append((px, py, pz))
 
+        # UV1 (diffuse/color)
         if uv_off >= 0:
             u, v = struct.unpack_from("<ff", data, off + uv_off)
             uvs.append((u, 1.0 - v))  # flip V
         else:
             uvs.append((0.0, 0.0))
+        
+        # UV2 (lightmap)
+        if uv2_info:
+            uv2_off, uv2_fmt = uv2_info
+            if uv2_fmt == 'float2':
+                u2, v2 = struct.unpack_from("<ff", data, off + uv2_off)
+                uvs2.append((u2, 1.0 - v2))
+            elif uv2_fmt == 'uint16_unorm':
+                u2_raw = struct.unpack_from("<H", data, off + uv2_off)[0]
+                v2_raw = struct.unpack_from("<H", data, off + uv2_off + 2)[0]
+                u2 = u2_raw / 32767.0
+                v2 = 1.0 - (v2_raw / 32767.0)
+                uvs2.append((u2, v2))
 
     # Parse indices (uint16 triangle list)
     idx_base = vert_base + vcount * vbytes
     indices = list(struct.unpack_from(f"<{fcount}H", data, idx_base))
 
-    return positions, uvs, indices
+    return positions, uvs, uvs2, indices
 
 
 # ============================================================================
 # Blender Mesh Builder
 # ============================================================================
 
-def build_mesh(name, positions, uvs, indices):
+def build_mesh(name, positions, uvs, indices, uvs2=None):
     """
     Create a Blender mesh from parsed MSH data.
 
@@ -161,7 +206,7 @@ def build_mesh(name, positions, uvs, indices):
     mesh = bpy.data.meshes.new(name=name)
     mesh.from_pydata(positions, [], faces)
 
-    # Create UV layer (named "map1" to match FBX/Noesis convention)
+    # Create UV1 layer (named "map1" to match FBX/Noesis convention)
     if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
         uv_layer = mesh.uv_layers.new(name="map1")
         # Blender stores UVs per-loop (per-face-vertex)
@@ -171,6 +216,16 @@ def build_mesh(name, positions, uvs, indices):
             for vert_idx in face:
                 if vert_idx < len(uvs):
                     uv_layer.data[loop_idx].uv = uvs[vert_idx]
+                loop_idx += 1
+
+    # Create UV2 layer (lightmap, "lightmap")
+    if uvs2 and any(u != 0.0 or v != 0.0 for u, v in uvs2):
+        uv2_layer = mesh.uv_layers.new(name="lightmap")
+        loop_idx = 0
+        for face in faces:
+            for vert_idx in face:
+                if vert_idx < len(uvs2):
+                    uv2_layer.data[loop_idx].uv = uvs2[vert_idx]
                 loop_idx += 1
 
     mesh.validate()
@@ -259,6 +314,19 @@ class SC_OT_import_msh(Operator, ImportHelper):
         default='Z_UP_TO_Y_UP',
     )
 
+    auto_smooth: BoolProperty(
+        name="Auto Smooth",
+        description="Automatically split normals by face angle (matching in-game shading)",
+        default=True,
+    )
+
+    smooth_angle: FloatProperty(
+        name="Smooth Angle",
+        description="Face angle threshold in degrees (default 30°)",
+        default=30.0,
+        min=1.0, max=180.0,
+    )
+
     def execute(self, context):
         if not self.files:
             # Single file from filepath
@@ -321,10 +389,22 @@ class SC_OT_import_msh(Operator, ImportHelper):
         try:
             with open(filepath, 'rb') as f:
                 data = f.read()
-            positions, uvs, indices = parse_msh(data)
+            positions, uvs, uvs2, indices = parse_msh(data)
 
             name = self._clean_name(os.path.basename(filepath))
-            mesh = build_mesh(name, positions, uvs, indices)
+            mesh = build_mesh(name, positions, uvs, indices, uvs2)
+
+            # Auto-smooth for matching in-game normal splitting
+            if self.auto_smooth and self.smooth_angle > 0.0:
+                mesh.use_auto_smooth = True
+                mesh.auto_smooth_angle = math.radians(self.smooth_angle)
+
+            # Compute tangents for normal mapping (must be after auto_smooth)
+            if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
+                try:
+                    mesh.calc_tangents(uvmap="map1")
+                except Exception:
+                    pass
 
             obj = bpy.data.objects.new(name=name, object_data=mesh)
 
@@ -430,6 +510,19 @@ class SC_OT_import_msh_batch(Operator, ImportHelper):
         default='Z_UP_TO_Y_UP',
     )
 
+    auto_smooth: BoolProperty(
+        name="Auto Smooth",
+        description="Automatically split normals by face angle",
+        default=True,
+    )
+
+    smooth_angle: FloatProperty(
+        name="Smooth Angle",
+        description="Face angle threshold in degrees (default 30°)",
+        default=30.0,
+        min=1.0, max=180.0,
+    )
+
     def execute(self, context):
         return self._batch_import(context)
 
@@ -459,13 +552,29 @@ class SC_OT_import_msh_batch(Operator, ImportHelper):
 
                     with open(filepath, 'rb') as f:
                         data = f.read()
-                    positions, uvs, indices = parse_msh(data)
+                    positions, uvs, uvs2, indices = parse_msh(data)
 
-                    mesh = build_mesh(obj_name, positions, uvs, indices)
+                    mesh = build_mesh(obj_name, positions, uvs, indices, uvs2)
+
+                    # Auto-smooth
+                    if self.auto_smooth and self.smooth_angle > 0.0:
+                        mesh.use_auto_smooth = True
+                        mesh.auto_smooth_angle = math.radians(self.smooth_angle)
+
+                    # Compute tangents (must be after auto_smooth)
+                    if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
+                        try:
+                            mesh.calc_tangents(uvmap="map1")
+                        except Exception:
+                            pass
+
                     obj = bpy.data.objects.new(name=obj_name, object_data=mesh)
 
                     if self.scale != 1.0:
                         obj.scale = (self.scale, self.scale, self.scale)
+
+                    # Apply coordinate system rotation
+                    _apply_up_axis(obj, self.up_axis)
 
                     collection = context.collection or context.scene.collection
                     collection.objects.link(obj)

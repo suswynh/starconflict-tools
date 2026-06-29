@@ -91,7 +91,11 @@ MATERIAL_SAMPLERS = {
     ],
     "object_norm": [
         "DiffuseSampler",
-        "NormalSampler",
+        "NormalSampler",          # _nm: DXT5nm (R=AO)
+        "SpecularColorSampler",   # _sc: specular color
+        "AmbOcclSampler",         # _msk: G=AO, B=Glossiness
+        "Diffuse2Sampler",        # _glow: emission
+        "LightmapSampler",        # _pdo: lightmap AO (maps/scene, Type=5 PDO)
     ],
     "object_norm_blend": [
         "DiffuseSampler",
@@ -106,10 +110,12 @@ MATERIAL_SAMPLERS = {
     ],
     "dyn_object_norm": [
         "DiffuseSampler",
-        "NormalSampler",
-        "SpecularColorSampler",
-        "AmbOcclSampler",
-        "DetailSampler",
+        "NormalSampler",          # _nm: DXT5nm (A=NormalX, G=NormalY, R=AO)
+        "SpecularColorSampler",   # _sc: RGB=specular color
+        "AmbOcclSampler",         # _msk: R=Height, G=AO, B=Glossiness (object.fx verified)
+        "DetailSampler",          # _nm: detail normal (reuses normal texture)
+        "LightmapSampler",        # _pdo: R=cosine AO (optional, UV2)
+        "Diffuse2Sampler",        # _glow: emission (optional, bigships)
     ],
     "dyn_object_norm_blend": [
         "DiffuseSampler",

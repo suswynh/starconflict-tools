@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: s2_test3/planet",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "4eaa3ae8371b5acb",
+  "label": "s2_test3/planet",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\global_world\\s2_test3\\planet",
+  "mdf_file": "moon.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 1,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "planets | planet_moon"
+    }
+  }
+}

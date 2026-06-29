@@ -1,0 +1,4 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,dyn_object_norm,aladium_plates_01,"aladium_plates_01, aladium_plates_01_msk, station_01",6
+1,dyn_object_norm,aladium_plates_02,"aladium_plates_02, aladium_plates_02_msk, station_01",6
+2,dyn_object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk_sc_dark",5

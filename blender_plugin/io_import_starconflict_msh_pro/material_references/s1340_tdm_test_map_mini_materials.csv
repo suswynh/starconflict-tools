@@ -1,0 +1,5 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,icerock01,"ice, icerock01, icerock01_msk",5
+1,object_norm,sc_cubes,"cpasecity, plates_detail, sc_cubes, sc_cubes_msk",6
+2,object_norm,sc_plates02,"cpasecity, plates_detail, sc_plates02, sc_plates02_msk",6
+3,object_norm,sc_crack_plates,"cpasecity, sc_crack_plates, sc_crack_plates_msk",5

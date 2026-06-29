@@ -1,0 +1,19 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+1,skybackground,gasgiant_rings,gasgiant_rings,1
+2,skybackground,asteroid_pole,asteroid_pole,1
+3,skybackground,gasplanet,gasplanet,1
+4,sky,aura,aura,1
+5,skybackground,jer_main,jer_main,1
+6,sky,aura,aura,1
+7,object_norm,js_individual_details,"js_individual_details, miningsite",6
+8,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, miningsite",6
+9,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, miningsite",6
+10,object_norm,bs_center,"bs_center, bs_center_msk, miningsite",6
+11,object_norm,jer_plates01,"jer_plates01, jer_plates01_msk, miningsite",5
+12,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, miningsite",6
+13,object_norm,bs_center,"bs_center, bs_center_msk, miningsite",6
+14,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, miningsite",6
+15,animated_mock,affect_animate,"affect, affect_animate",2
+16,animated_mock,affect_animate,"affect_animate, gate_scroll_red",2
+17,animated_mock,affect_animate,"affect, affect_animate",2

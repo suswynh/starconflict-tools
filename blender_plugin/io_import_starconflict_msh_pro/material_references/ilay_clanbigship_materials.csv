@@ -1,0 +1,20 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_msk, dreadnought_new",6
+1,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk_sc_dark, dreadnought_new",6
+2,object_norm,bs_communications_01,"bs_communications_01, bs_communications_01_msk_sc_dark, dreadnought_new",6
+3,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, dreadnought_new",6
+4,object_norm,bs_center,"bs_center, bs_center_msk_sc_dark, dreadnought_new",6
+5,object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, dreadnought_new",6
+6,object_norm,wall05,"dreadnought_new, wall05",4
+7,object_norm,gates,"dreadnought_new, gates",4
+8,object_norm,wall01,"dreadnought_new, wall01",4
+9,object_norm,wires,"dreadnought_new, wires",4
+10,object_norm,wall02,"dreadnought_new, wall02, wall02_msk",5
+11,object_norm,linewind,"dreadnought_new, linewind",5
+12,object_norm,wall06,"dreadnought_new, wall06",4
+13,object_norm,wall07,"dreadnought_new, wall07",4
+14,object_norm,cockpit,"cockpit, dreadnought_new, wall06",4
+15,object_norm,runway,"dreadnought_new, runway, wall06",4
+16,object_norm,ceiling01,"ceiling01, dreadnought_new",5
+17,animated_mock,gate_scroll,"gate_scroll, strips_fon_shield",2
+18,animated_mock,gate_scroll,"gate_scroll, strips_fon_shield",2

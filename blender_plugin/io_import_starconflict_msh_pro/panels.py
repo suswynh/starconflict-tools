@@ -3,6 +3,7 @@
 # ============================================================================
 """Sidebar panels and menus for the MSH Pro importer."""
 
+import os
 import bpy
 from bpy.types import Panel, Menu
 
@@ -64,6 +65,39 @@ class SC_PRO_PT_main(Panel):
             tex_count = len(prefs.default_tex_paths)
             mdf_count = len(prefs.default_mdf_paths)
             box.label(text=f"Texture paths: {tex_count}  |  MDF paths: {mdf_count}")
+
+            # ── Unpack Root & Library Status ──
+            unpack_root = prefs.unpack_root_default
+            if unpack_root:
+                box = layout.box()
+                box.label(text="Material Library", icon='LIBRARY_DATA_DIRECT')
+                if os.path.isdir(unpack_root):
+                    box.label(text=f"📁 {unpack_root}", icon='CHECKMARK')
+                else:
+                    box.label(text=f"⚠️ 解包目录无效", icon='ERROR')
+                    box.label(text=unpack_root)
+
+                lib_path = prefs.material_library_path
+                if lib_path and os.path.isfile(lib_path):
+                    box.label(text=f"📦 库文件已加载", icon='CHECKMARK')
+                else:
+                    box.label(text="📦 使用内嵌默认库", icon='LIBRARY_DATA_BROKEN')
+
+                # Collection depth display
+                if prefs.collection_depth == -1:
+                    depth_label = "全部层级"
+                elif prefs.collection_depth == 0:
+                    depth_label = "禁用"
+                else:
+                    depth_label = f"{prefs.collection_depth} 层"
+                box.label(text=f"Collection: {depth_label} | "
+                              f"简写: {'ON' if prefs.use_abbreviations else 'OFF'}")
+            else:
+                box = layout.box()
+                box.label(text="Material Library", icon='LIBRARY_DATA_BROKEN')
+                box.label(text="⚠️ 未指定解包目录", icon='ERROR')
+                box.label(text="使用内嵌默认库（功能受限）")
+                box.label(text="💡 在 Preferences 中设置路径")
 
     @staticmethod
     def _get_prefs(context):

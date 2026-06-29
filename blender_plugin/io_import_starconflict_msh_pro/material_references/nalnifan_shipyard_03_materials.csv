@@ -1,0 +1,20 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,skybackground,temperate_surface_det,"mainlands, temperate_surface, temperate_surface_det",3
+1,skybackground,mainlands_cm,mainlands_cm,1
+2,sky,clouds_shadow,clouds_shadow,1
+3,skybackground,clouds,"clouds, clouds_cm",3
+4,sky,atmosphere,atmosphere,1
+5,sky,ceres_aura,ceres_aura,1
+6,skybackground,fed_station_01,"fed_station_01, fed_station_01_norm",2
+7,skybackground,fed_station_02,"fed_station_02, fed_station_02_norm",2
+8,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
+9,object_norm,is_details,"is_details, is_details_msk, wrecks_all",5
+10,object_norm,is_communications,"is_communications, is_communications_msk, wrecks_all",5
+11,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, wrecks_all",6
+12,object_norm,bs_shell_01,"bs_shell_01, bs_shell_01_msk, wrecks_all",6
+13,object_norm,crs_set01,"crs_set01, crs_set01_msk, plates_detail, wrecks_all",6
+14,object_norm,crs_set02,"crs_set02, crs_set02_msk, plates_detail, wrecks_all",6
+15,object_norm,crs_plates_brk01,"crs_plates_brk01, crs_plates_brk01_msk, plates_detail, wrecks_all",6
+16,object_norm,crs_plates04,"crs_plates04, plates_detail, wrecks_all",5
+17,object_norm,crs_detplates,"crs_detplates, crs_detplates_msk, wrecks_all",6
+18,object_norm,crs_set03,"crs_set03, crs_set03_msk, plates_detail, wrecks_all",6

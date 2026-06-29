@@ -1,0 +1,36 @@
+{
+  "_comment": "材质映射模板: area2/s1340_tdm_test_map_mini",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "c57948151c22f1e4",
+  "label": "area2/s1340_tdm_test_map_mini",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\s1340_tdm_test_map_mini",
+  "mdf_file": "map.mdf",
+  "mdf_blocks": 4,
+  "msh_count": 101,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | icerock01"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_cubes"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_plates02"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | sc_crack_plates"
+    }
+  }
+}

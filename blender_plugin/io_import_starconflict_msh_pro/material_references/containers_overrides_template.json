@@ -1,0 +1,18 @@
+{
+  "_comment": "材质映射模板: models/containers",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "7f7271356c2e9a17",
+  "label": "models/containers",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\models\\containers",
+  "mdf_file": "bs_const_cube_big01.mdf",
+  "mdf_blocks": 1,
+  "msh_count": 4,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | bs_center"
+    }
+  }
+}

@@ -1,0 +1,1603 @@
+{
+  "_description": "MDF SHA1指纹 → 地图信息索引。导入时插件自动匹配，无需手动查找。",
+  "_total_maps": 142,
+  "maps": {
+    "994f39f98f1d419c": {
+      "label": "area1/allidium_in_danger",
+      "name": "allidium_in_danger",
+      "rel_path": "area1\\allidium_in_danger",
+      "mdf_blocks": 19,
+      "msh_count": 362,
+      "shaders": {
+        "object_norm": 6,
+        "fresnel": 1,
+        "object_norm_blend": 4,
+        "skybackground": 8
+      }
+    },
+    "ccd53ea405c413ee": {
+      "label": "allidium_in_danger/models",
+      "name": "models",
+      "rel_path": "area1\\allidium_in_danger\\models",
+      "mdf_blocks": 2,
+      "msh_count": 837,
+      "shaders": {
+        "dyn_object_norm": 1,
+        "dyn_animated_mock": 1
+      }
+    },
+    "cbd08febdfeeb293": {
+      "label": "area1/devilsjaw",
+      "name": "devilsjaw",
+      "rel_path": "area1\\devilsjaw",
+      "mdf_blocks": 7,
+      "msh_count": 300,
+      "shaders": {
+        "object_norm": 6,
+        "animated_mock": 1
+      }
+    },
+    "2459b8b04c112b1a": {
+      "label": "area1/farm",
+      "name": "farm",
+      "rel_path": "area1\\farm",
+      "mdf_blocks": 3,
+      "msh_count": 232,
+      "shaders": {
+        "object_norm": 3
+      }
+    },
+    "1988f2c6cc044348": {
+      "label": "farm/models",
+      "name": "models",
+      "rel_path": "area1\\farm\\models",
+      "mdf_blocks": 4,
+      "msh_count": 25,
+      "shaders": {
+        "dyn_object_norm": 3,
+        "dyn_glass": 1
+      }
+    },
+    "afe9589494998fc3": {
+      "label": "area1/football",
+      "name": "football",
+      "rel_path": "area1\\football",
+      "mdf_blocks": 28,
+      "msh_count": 146,
+      "shaders": {
+        "object_norm": 21,
+        "animated_mock": 7
+      }
+    },
+    "a4b41049096b46c9": {
+      "label": "area1/mars_atacks",
+      "name": "mars_atacks",
+      "rel_path": "area1\\mars_atacks",
+      "mdf_blocks": 5,
+      "msh_count": 492,
+      "shaders": {
+        "object_norm": 5
+      }
+    },
+    "e41bb9bb6eee2393": {
+      "label": "mars_atacks/model",
+      "name": "model",
+      "rel_path": "area1\\mars_atacks\\model",
+      "mdf_blocks": 9,
+      "msh_count": 261,
+      "shaders": {
+        "dyn_animated_mock": 5,
+        "dyn_object_norm": 4
+      }
+    },
+    "89bcce5adbceb13e": {
+      "label": "area1/pandora_anomaly",
+      "name": "pandora_anomaly",
+      "rel_path": "area1\\pandora_anomaly",
+      "mdf_blocks": 11,
+      "msh_count": 1518,
+      "shaders": {
+        "object_norm": 11
+      }
+    },
+    "bdecd746f5b7dbd0": {
+      "label": "area1/pandora_dreadnwreck",
+      "name": "pandora_dreadnwreck",
+      "rel_path": "area1\\pandora_dreadnwreck",
+      "mdf_blocks": 16,
+      "msh_count": 733,
+      "shaders": {
+        "object_norm": 16
+      }
+    },
+    "6e92324afbd56ba5": {
+      "label": "area2/aliendestsatation",
+      "name": "aliendestsatation",
+      "rel_path": "area2\\aliendestsatation",
+      "mdf_blocks": 18,
+      "msh_count": 745,
+      "shaders": {
+        "object_norm": 14,
+        "skybackground": 4
+      }
+    },
+    "ef8b5b735234b8fe": {
+      "label": "area2/ancientcomplex",
+      "name": "ancientcomplex",
+      "rel_path": "area2\\ancientcomplex",
+      "mdf_blocks": 22,
+      "msh_count": 358,
+      "shaders": {
+        "object_norm": 16,
+        "blank_object": 2,
+        "animated_mock": 4
+      }
+    },
+    "0d39fcde2c034618": {
+      "label": "area2/da_deathstar",
+      "name": "da_deathstar",
+      "rel_path": "area2\\da_deathstar",
+      "mdf_blocks": 6,
+      "msh_count": 536,
+      "shaders": {
+        "dyn_object_norm": 5,
+        "dyn_object_norm_blend": 1
+      }
+    },
+    "4238231edbe1dfe5": {
+      "label": "area2/dectructedasteroid",
+      "name": "dectructedasteroid",
+      "rel_path": "area2\\dectructedasteroid",
+      "mdf_blocks": 2,
+      "msh_count": 169,
+      "shaders": {
+        "object_norm": 2
+      }
+    },
+    "2c043752c8a5280f": {
+      "label": "area2/destasteroid",
+      "name": "destasteroid",
+      "rel_path": "area2\\destasteroid",
+      "mdf_blocks": 41,
+      "msh_count": 351,
+      "shaders": {
+        "object_norm": 39,
+        "animated_mock": 2
+      }
+    },
+    "3f82873eb5a65d45": {
+      "label": "area2/pvp_transstance",
+      "name": "pvp_transstance",
+      "rel_path": "area2\\pvp_transstance",
+      "mdf_blocks": 49,
+      "msh_count": 431,
+      "shaders": {
+        "object_norm": 41,
+        "skybackground": 8
+      }
+    },
+    "402e48a7cd6605b3": {
+      "label": "area2/s1340_gasgiant",
+      "name": "s1340_gasgiant",
+      "rel_path": "area2\\s1340_gasgiant",
+      "mdf_blocks": 7,
+      "msh_count": 698,
+      "shaders": {
+        "object_norm": 7
+      }
+    },
+    "26d87fbac56957cb": {
+      "label": "area2/s1340_tdm_test_map",
+      "name": "s1340_tdm_test_map",
+      "rel_path": "area2\\s1340_tdm_test_map",
+      "mdf_blocks": 7,
+      "msh_count": 448,
+      "shaders": {
+        "object_norm": 7
+      }
+    },
+    "c57948151c22f1e4": {
+      "label": "area2/s1340_tdm_test_map_mini",
+      "name": "s1340_tdm_test_map_mini",
+      "rel_path": "area2\\s1340_tdm_test_map_mini",
+      "mdf_blocks": 4,
+      "msh_count": 101,
+      "shaders": {
+        "object_norm": 4
+      }
+    },
+    "928ec7fc6cf73765": {
+      "label": "area2/s1347_geostation",
+      "name": "s1347_geostation",
+      "rel_path": "area2\\s1347_geostation",
+      "mdf_blocks": 27,
+      "msh_count": 1001,
+      "shaders": {
+        "object_norm": 25,
+        "animated_mock": 2
+      }
+    },
+    "5c85546fc0979131": {
+      "label": "area2/s1347_livestation",
+      "name": "s1347_livestation",
+      "rel_path": "area2\\s1347_livestation",
+      "mdf_blocks": 34,
+      "msh_count": 790,
+      "shaders": {
+        "object_norm": 33,
+        "animated_mock": 1
+      }
+    },
+    "4d2b34ae1245e746": {
+      "label": "area2/s1347_smallstation",
+      "name": "s1347_smallstation",
+      "rel_path": "area2\\s1347_smallstation",
+      "mdf_blocks": 15,
+      "msh_count": 349,
+      "shaders": {
+        "object_norm": 14,
+        "animated_mock": 1
+      }
+    },
+    "a7358e0b22ef5940": {
+      "label": "area2/thar_aliendebris13",
+      "name": "thar_aliendebris13",
+      "rel_path": "area2\\thar_aliendebris13",
+      "mdf_blocks": 19,
+      "msh_count": 470,
+      "shaders": {
+        "object_norm": 18,
+        "animated_mock": 1
+      }
+    },
+    "4a882a78a15cf104": {
+      "label": "area2/thar_alienruins",
+      "name": "thar_alienruins",
+      "rel_path": "area2\\thar_alienruins",
+      "mdf_blocks": 12,
+      "msh_count": 703,
+      "shaders": {
+        "object_norm_blend": 3,
+        "object_norm": 9
+      }
+    },
+    "8793ed0858916ff7": {
+      "label": "area2/thar_concourse",
+      "name": "thar_concourse",
+      "rel_path": "area2\\thar_concourse",
+      "mdf_blocks": 35,
+      "msh_count": 889,
+      "shaders": {
+        "object_norm": 27,
+        "animated_mock": 6,
+        "object": 2
+      }
+    },
+    "e8c53b42609f7945": {
+      "label": "area2/thar_lavastone",
+      "name": "thar_lavastone",
+      "rel_path": "area2\\thar_lavastone",
+      "mdf_blocks": 4,
+      "msh_count": 281,
+      "shaders": {
+        "object_norm": 4
+      }
+    },
+    "bf83a041905dffaa": {
+      "label": "area2/thar_threshold",
+      "name": "thar_threshold",
+      "rel_path": "area2\\thar_threshold",
+      "mdf_blocks": 15,
+      "msh_count": 228,
+      "shaders": {
+        "object_norm": 13,
+        "object": 1,
+        "animated_mock": 1
+      }
+    },
+    "143789c2dfbac41f": {
+      "label": "area2/thar_threshold2",
+      "name": "thar_threshold2",
+      "rel_path": "area2\\thar_threshold2",
+      "mdf_blocks": 10,
+      "msh_count": 305,
+      "shaders": {
+        "object_norm": 7,
+        "object": 1,
+        "animated_mock": 2
+      }
+    },
+    "57538ff26617cd61": {
+      "label": "area2/thar_threshold3",
+      "name": "thar_threshold3",
+      "rel_path": "area2\\thar_threshold3",
+      "mdf_blocks": 2,
+      "msh_count": 74,
+      "shaders": {
+        "blank_object": 1,
+        "object_norm": 1
+      }
+    },
+    "84321fa702991cb6": {
+      "label": "area3/ceres3_asteroidcity",
+      "name": "ceres3_asteroidcity",
+      "rel_path": "area3\\ceres3_asteroidcity",
+      "mdf_blocks": 8,
+      "msh_count": 136,
+      "shaders": {
+        "object_norm": 7,
+        "animated_mock": 1
+      }
+    },
+    "c5e4ac37764d09bd": {
+      "label": "area3/ceres3_northmsite",
+      "name": "ceres3_northmsite",
+      "rel_path": "area3\\ceres3_northmsite",
+      "mdf_blocks": 10,
+      "msh_count": 120,
+      "shaders": {
+        "object_norm": 9,
+        "animated_mock": 1
+      }
+    },
+    "ce67f9a95d6a93a1": {
+      "label": "area3/desttown",
+      "name": "desttown",
+      "rel_path": "area3\\desttown",
+      "mdf_blocks": 50,
+      "msh_count": 742,
+      "shaders": {
+        "object_norm": 47,
+        "animated_mock": 3
+      }
+    },
+    "f10172f6e1bf902a": {
+      "label": "area3/imper_gs",
+      "name": "imper_gs",
+      "rel_path": "area3\\imper_gs",
+      "mdf_blocks": 9,
+      "msh_count": 585,
+      "shaders": {
+        "object_norm": 9
+      }
+    },
+    "da3142093c10ff43": {
+      "label": "area3/planet_war",
+      "name": "planet_war",
+      "rel_path": "area3\\planet_war",
+      "mdf_blocks": 8,
+      "msh_count": 720,
+      "shaders": {
+        "dyn_object_norm": 7,
+        "dyn_animated_mock": 1
+      }
+    },
+    "559246df5d34f3fa": {
+      "label": "area3/planet_war_7",
+      "name": "planet_war_7",
+      "rel_path": "area3\\planet_war_7",
+      "mdf_blocks": 50,
+      "msh_count": 1309,
+      "shaders": {
+        "object_norm_blend": 16,
+        "object_norm": 22,
+        "animated_mock": 11,
+        "blank_object": 1
+      }
+    },
+    "6d1ff40119a36e63": {
+      "label": "area3/pve_bigship_building",
+      "name": "pve_bigship_building",
+      "rel_path": "area3\\pve_bigship_building",
+      "mdf_blocks": 57,
+      "msh_count": 604,
+      "shaders": {
+        "object_norm": 54,
+        "animated_mock": 3
+      }
+    },
+    "5d2bc4cd91e8828a": {
+      "label": "area3/pve_jericho_base",
+      "name": "pve_jericho_base",
+      "rel_path": "area3\\pve_jericho_base",
+      "mdf_blocks": 67,
+      "msh_count": 280,
+      "shaders": {
+        "skybackground": 8,
+        "sky": 2,
+        "object_norm": 47,
+        "animated_mock": 10
+      }
+    },
+    "35933d4ec27fe870": {
+      "label": "area3/s1515_piratebay",
+      "name": "s1515_piratebay",
+      "rel_path": "area3\\s1515_piratebay",
+      "mdf_blocks": 49,
+      "msh_count": 451,
+      "shaders": {
+        "object_norm": 41,
+        "animated_mock": 7,
+        "blank_object": 1
+      }
+    },
+    "36aee80dea007338": {
+      "label": "area3/tutorial_bigship_building",
+      "name": "tutorial_bigship_building",
+      "rel_path": "area3\\tutorial_bigship_building",
+      "mdf_blocks": 32,
+      "msh_count": 245,
+      "shaders": {
+        "object_norm": 32
+      }
+    },
+    "a0bfe7172f311ff7": {
+      "label": "allidium/allidium_yard",
+      "name": "allidium_yard",
+      "rel_path": "dreadnoughtbattle\\allidium\\allidium_yard",
+      "mdf_blocks": 1,
+      "msh_count": 193,
+      "shaders": {
+        "dyn_glass": 1
+      }
+    },
+    "4a56e1c884f4b529": {
+      "label": "allidium_yard/models",
+      "name": "models",
+      "rel_path": "dreadnoughtbattle\\allidium\\allidium_yard\\models",
+      "mdf_blocks": 3,
+      "msh_count": 13,
+      "shaders": {
+        "dyn_object_norm": 3
+      }
+    },
+    "94d72320b5a1b504": {
+      "label": "dreadnoughtbattle/empire",
+      "name": "empire",
+      "rel_path": "dreadnoughtbattle\\empire",
+      "mdf_blocks": 20,
+      "msh_count": 1151,
+      "shaders": {
+        "object_norm": 17,
+        "animated_mock": 3
+      }
+    },
+    "90f0708ede9d0ad5": {
+      "label": "dreadnoughtbattle/empty",
+      "name": "empty",
+      "rel_path": "dreadnoughtbattle\\empty",
+      "mdf_blocks": 1,
+      "msh_count": 25,
+      "shaders": {
+        "object_norm": 1
+      }
+    },
+    "fa7972740390a76b": {
+      "label": "dreadnoughtbattle/federation",
+      "name": "federation",
+      "rel_path": "dreadnoughtbattle\\federation",
+      "mdf_blocks": 5,
+      "msh_count": 127,
+      "shaders": {
+        "object_norm": 4,
+        "blank_object": 1
+      }
+    },
+    "16bfb18cb88690d7": {
+      "label": "dreadnoughtbattle/jericho",
+      "name": "jericho",
+      "rel_path": "dreadnoughtbattle\\jericho",
+      "mdf_blocks": 15,
+      "msh_count": 280,
+      "shaders": {
+        "object_norm": 15
+      }
+    },
+    "5cfea423daf1651e": {
+      "label": "event/paper_airplanes",
+      "name": "paper_airplanes",
+      "rel_path": "event\\paper_airplanes",
+      "mdf_blocks": 17,
+      "msh_count": 245,
+      "shaders": {
+        "object_norm": 11,
+        "animated_mock": 2,
+        "blank_object": 4
+      }
+    },
+    "94e24e1f0df91b98": {
+      "label": "paper_airplanes/addition_objects",
+      "name": "addition_objects",
+      "rel_path": "event\\paper_airplanes\\addition_objects",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object": 1
+      }
+    },
+    "ffc9d01898c7eaba": {
+      "label": "paper_airplanes/background",
+      "name": "background",
+      "rel_path": "event\\paper_airplanes\\background",
+      "mdf_blocks": 1,
+      "msh_count": 1,
+      "shaders": {
+        "sky": 1
+      }
+    },
+    "5337004032433a6d": {
+      "label": "paper_airplanes/beacon",
+      "name": "beacon",
+      "rel_path": "event\\paper_airplanes\\beacon",
+      "mdf_blocks": 3,
+      "msh_count": 9,
+      "shaders": {
+        "dyn_object_norm": 3
+      }
+    },
+    "67c3afadafd39c34": {
+      "label": "paper_airplanes/guns",
+      "name": "guns",
+      "rel_path": "event\\paper_airplanes\\guns",
+      "mdf_blocks": 2,
+      "msh_count": 4,
+      "shaders": {
+        "ship_hull": 2
+      }
+    },
+    "f286929b6230a1a4": {
+      "label": "paper_airplanes/ship",
+      "name": "ship",
+      "rel_path": "event\\paper_airplanes\\ship",
+      "mdf_blocks": 1,
+      "msh_count": 5,
+      "shaders": {
+        "ship_hull": 1
+      }
+    },
+    "8638259da722bc53": {
+      "label": "ship/ship2",
+      "name": "ship2",
+      "rel_path": "event\\paper_airplanes\\ship\\ship2",
+      "mdf_blocks": 4,
+      "msh_count": 4,
+      "shaders": {
+        "ship_decals": 1,
+        "dyn_object_norm": 1,
+        "ship_hull": 1,
+        "ship_static_decals": 1
+      }
+    },
+    "7c91be96668b09b1": {
+      "label": "ship/ship3",
+      "name": "ship3",
+      "rel_path": "event\\paper_airplanes\\ship\\ship3",
+      "mdf_blocks": 5,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 1,
+        "ship_static_decals": 2,
+        "ship_decals": 1,
+        "ship_hull": 1
+      }
+    },
+    "0eda110d99c79416": {
+      "label": "ship/wreck",
+      "name": "wreck",
+      "rel_path": "event\\paper_airplanes\\ship\\wreck",
+      "mdf_blocks": 2,
+      "msh_count": 6,
+      "shaders": {
+        "dyn_object_norm": 2
+      }
+    },
+    "5f89cf6d01556ed7": {
+      "label": "federation",
+      "name": "federation",
+      "rel_path": "federation",
+      "mdf_blocks": 25,
+      "msh_count": 416,
+      "shaders": {
+        "object_norm": 22,
+        "animated_mock": 3
+      }
+    },
+    "dc143acf74f88a0e": {
+      "label": "federation/pvp_omega",
+      "name": "pvp_omega",
+      "rel_path": "federation\\pvp_omega",
+      "mdf_blocks": 64,
+      "msh_count": 516,
+      "shaders": {
+        "object_norm": 49,
+        "animated_mock": 7,
+        "skybackground": 5,
+        "sky": 3
+      }
+    },
+    "553999882130d6d0": {
+      "label": "federation/s1550_pve_asteroid_building",
+      "name": "s1550_pve_asteroid_building",
+      "rel_path": "federation\\s1550_pve_asteroid_building",
+      "mdf_blocks": 69,
+      "msh_count": 741,
+      "shaders": {
+        "object_norm": 61,
+        "animated_mock": 8
+      }
+    },
+    "78ccba08942c1933": {
+      "label": "global_world/s1_test",
+      "name": "s1_test",
+      "rel_path": "global_world\\s1_test",
+      "mdf_blocks": 18,
+      "msh_count": 73,
+      "shaders": {
+        "animated_mock": 6,
+        "skybackground": 3,
+        "sky": 1,
+        "blank_object": 1,
+        "object_norm": 7
+      }
+    },
+    "ea6001ba48b7cef5": {
+      "label": "global_world/s1_test2",
+      "name": "s1_test2",
+      "rel_path": "global_world\\s1_test2",
+      "mdf_blocks": 18,
+      "msh_count": 51,
+      "shaders": {
+        "blank_object": 1,
+        "skybackground": 4,
+        "sky": 1,
+        "animated_mock": 5,
+        "object_norm": 7
+      }
+    },
+    "7d0d49078744f3b8": {
+      "label": "global_world/s2_test2",
+      "name": "s2_test2",
+      "rel_path": "global_world\\s2_test2",
+      "mdf_blocks": 29,
+      "msh_count": 47,
+      "shaders": {
+        "blank_object": 1,
+        "animated_mock": 2,
+        "object_norm": 21,
+        "skybackground": 3,
+        "sky": 2
+      }
+    },
+    "1e85acf03c32c93f": {
+      "label": "global_world/s2_test3",
+      "name": "s2_test3",
+      "rel_path": "global_world\\s2_test3",
+      "mdf_blocks": 26,
+      "msh_count": 945,
+      "shaders": {
+        "sky": 2,
+        "animated_mock": 2,
+        "skybackground": 2,
+        "object_norm": 20
+      }
+    },
+    "4eaa3ae8371b5acb": {
+      "label": "s2_test3/planet",
+      "name": "planet",
+      "rel_path": "global_world\\s2_test3\\planet",
+      "mdf_blocks": 1,
+      "msh_count": 1,
+      "shaders": {
+        "planets": 1
+      }
+    },
+    "c70c9e1db3004ca2": {
+      "label": "global_world/s3_test",
+      "name": "s3_test",
+      "rel_path": "global_world\\s3_test",
+      "mdf_blocks": 29,
+      "msh_count": 183,
+      "shaders": {
+        "blank_object": 1,
+        "animated_mock": 4,
+        "object_norm": 24
+      }
+    },
+    "c2f730ce2aec796e": {
+      "label": "global_world/s3_test2",
+      "name": "s3_test2",
+      "rel_path": "global_world\\s3_test2",
+      "mdf_blocks": 31,
+      "msh_count": 996,
+      "shaders": {
+        "blank_object": 1,
+        "animated_mock": 4,
+        "fresnel": 2,
+        "object_norm": 24
+      }
+    },
+    "8d587e56a92aa9de": {
+      "label": "map_empty",
+      "name": "map_empty",
+      "rel_path": "map_empty",
+      "mdf_blocks": 1,
+      "msh_count": 2,
+      "shaders": {
+        "object_norm": 1
+      }
+    },
+    "6cab135627e36729": {
+      "label": "models/asteroids_rocks",
+      "name": "asteroids_rocks",
+      "rel_path": "models\\asteroids_rocks",
+      "mdf_blocks": 1,
+      "msh_count": 31,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "b84792d6ba2b8f9e": {
+      "label": "mining_rocks/gold",
+      "name": "gold",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\gold",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "20614a09fe155b75": {
+      "label": "mining_rocks/grafit",
+      "name": "grafit",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\grafit",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "2d1f1b211d67f037": {
+      "label": "mining_rocks/kremnii",
+      "name": "kremnii",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\kremnii",
+      "mdf_blocks": 1,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "23fc8239a27192f9": {
+      "label": "mining_rocks/oskolok",
+      "name": "oskolok",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\oskolok",
+      "mdf_blocks": 1,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "2f1e263ecb504b80": {
+      "label": "mining_rocks/osmii",
+      "name": "osmii",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\osmii",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "ac136274bbaa6191": {
+      "label": "mining_rocks/rich",
+      "name": "rich",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\rich",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "d7b771461f627f52": {
+      "label": "mining_rocks/vanadii",
+      "name": "vanadii",
+      "rel_path": "models\\asteroids_rocks\\mining_rocks\\vanadii",
+      "mdf_blocks": 1,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "43519ed40fa3cab5": {
+      "label": "models/bigship",
+      "name": "bigship",
+      "rel_path": "models\\bigship",
+      "mdf_blocks": 1,
+      "msh_count": 41,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "0617ff8cf3c7a567": {
+      "label": "bigship/fed",
+      "name": "fed",
+      "rel_path": "models\\bigship\\fed",
+      "mdf_blocks": 2,
+      "msh_count": 13,
+      "shaders": {
+        "dyn_object_norm": 2
+      }
+    },
+    "a6a7b14dd9cd683c": {
+      "label": "bigship/jer",
+      "name": "jer",
+      "rel_path": "models\\bigship\\jer",
+      "mdf_blocks": 2,
+      "msh_count": 31,
+      "shaders": {
+        "dyn_object_norm": 2
+      }
+    },
+    "7f7271356c2e9a17": {
+      "label": "models/containers",
+      "name": "containers",
+      "rel_path": "models\\containers",
+      "mdf_blocks": 1,
+      "msh_count": 4,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "714e7828e3fc12c7": {
+      "label": "models/crystal",
+      "name": "crystal",
+      "rel_path": "models\\crystal",
+      "mdf_blocks": 3,
+      "msh_count": 6,
+      "shaders": {
+        "dyn_object_norm": 3
+      }
+    },
+    "f0aa6fd8ae3e2c14": {
+      "label": "models/drill",
+      "name": "drill",
+      "rel_path": "models\\drill",
+      "mdf_blocks": 2,
+      "msh_count": 3,
+      "shaders": {
+        "dyn_object_norm": 2
+      }
+    },
+    "8c59e157a6bb65e5": {
+      "label": "models/energy_geiser",
+      "name": "energy_geiser",
+      "rel_path": "models\\energy_geiser",
+      "mdf_blocks": 4,
+      "msh_count": 8,
+      "shaders": {
+        "dyn_object_norm": 1,
+        "dyn_object": 1,
+        "dyn_animated_mock": 2
+      }
+    },
+    "88fe0472b6013e12": {
+      "label": "imper_station/docking_bay_huge",
+      "name": "docking_bay_huge",
+      "rel_path": "models\\imper_station\\docking_bay_huge",
+      "mdf_blocks": 5,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 4,
+        "dyn_animated_mock": 1
+      }
+    },
+    "583a9b9bb9c36d0a": {
+      "label": "imper_station/heal_station",
+      "name": "heal_station",
+      "rel_path": "models\\imper_station\\heal_station",
+      "mdf_blocks": 10,
+      "msh_count": 10,
+      "shaders": {
+        "dyn_object_norm": 9,
+        "dyn_animated_mock": 1
+      }
+    },
+    "b13abd31cd657373": {
+      "label": "imper_station/post",
+      "name": "post",
+      "rel_path": "models\\imper_station\\post",
+      "mdf_blocks": 7,
+      "msh_count": 7,
+      "shaders": {
+        "dyn_object_norm": 7
+      }
+    },
+    "8b4b8ff7ec866eb0": {
+      "label": "imper_station/rock_crusher",
+      "name": "rock_crusher",
+      "rel_path": "models\\imper_station\\rock_crusher",
+      "mdf_blocks": 1,
+      "msh_count": 2,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "6dc8338228891e4e": {
+      "label": "models/jer_outpost",
+      "name": "jer_outpost",
+      "rel_path": "models\\jer_outpost",
+      "mdf_blocks": 1,
+      "msh_count": 5,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "06bad98f529405ca": {
+      "label": "models/precursors",
+      "name": "precursors",
+      "rel_path": "models\\precursors",
+      "mdf_blocks": 1,
+      "msh_count": 153,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "93020632ef52da32": {
+      "label": "models/scaffold",
+      "name": "scaffold",
+      "rel_path": "models\\scaffold",
+      "mdf_blocks": 1,
+      "msh_count": 7,
+      "shaders": {
+        "dyn_object_norm": 1
+      }
+    },
+    "85090b52adf88189": {
+      "label": "empire/empire_frontier",
+      "name": "empire_frontier",
+      "rel_path": "open_world\\empire\\empire_frontier",
+      "mdf_blocks": 57,
+      "msh_count": 313,
+      "shaders": {
+        "skybackground": 6,
+        "object_norm": 51
+      }
+    },
+    "4076e1f7e1dd6f88": {
+      "label": "empire/empire_interval_1",
+      "name": "empire_interval_1",
+      "rel_path": "open_world\\empire\\empire_interval_1",
+      "mdf_blocks": 13,
+      "msh_count": 169,
+      "shaders": {
+        "sky": 2,
+        "object_norm": 8,
+        "skybackground": 3
+      }
+    },
+    "f2c28cd7ecc0c38e": {
+      "label": "empire/empire_interval_2",
+      "name": "empire_interval_2",
+      "rel_path": "open_world\\empire\\empire_interval_2",
+      "mdf_blocks": 12,
+      "msh_count": 182,
+      "shaders": {
+        "sky": 2,
+        "object_norm": 7,
+        "skybackground": 3
+      }
+    },
+    "4c551c67f7651c0c": {
+      "label": "empire/empire_interval_3",
+      "name": "empire_interval_3",
+      "rel_path": "open_world\\empire\\empire_interval_3",
+      "mdf_blocks": 23,
+      "msh_count": 189,
+      "shaders": {
+        "object_norm": 18,
+        "sky": 1,
+        "skybackground": 4
+      }
+    },
+    "6e67e0456db52d74": {
+      "label": "empire/empire_interval_4",
+      "name": "empire_interval_4",
+      "rel_path": "open_world\\empire\\empire_interval_4",
+      "mdf_blocks": 11,
+      "msh_count": 122,
+      "shaders": {
+        "sky": 4,
+        "object_norm": 3,
+        "skybackground": 4
+      }
+    },
+    "0befed66afd366a6": {
+      "label": "empire/empire_interval_5",
+      "name": "empire_interval_5",
+      "rel_path": "open_world\\empire\\empire_interval_5",
+      "mdf_blocks": 10,
+      "msh_count": 117,
+      "shaders": {
+        "object_norm": 3,
+        "sky": 3,
+        "skybackground": 4
+      }
+    },
+    "23884e3b052edd06": {
+      "label": "empire/ilay_clanbigship",
+      "name": "ilay_clanbigship",
+      "rel_path": "open_world\\empire\\ilay_clanbigship",
+      "mdf_blocks": 19,
+      "msh_count": 1276,
+      "shaders": {
+        "object_norm": 17,
+        "animated_mock": 2
+      }
+    },
+    "71d7a8cd8e0ebf33": {
+      "label": "empire/ilay_gate_rex",
+      "name": "ilay_gate_rex",
+      "rel_path": "open_world\\empire\\ilay_gate_rex",
+      "mdf_blocks": 15,
+      "msh_count": 475,
+      "shaders": {
+        "object_norm": 10,
+        "sky": 1,
+        "skybackground": 4
+      }
+    },
+    "92d520c28dd5eb7c": {
+      "label": "empire/ilay_gate_rex_2",
+      "name": "ilay_gate_rex_2",
+      "rel_path": "open_world\\empire\\ilay_gate_rex_2",
+      "mdf_blocks": 14,
+      "msh_count": 165,
+      "shaders": {
+        "sky": 2,
+        "object_norm": 9,
+        "skybackground": 3
+      }
+    },
+    "f0088b9a8ba417c3": {
+      "label": "empire/ilay_gate_rex_3",
+      "name": "ilay_gate_rex_3",
+      "rel_path": "open_world\\empire\\ilay_gate_rex_3",
+      "mdf_blocks": 12,
+      "msh_count": 179,
+      "shaders": {
+        "sky": 2,
+        "object_norm": 7,
+        "skybackground": 3
+      }
+    },
+    "30cd5cc1b7a7080a": {
+      "label": "empire/ilay_gate_sirus",
+      "name": "ilay_gate_sirus",
+      "rel_path": "open_world\\empire\\ilay_gate_sirus",
+      "mdf_blocks": 16,
+      "msh_count": 187,
+      "shaders": {
+        "sky": 2,
+        "object_norm": 10,
+        "skybackground": 4
+      }
+    },
+    "dd4d42b3dec8156d": {
+      "label": "empire/ilay_gate_sirus_2",
+      "name": "ilay_gate_sirus_2",
+      "rel_path": "open_world\\empire\\ilay_gate_sirus_2",
+      "mdf_blocks": 23,
+      "msh_count": 168,
+      "shaders": {
+        "object_norm": 18,
+        "sky": 1,
+        "skybackground": 4
+      }
+    },
+    "8decc422be7859b2": {
+      "label": "empire/ilay_gate_sirus_3",
+      "name": "ilay_gate_sirus_3",
+      "rel_path": "open_world\\empire\\ilay_gate_sirus_3",
+      "mdf_blocks": 16,
+      "msh_count": 643,
+      "shaders": {
+        "object_norm": 11,
+        "sky": 1,
+        "skybackground": 4
+      }
+    },
+    "67129cfde3a11c3c": {
+      "label": "empire/ilay_mining_site",
+      "name": "ilay_mining_site",
+      "rel_path": "open_world\\empire\\ilay_mining_site",
+      "mdf_blocks": 34,
+      "msh_count": 340,
+      "shaders": {
+        "object_norm": 23,
+        "sky": 1,
+        "skybackground": 4,
+        "animated_mock": 6
+      }
+    },
+    "89fba89b94c25cc0": {
+      "label": "empire/ilay_station",
+      "name": "ilay_station",
+      "rel_path": "open_world\\empire\\ilay_station",
+      "mdf_blocks": 55,
+      "msh_count": 443,
+      "shaders": {
+        "sky": 4,
+        "object_norm": 42,
+        "skybackground": 5,
+        "animated_mock": 4
+      }
+    },
+    "be37c69fe03fc276": {
+      "label": "empire/ilay_station_2",
+      "name": "ilay_station_2",
+      "rel_path": "open_world\\empire\\ilay_station_2",
+      "mdf_blocks": 19,
+      "msh_count": 440,
+      "shaders": {
+        "sky": 4,
+        "object_norm": 11,
+        "skybackground": 4
+      }
+    },
+    "0068e18fa5d0e6d4": {
+      "label": "empire/ilay_station_3",
+      "name": "ilay_station_3",
+      "rel_path": "open_world\\empire\\ilay_station_3",
+      "mdf_blocks": 38,
+      "msh_count": 255,
+      "shaders": {
+        "sky": 4,
+        "object_norm": 30,
+        "skybackground": 4
+      }
+    },
+    "8119bb4c4d240a71": {
+      "label": "empire/rex_fallen_dreadnought",
+      "name": "rex_fallen_dreadnought",
+      "rel_path": "open_world\\empire\\rex_fallen_dreadnought",
+      "mdf_blocks": 21,
+      "msh_count": 329,
+      "shaders": {
+        "object_norm": 21
+      }
+    },
+    "b1fe15a0a114c148": {
+      "label": "empire/rex_fallen_scrapyard",
+      "name": "rex_fallen_scrapyard",
+      "rel_path": "open_world\\empire\\rex_fallen_scrapyard",
+      "mdf_blocks": 15,
+      "msh_count": 218,
+      "shaders": {
+        "object_norm": 15
+      }
+    },
+    "4e0082e7263a8771": {
+      "label": "empire/sirus_debris_site",
+      "name": "sirus_debris_site",
+      "rel_path": "open_world\\empire\\sirus_debris_site",
+      "mdf_blocks": 42,
+      "msh_count": 618,
+      "shaders": {
+        "object_norm": 37,
+        "skybackground": 4,
+        "animated_mock": 1
+      }
+    },
+    "b58e50f055d1748b": {
+      "label": "open_world/federation",
+      "name": "federation",
+      "rel_path": "open_world\\federation",
+      "mdf_blocks": 10,
+      "msh_count": 421,
+      "shaders": {
+        "object_norm": 7,
+        "animated_mock": 2,
+        "object": 1
+      }
+    },
+    "9a9fcaac91fbae93": {
+      "label": "federation/carib_waterharvest",
+      "name": "carib_waterharvest",
+      "rel_path": "open_world\\federation\\carib_waterharvest",
+      "mdf_blocks": 54,
+      "msh_count": 458,
+      "shaders": {
+        "object_norm": 50,
+        "animated_mock": 4
+      }
+    },
+    "e2e75d0fe87af599": {
+      "label": "federation/carib_waterharvest_02",
+      "name": "carib_waterharvest_02",
+      "rel_path": "open_world\\federation\\carib_waterharvest_02",
+      "mdf_blocks": 33,
+      "msh_count": 171,
+      "shaders": {
+        "object_norm": 31,
+        "animated_mock": 2
+      }
+    },
+    "6eab0e6484c4dc73": {
+      "label": "federation/carib_waterharvest_03",
+      "name": "carib_waterharvest_03",
+      "rel_path": "open_world\\federation\\carib_waterharvest_03",
+      "mdf_blocks": 14,
+      "msh_count": 413,
+      "shaders": {
+        "object_norm": 14
+      }
+    },
+    "21156e2011d35a34": {
+      "label": "federation/fed_frontier",
+      "name": "fed_frontier",
+      "rel_path": "open_world\\federation\\fed_frontier",
+      "mdf_blocks": 63,
+      "msh_count": 579,
+      "shaders": {
+        "object_norm": 55,
+        "animated_mock": 4,
+        "skybackground": 4
+      }
+    },
+    "386f038ff31a8969": {
+      "label": "federation/fed_frozen_station",
+      "name": "fed_frozen_station",
+      "rel_path": "open_world\\federation\\fed_frozen_station",
+      "mdf_blocks": 113,
+      "msh_count": 708,
+      "shaders": {
+        "object_norm": 91,
+        "animated_mock": 10,
+        "skybackground": 8,
+        "blank_object": 2,
+        "sky": 2
+      }
+    },
+    "8740991788e61812": {
+      "label": "federation/lumen_constructionsite",
+      "name": "lumen_constructionsite",
+      "rel_path": "open_world\\federation\\lumen_constructionsite",
+      "mdf_blocks": 23,
+      "msh_count": 548,
+      "shaders": {
+        "object_norm": 19,
+        "blank_object": 1,
+        "animated_mock": 3
+      }
+    },
+    "ad5853f5479109b0": {
+      "label": "federation/lumen_constructionsite_02",
+      "name": "lumen_constructionsite_02",
+      "rel_path": "open_world\\federation\\lumen_constructionsite_02",
+      "mdf_blocks": 3,
+      "msh_count": 79,
+      "shaders": {
+        "object_norm": 3
+      }
+    },
+    "9f544254b7eddcd6": {
+      "label": "federation/lumen_constructionsite_03",
+      "name": "lumen_constructionsite_03",
+      "rel_path": "open_world\\federation\\lumen_constructionsite_03",
+      "mdf_blocks": 3,
+      "msh_count": 87,
+      "shaders": {
+        "object_norm": 3
+      }
+    },
+    "c05d1cfb49bf0a97": {
+      "label": "federation/nalnifan_clanbigship",
+      "name": "nalnifan_clanbigship",
+      "rel_path": "open_world\\federation\\nalnifan_clanbigship",
+      "mdf_blocks": 6,
+      "msh_count": 773,
+      "shaders": {
+        "object_norm": 6
+      }
+    },
+    "5e881ea090d27073": {
+      "label": "federation/nalnifan_gate_carib",
+      "name": "nalnifan_gate_carib",
+      "rel_path": "open_world\\federation\\nalnifan_gate_carib",
+      "mdf_blocks": 37,
+      "msh_count": 860,
+      "shaders": {
+        "object_norm": 30,
+        "animated_mock": 7
+      }
+    },
+    "20fdf366105e705d": {
+      "label": "federation/nalnifan_gate_lumen",
+      "name": "nalnifan_gate_lumen",
+      "rel_path": "open_world\\federation\\nalnifan_gate_lumen",
+      "mdf_blocks": 12,
+      "msh_count": 135,
+      "shaders": {
+        "animated_mock": 2,
+        "object_norm": 10
+      }
+    },
+    "679862373769ed1b": {
+      "label": "federation/nalnifan_shipyard",
+      "name": "nalnifan_shipyard",
+      "rel_path": "open_world\\federation\\nalnifan_shipyard",
+      "mdf_blocks": 52,
+      "msh_count": 375,
+      "shaders": {
+        "skybackground": 5,
+        "sky": 3,
+        "object_norm": 40,
+        "animated_mock": 4
+      }
+    },
+    "5649c63bafbbd7bb": {
+      "label": "federation/nalnifan_shipyard_02",
+      "name": "nalnifan_shipyard_02",
+      "rel_path": "open_world\\federation\\nalnifan_shipyard_02",
+      "mdf_blocks": 14,
+      "msh_count": 82,
+      "shaders": {
+        "skybackground": 3,
+        "sky": 3,
+        "object_norm": 8
+      }
+    },
+    "07ae95af741b51a8": {
+      "label": "federation/nalnifan_shipyard_03",
+      "name": "nalnifan_shipyard_03",
+      "rel_path": "open_world\\federation\\nalnifan_shipyard_03",
+      "mdf_blocks": 19,
+      "msh_count": 550,
+      "shaders": {
+        "skybackground": 5,
+        "sky": 3,
+        "object_norm": 11
+      }
+    },
+    "67ec3654392b5a8c": {
+      "label": "federation/nalnifan_station",
+      "name": "nalnifan_station",
+      "rel_path": "open_world\\federation\\nalnifan_station",
+      "mdf_blocks": 73,
+      "msh_count": 329,
+      "shaders": {
+        "skybackground": 11,
+        "sky": 3,
+        "object_norm": 51,
+        "animated_mock": 8
+      }
+    },
+    "e8ff5c816238c391": {
+      "label": "jericho/isid_clanbigship",
+      "name": "isid_clanbigship",
+      "rel_path": "open_world\\jericho\\isid_clanbigship",
+      "mdf_blocks": 15,
+      "msh_count": 1087,
+      "shaders": {
+        "object_norm": 15
+      }
+    },
+    "1da46532b9159aa3": {
+      "label": "jericho/isid_gasharvest",
+      "name": "isid_gasharvest",
+      "rel_path": "open_world\\jericho\\isid_gasharvest",
+      "mdf_blocks": 24,
+      "msh_count": 132,
+      "shaders": {
+        "skybackground": 6,
+        "sky": 8,
+        "object_norm": 8,
+        "animated_mock": 2
+      }
+    },
+    "01a2e2d1b89fc11a": {
+      "label": "jericho/isid_gate_maseera",
+      "name": "isid_gate_maseera",
+      "rel_path": "open_world\\jericho\\isid_gate_maseera",
+      "mdf_blocks": 17,
+      "msh_count": 332,
+      "shaders": {
+        "object_norm": 14,
+        "animated_mock": 3
+      }
+    },
+    "939b7297f0b55fd5": {
+      "label": "jericho/isid_miningsite",
+      "name": "isid_miningsite",
+      "rel_path": "open_world\\jericho\\isid_miningsite",
+      "mdf_blocks": 28,
+      "msh_count": 296,
+      "shaders": {
+        "object_norm": 18,
+        "skybackground": 4,
+        "sky": 2,
+        "animated_mock": 4
+      }
+    },
+    "79a9d428c2b3e88b": {
+      "label": "jericho/isid_miningsite_02",
+      "name": "isid_miningsite_02",
+      "rel_path": "open_world\\jericho\\isid_miningsite_02",
+      "mdf_blocks": 18,
+      "msh_count": 513,
+      "shaders": {
+        "object_norm": 9,
+        "skybackground": 4,
+        "sky": 2,
+        "animated_mock": 3
+      }
+    },
+    "341c003d56dd4949": {
+      "label": "jericho/isid_miningsite_03",
+      "name": "isid_miningsite_03",
+      "rel_path": "open_world\\jericho\\isid_miningsite_03",
+      "mdf_blocks": 8,
+      "msh_count": 126,
+      "shaders": {
+        "object_norm": 2,
+        "skybackground": 4,
+        "sky": 2
+      }
+    },
+    "f7288cfa85490ef1": {
+      "label": "jericho/isid_station",
+      "name": "isid_station",
+      "rel_path": "open_world\\jericho\\isid_station",
+      "mdf_blocks": 42,
+      "msh_count": 417,
+      "shaders": {
+        "object_norm": 24,
+        "skybackground": 8,
+        "sky": 2,
+        "animated_mock": 8
+      }
+    },
+    "8137adeebadf3079": {
+      "label": "jericho/isid_station_02",
+      "name": "isid_station_02",
+      "rel_path": "open_world\\jericho\\isid_station_02",
+      "mdf_blocks": 20,
+      "msh_count": 221,
+      "shaders": {
+        "object_norm": 13,
+        "skybackground": 3,
+        "sky": 2,
+        "animated_mock": 2
+      }
+    },
+    "1c12995f521d3f34": {
+      "label": "jericho/isid_station_03",
+      "name": "isid_station_03",
+      "rel_path": "open_world\\jericho\\isid_station_03",
+      "mdf_blocks": 6,
+      "msh_count": 101,
+      "shaders": {
+        "object_norm": 1,
+        "skybackground": 3,
+        "sky": 2
+      }
+    },
+    "57b95e9f6dcef4c8": {
+      "label": "jericho/jericho_frontier",
+      "name": "jericho_frontier",
+      "rel_path": "open_world\\jericho\\jericho_frontier",
+      "mdf_blocks": 45,
+      "msh_count": 689,
+      "shaders": {
+        "object_norm": 42,
+        "animated_mock": 3
+      }
+    },
+    "39197cabcb345fbb": {
+      "label": "jericho/maseera_gate_isid",
+      "name": "maseera_gate_isid",
+      "rel_path": "open_world\\jericho\\maseera_gate_isid",
+      "mdf_blocks": 13,
+      "msh_count": 306,
+      "shaders": {
+        "object_norm": 8,
+        "sky": 1,
+        "skybackground": 4
+      }
+    },
+    "9bbb0cfb2852b3aa": {
+      "label": "jericho/maseera_gate_isid_02",
+      "name": "maseera_gate_isid_02",
+      "rel_path": "open_world\\jericho\\maseera_gate_isid_02",
+      "mdf_blocks": 18,
+      "msh_count": 226,
+      "shaders": {
+        "object_norm": 14,
+        "skybackground": 3,
+        "sky": 1
+      }
+    },
+    "0c03901b85581c51": {
+      "label": "jericho/maseera_gate_isid_03",
+      "name": "maseera_gate_isid_03",
+      "rel_path": "open_world\\jericho\\maseera_gate_isid_03",
+      "mdf_blocks": 15,
+      "msh_count": 439,
+      "shaders": {
+        "object_norm": 10,
+        "skybackground": 4,
+        "sky": 1
+      }
+    },
+    "d3ad0edb02d89f0e": {
+      "label": "jericho/maseera_terramorphingsite",
+      "name": "maseera_terramorphingsite",
+      "rel_path": "open_world\\jericho\\maseera_terramorphingsite",
+      "mdf_blocks": 40,
+      "msh_count": 425,
+      "shaders": {
+        "object_norm": 21,
+        "sky": 5,
+        "animated_mock": 8,
+        "skybackground": 6
+      }
+    },
+    "7623c8b7e1a5255c": {
+      "label": "precursors/precursor_zona_1",
+      "name": "precursor_zona_1",
+      "rel_path": "open_world\\precursors\\precursor_zona_1",
+      "mdf_blocks": 3,
+      "msh_count": 122,
+      "shaders": {
+        "object_norm": 2,
+        "animated_mock": 1
+      }
+    },
+    "5ca522474e6a7214": {
+      "label": "precursors/precursor_zona_2",
+      "name": "precursor_zona_2",
+      "rel_path": "open_world\\precursors\\precursor_zona_2",
+      "mdf_blocks": 11,
+      "msh_count": 494,
+      "shaders": {
+        "object_norm": 7,
+        "blank_object": 1,
+        "animated_mock": 3
+      }
+    },
+    "aaab13cc06548ef0": {
+      "label": "precursors/precursor_zona_3",
+      "name": "precursor_zona_3",
+      "rel_path": "open_world\\precursors\\precursor_zona_3",
+      "mdf_blocks": 11,
+      "msh_count": 550,
+      "shaders": {
+        "object_norm": 7,
+        "blank_object": 1,
+        "animated_mock": 3
+      }
+    },
+    "90d5ac3d70633af6": {
+      "label": "precursors/precursor_zona_5",
+      "name": "precursor_zona_5",
+      "rel_path": "open_world\\precursors\\precursor_zona_5",
+      "mdf_blocks": 12,
+      "msh_count": 561,
+      "shaders": {
+        "object_norm": 7,
+        "blank_object": 2,
+        "animated_mock": 3
+      }
+    },
+    "62c600887b6b20ac": {
+      "label": "precursors/precursor_zona_6",
+      "name": "precursor_zona_6",
+      "rel_path": "open_world\\precursors\\precursor_zona_6",
+      "mdf_blocks": 43,
+      "msh_count": 455,
+      "shaders": {
+        "object_norm": 33,
+        "blank_object": 1,
+        "animated_mock": 9
+      }
+    }
+  }
+}

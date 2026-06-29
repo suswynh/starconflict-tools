@@ -1,0 +1,66 @@
+{
+  "_comment": "材质映射模板: mars_atacks/model",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "e41bb9bb6eee2393",
+  "label": "mars_atacks/model",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area1\\mars_atacks\\model",
+  "mdf_file": "jenergy.mdf",
+  "mdf_blocks": 9,
+  "msh_count": 261,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_animated_mock | static_shield02"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_animated_mock | static_shield01"
+    },
+    "2": {
+      "block": 2,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_animated_mock | gate_scroll"
+    },
+    "3": {
+      "block": 3,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | bs_communications_02"
+    },
+    "4": {
+      "block": 4,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | jer_plates01"
+    },
+    "5": {
+      "block": 5,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | is_details"
+    },
+    "6": {
+      "block": 6,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_object_norm | crystal01_mineral"
+    },
+    "7": {
+      "block": 7,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_animated_mock | affect_animate"
+    },
+    "8": {
+      "block": 8,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "dyn_animated_mock | ui_jugle_planet"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "_comment": "材质映射模板: area2/thar_threshold3",
+  "_usage": "修改 block 和 confidence，然后复制整个 overrides 到 material_mapping_db.json",
+  "_fingerprint": "57538ff26617cd61",
+  "label": "area2/thar_threshold3",
+  "map_dir": "D:\\starconflict upcak\\scunpack\\output\\mapskit\\maps\\area2\\thar_threshold3",
+  "mdf_file": "thar_threshold.mdf",
+  "mdf_blocks": 2,
+  "msh_count": 74,
+  "overrides": {
+    "0": {
+      "block": 0,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "blank_object | ?"
+    },
+    "1": {
+      "block": 1,
+      "confidence": "low",
+      "source": "index_1to1",
+      "note": "object_norm | asteroid_hole01"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+﻿block,shader,diffuse_short,keywords,samplers
+0,object_norm,decrock,"cracks, decrock",5
+1,object_norm,spccit,"houses, spccit, spccit_msk",6
+2,animated_mock,deckrock,deckrock,2
+3,object_norm,decrock02_dark,"deckrock, decrock02, decrock02_dark, spasecity1",6
+4,object_norm,decrock02,"decrock02, spasecity1",5
+5,object_norm,decrock02_dark,"decrock02, decrock02_dark, spasecity1",5
+6,object_norm,decrock04,"decrock04, spasecity1",6
+7,object_norm,decrock03,"decrock03, spasecity1",5
+8,object_norm,dcrck_brkn,"dcrck_brkn, dcrck_brkn_msk, spasecity1",5
+9,object_norm,cage_di,"cage, cage_di, spasecity1",6
+10,object_norm,decrock,"decrock, spasecity1",5
+11,object_norm,decrock02,"decrock02, spasecity2",5
+12,object_norm,decrock02_dark,"deckrock, decrock02, decrock02_dark, spasecity2",6
+13,object_norm,decrock04,"decrock04, spasecity2",6
+14,object_norm,decrock02_dark,"decrock02, decrock02_dark, spasecity2",5
+15,object_norm,decrock,"decrock, spasecity2",5
+16,object_norm,dcrck_brkn,"dcrck_brkn, dcrck_brkn_msk, spasecity2",5
+17,object_norm,decrock03,"decrock03, spasecity2",5
+18,object_norm,cage_di,"cage, cage_di, spasecity2",6
