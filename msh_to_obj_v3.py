@@ -1,7 +1,8 @@
 """
-Star Conflict MSH → OBJ converter v3
+Star Conflict MSH → OBJ converter v3.1
 Based on fmt_StarConflict_mdl-msh000.py (Noesis plugin) + original auto-detect.
-Supports: version 0-3, VBytes 24/28/32/36, UV export.
+Supports: version 0-3, VBytes 20/24/28/32/36/40/44, UV export.
+v3.1 (2026-07-11): Fix VBytes=40 flag=0x13/0x10 and VBytes=32 flag=0x0F UV offsets.
 """
 import struct, os, sys
 
@@ -95,17 +96,23 @@ def get_uv_offset(vbytes, flag):
     elif vbytes == 24:
         return 16   # pos@0(12B), ?(4B), UV@16(8B)
     elif vbytes == 28:
-        if flag in (0xE, 5):
+        if flag == 0xE:
             return 16   # pos@0(12B), ?(4B), UV@16(8B), ?(4B)
-        elif flag == 0x11:
-            return 20   # pos@0(12B), ?(8B), UV@20(8B)
+        elif flag in (5, 0x11):
+            return 20   # pos@0(12B), ?(8B), UV@20(8B) — flag=5 verified: pvp_omega skybox meshes
         else:
             return 16   # 默认
     elif vbytes == 32:
+        if flag == 0x0F:
+            return 16   # Fixed: was 20, UV1 at offset 16 (verified: fed_mercenary_tool_001)
         return 20   # pos@0(12B), ?(8B), UV@20(8B), ?(4B)
     elif vbytes == 36:
         return 20   # pos@0(12B), ?(8B), UV@20(8B), ?(8B)
     elif vbytes == 40:
+        if flag == 0x13:
+            return 20   # Fixed: was 24, UV1 at offset 20 (verified: loader_01, reptile_01_000)
+        elif flag == 0x10:
+            return 16   # Fixed: was 24, UV1 at offset 16 for skinned character (verified: fed_mercenary_man)
         return 24   # pos@0(12B), ?(12B), UV@24(8B), ?(8B)
     elif vbytes == 44:
         return 20   # pos@0(12B), ?(8B), UV@20(8B), UV2@28(4B), ?(12B)

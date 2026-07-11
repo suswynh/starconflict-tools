@@ -55,8 +55,48 @@ PBR 贴图通道分析 (2026-06-30 — 着色器源码验证):
   ⚠️ irradiance cubemap: 缺TFD文件
   ⚠️ VBytes=40角色模型: UV偏移待修正
   ⚠️ VBytes=28模型: 无UV2空间, lightmap使用UV1采样 (PD_OCCL Type=0)
-  ✅ fed_plates01_msk 通道: 已通过着色器源码确认为 G=AO, B=Glossiness
-  ⚠️ Blender Principled BSDF 与 Blinn-Phong 不完全匹配: Gloss→Roughness 转换为近似
+   ✅ fed_plates01_msk 通道: 已通过着色器源码确认为 G=AO, B=Glossiness
+   ⚠️ Blender Principled BSDF 与 Blinn-Phong 不完全匹配: Gloss→Roughness 转换为近似
+
+   ── 透明材质着色器分析 (2026-07-02 — animated_mock.fx 源码验证) ──
+
+   ✅ 透明遮罩材质 (SC_animated_mock)
+   - 专门用于半透明空气墙/护盾/传送门/屏障效果
+   - UV 动画完全由顶点着色器驱动，**无需网格旋转或变换矩阵**
+   - VS_INPUT: VertexTransformInput + Tex0(UV1) + Tex1(UV2/lightmap)
+   - PS_OUTPUT: baseUv=Tex0, cmUv=Tex1 (Tex1 作为 ColormapSampler 的采样坐标)
+
+   ✅ UV 动画模式 (animated_mock.fx vertex shader):
+   - 平移偏移:  o.uv0.xy += UserParam2_Float4.xy (常量正向偏移)
+   - 垂直滚动:  o.uv0.y += animTime * UserParam2_Float4.z (随时间滚动)
+   - 全方向:    o.uv0 += animTime * UserParam4_Float4.xyzw (UV 四方向平移)
+   - 旋转变换:  sincos(animTime * UserParam2_Float4.w * PI*2) 环绕 (0.5,0.5)
+   - 离散帧:    UserParam1_Float4.xz=周期, yw=帧数; 公式简化:
+                frame = floor(frac(animTime / period) * frames)
+                uv += sign * frame / frames
+   - 时间源:    CodeParam0_Float4[0].w (游戏代码驱动) 或 GlobalTime.y (回退)
+
+   ✅ ColormapSampler (如 gate_mask02.dds) 在像素着色器中的双用途:
+        float4 cm = tex2D(ColormapSampler, cmUv);
+        albedo.rgb *= cm.rgb;           ← RGB = 颜色调制 (与漫反射相乘着色)
+        albedo.a = cm.a;                 ← A   = 透明度混合 (最终 Alpha 值)
+   - ⚠️ 这是 Alpha Blending (透明混合), 不是 Alpha Test (裁剪)
+   - 无 CUBE 定义时走 else: albedo.a = cm.a (gate_mask02 走此路径)
+   - 有 CUBE 时: albedo = lerp(cube, albedo, cm.a); albedo.a = 1.0
+
+   ✅ gate_mask02 在 pvp_omega map.mdf 中的材质参数 (animated_mock block #14/#17):
+        DiffuseSampler    "models\shields\gate_scroll"  ← 基础纹理(卷轴发光图案)
+        ColormapSampler   "models\shields\gate_mask02"  ← 遮罩纹理(RGB=色调, A=透明度)
+        UserParam0_Float4 ( 1 1 0 0 )                   ← 亮度=1.0, 光泽度=1.0
+        UserParam2_Float4 ( 0 0 0.5 0 )                 ← 偏移=(0,0), 滚动速度=0.5, 旋转速度=0
+        UserParam3_Float4 ( 0 0 0 1 )                   ← Fresnel 参数
+        UserParam1_Float4 ( 1e+006 1 1e+006 1 )         ← 离散帧动画=禁用(周期极大)
+     - ⚠️ MDF 默认值中旋转速度=0, 游戏运行时可经由 CodeParam0 覆盖
+     - 该材质在 mdl-geo 中无变换节点, 所有动画效果由着色器参数驱动
+
+   ✅ 工程结论: map_504 (msh504) 网格无旋转矩阵, UV 动画完全由 animated_mock.fx 的
+     顶点着色器通过 UserParam/CodeParam 运行时参数驱动。gate_mask02 为混合遮罩材质:
+     RGB 控制颜色调制, Alpha 控制半透明混合。
 
 版本历史:
   v1: rawtex_py.py (简单TFH启发式) + tex_v1 (简单位流)
@@ -87,11 +127,39 @@ PBR 贴图通道分析 (2026-06-30 — 着色器源码验证):
       确认游戏使用 Specular-Gloss 工作流 (Blinn-Phong)
       修改: material_builder.py, shader_presets.py, README.md, README_PRO.md
 
-  v2.2 (2026-06-29): UV2 Lightmap + PBR _msk 通道完整解析
-      UV2: msh_parser.py 新增 VBytes=32 的 UV2 解析 (offset=28, uint16_unorm)
-           dreadnought_control_cab_imp 等 bigship/map 模型现在正确导入 lightmap UV 通道
-      _msk: material_builder.py AmbOcclSampler 从单通道(R)改为三通道(R/G/B)提取
-            R→AO/Cavity, G→Roughness, B→Metallic (完整 PBR 还原)
-            ⚠️ 以上通道映射已在 v2.3 中通过着色器源码纠正
-      shader_presets.py: 更新 object_norm/dyn_object_norm 采样器列表
-      README/README_PRO: 新增 PBR 贴图通道分析与 UV2 文档
+   v2.2 (2026-06-29): UV2 Lightmap + PBR _msk 通道完整解析
+       UV2: msh_parser.py 新增 VBytes=32 的 UV2 解析 (offset=28, uint16_unorm)
+            dreadnought_control_cab_imp 等 bigship/map 模型现在正确导入 lightmap UV 通道
+       _msk: material_builder.py AmbOcclSampler 从单通道(R)改为三通道(R/G/B)提取
+             R→AO/Cavity, G→Roughness, B→Metallic (完整 PBR 还原)
+             ⚠️ 以上通道映射已在 v2.3 中通过着色器源码纠正
+       shader_presets.py: 更新 object_norm/dyn_object_norm 采样器列表
+       README/README_PRO: 新增 PBR 贴图通道分析与 UV2 文档
+
+   v2.4 (2026-07-02): Blender 着色器节点还原修复 — alpha/自发光/lightmap/空气墙混合
+       通过遍历所有 .fx 着色器源码验证材质属性映射，修复三项 Blender 节点网络问题:
+
+       ① Alpha 连接 (material_builder.py)
+       - sky (大气层): ceres_aura.dds 的 alpha 通道为纯白色, 改用颜色亮度→BSDF Alpha
+         (ShaderNodeRGBToBW: 亮部不透明, 暗部透明, 营造大气辉光渐变)
+       - skybackground (建筑透贴片): fed_station_01.dds alpha有实际轮廓, 直连BSDF Alpha
+       - animated_mock 等透明材质: ColormapSampler.Alpha → BSDF Alpha (albedo.a = cm.a)
+       - sky材质 Alpha*Color 乘法保留 (模拟 color.a * MAX_RGBS_RANGE)
+
+       ② 自发光连接 (material_builder.py)
+       - sky/skybackground/planets 无 _glow 贴图时: DiffuseSampler → Base Color + Emission Color
+       - 材质预览模式下不连接到自发光会显示灰白色
+
+       ③ Lightmap 混合系数 (material_builder.py)
+       - 原为简单乘法 (强度=1.0) 导致颜色过暗
+       - 改为: BaseColor 与 BaseColor*Lightmap 的 Mix 混合, 默认系数 0.3
+       - 通过 ShaderNodeMix 实现用户可调系数
+
+       ④ 空气墙材质 gate 混合 (material_builder.py)
+       - map_481 等空气墙: ColormapSampler RGB × DiffuseSampler → Base Color
+       - animated_mock.fx: albedo.rgb *= cm.rgb (gate_scroll × gate_mask02 调色)
+       - ColormapSampler Alpha → BSDF Alpha (透明度)
+       - VB=28 flag=0x000E 无第二UV通道, Tex0/Tex1 共享同一套UV
+
+       shader_presets.py: 新增 sky/skybackground/planets 到 TRANSPARENT_MATERIAL_TYPES
+       修改文件: material_builder.py, shader_presets.py, PROJECT_NOTES.txt, README_PRO.md

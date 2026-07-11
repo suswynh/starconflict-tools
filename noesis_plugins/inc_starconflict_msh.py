@@ -1,6 +1,6 @@
 # Star Conflict .mdl-mshXXX shared loader
 # Used by fmt_StarConflict_msh_A~Z.py to avoid duplicating identical logic 26 times.
-# KNOWN: VBytes=40 flag=0x10 (character models) UV offset needs fixing, does not affect ships/scenes.
+# v1.2.1 (2026-07-11): Fixed VBytes=40 flag=0x13/0x10 and VBytes=32 flag=0x0F UV1 offsets.
 #
 # v1.2 (2026-06): Fix front axis — MSH models face -Z, negate Z to face +Z (Maya/FBX compatible).
 #   Z negation also flips winding direction, so TRIWINDBACKWARD is not needed.
@@ -48,21 +48,32 @@ def load_msh(data, mdlList):
             rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
             rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 16)
         elif VBytes == 28:
-            if flag == 0xe or flag == 5:
+            if flag == 0xe:
                 rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
                 rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 16)
-            elif flag == 0x11:
+            elif flag == 5 or flag == 0x11:
                 rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
-                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 20)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 20)  # flag=5 UV at 20 (verified: pvp_omega skybox)
             else:
                 rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
                 rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 16)
         elif VBytes == 32:
-            rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
-            rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 20)
+            if flag == 0x0F:
+                rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 16)
+            else:
+                rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 20)
         elif VBytes == 40:
-            rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
-            rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 24)
+            if flag == 0x13:
+                rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 20)
+            elif flag == 0x10:
+                rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 16)
+            else:
+                rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
+                rapi.rpgBindUV1BufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 24)
         else:
             # fallback: at least bind position
             rapi.rpgBindPositionBufferOfs(VBuf, noesis.RPGEODATA_FLOAT, VBytes, 0)
