@@ -51,12 +51,17 @@ static int get_uv_offset(uint32_t vbytes, uint32_t flag)
         case 20: return 12;   /* pos@0(12B), UV@12(8B) */
         case 24: return 16;   /* pos@0(12B), ?(4B), UV@16(8B) */
         case 28:
-            if (flag == 0xE || flag == 5) return 16;
-            if (flag == 0x11) return 20;
+            if (flag == 0xE) return 16;
+            if (flag == 5 || flag == 0x11) return 20;  /* flag=5 UV at 20 (verified: pvp_omega skybox) */
             return 16;
-        case 32: return 20;
+        case 32:
+            if (flag == 0x0F) return 16;   /* Fixed: was 20, UV1 at offset 16 (fed_mercenary_tool) */
+            return 20;
         case 36: return 20;
-        case 40: return 24;   /* VBytes=40: UV at offset 24 */
+        case 40:
+            if (flag == 0x13) return 20;   /* Fixed: was 24, UV1 at offset 20 (loader, reptile_01) */
+            if (flag == 0x10) return 16;   /* Fixed: was 24, UV1 at offset 16 (skinned: fed_mercenary_man) */
+            return 24;
         case 44: return 20;   /* VBytes=44: UV1 at offset 20 (not 24) */
         default: return -1;   /* unknown layout, export position only */
     }
@@ -71,6 +76,13 @@ static void get_uv2_info(uint32_t vbytes, uint32_t flag, int *out_offset, uv2_fo
 {
     *out_format = UV2_NONE;
     *out_offset = -1;
+
+    /* VBytes=28 flag=0x0E: FX UV2 for animated_mock airwalls/gates */
+    if (vbytes == 28 && flag == 0x0E) {
+        *out_offset = 24;
+        *out_format = UV2_UINT16_UNORM;
+        return;
+    }
 
     if (vbytes < 36) return;  /* 无 UV2 空间 */
 

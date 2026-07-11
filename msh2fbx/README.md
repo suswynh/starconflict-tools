@@ -3,6 +3,8 @@
 纯 C 命令行工具，将 Hammer Engine 的 `.mdl-mshXXX` 静态网格转换为 Autodesk FBX 格式。
 零外部依赖，无需 Noesis 或 Autodesk SDK。
 
+> **v1.5** (2026-07) — VBytes=28 flag=0x0E 新增 FX UV2 提取（animated_mock 空气墙 gate_mask02）。
+> **v1.4** (2026-07) — 修复 VB=28 flag=0x0005 天空盒 UV 偏移：offset 16→20，修复 UV 解析为单线问题。
 > **v1.3** (2026-06) — 修复 Blender 4.2 LTS FBX 导入 UV 不可见问题：UV 映射从 `ByVertice` 改为 `ByPolygonVertex`。
 > **v1.2** (2026-06) — 修复前向轴：MSH 模型前向为 -Z，取反后前向为 +Z。
 
@@ -112,15 +114,20 @@ fbx_output/
 
 ## 支持的格式
 
-| VBytes | flag 条件 | UV 偏移 | 常见用途 |
-|--------|-----------|---------|----------|
-| 20 | — | 12 | 基础网格 |
-| 24 | — | 16 | 扩展网格 |
-| 28 | flag=0xE, 5 | 16 | 场景物体 |
-| 28 | flag=0x11 | 20 | 特殊物体 |
-| 32 | — | 20 | 中型网格 |
-| 36 | — | 20 | 大型网格 |
-| 40 | — | 24 | 角色模型 |
+| VBytes | flag 条件 | UV 偏移 | UV2 | 常见用途 |
+|--------|-----------|---------|:---:|----------|
+| 20 | — | 12 | — | 基础网格 |
+| 24 | — | 16 | — | 扩展网格 |
+| 28 | flag=0xE, 5 | 16 | — | 场景物体 |
+| 28 | flag=0x0E | 16 | **24** (FX) | 空气墙/gate (animated_mock) |
+| 28 | flag=0x11 | 20 | — | 特殊物体 |
+| 32 | — | 20 | 28 | 中型网格 |
+| 36 | — | 20 | 28 | 大型网格 |
+| 40 | — | 24 | 32 | 角色模型 |
+| 44 | — | 20 | 28 | 装饰模型 |
+
+- **UV2 Lightmap**：VBytes≥32 时自动导出到 FBX UV layer 1（set index 1）
+- **UV2 FX**：VBytes=28 flag=0x0E 时自动导出到 FBX UV layer 1（gate_mask02 遮罩坐标）
 
 编号范围：`.mdl-msh000` ~ `.mdl-msh1308`
 
