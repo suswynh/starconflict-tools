@@ -1,8 +1,16 @@
 # 批量 quickbms 解包所有 Star Conflict PAK 文件
-$qbms = "D:\starconflict upcak\quickbms\quickbms.exe"
-$bms  = "D:\starconflict upcak\clutch.bms"
-$pakDir = "D:\starconflict upcak\StarConflict\data"
-$outDir = "D:\starconflict upcak\quickbms_unpacksource"
+# ── 路径配置（可按需修改或通过环境变量覆盖） ──
+$ScriptRoot = $PSScriptRoot
+$ProjRoot   = Split-Path -Parent $ScriptRoot   # 项目根目录
+
+# quickbms.exe — 外部工具，默认在项目根目录下，支持环境变量
+$qbms  = if ($env:QUICKBMS_EXE) { $env:QUICKBMS_EXE } else { "$ProjRoot\quickbms\quickbms.exe" }
+# clutch.bms — 与脚本同目录
+$bms   = "$ScriptRoot\clutch.bms"
+# 游戏 PAK 数据目录 — 必须由用户指定，支持环境变量
+$pakDir = if ($env:SC_DATA_DIR) { $env:SC_DATA_DIR } else { "$ProjRoot\StarConflict\data" }
+# 解包输出目录
+$outDir = if ($env:QUICKBMS_OUT) { $env:QUICKBMS_OUT } else { "$ProjRoot\quickbms_unpacksource" }
 
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 

@@ -19,9 +19,11 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ── 路径配置 ────────────────────────────────────────────────
-SOURCE_BASE = Path(r"D:\starconflict upcak\scunpack\tex_universe_check")
-TARGET_BASE = Path(r"D:\starconflict upcak\scunpack\tex_png")
-TEXCONV = Path(r"D:\starconflict upcak\DS_Textures\RawTex\texconv.exe")
+# 项目根目录 = 脚本所在目录的上一级（脚本位于 starconflict-tools/ 下）
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SOURCE_BASE = Path(os.environ.get("DDS_SOURCE", PROJECT_ROOT / "scunpack" / "tex_universe_check"))
+TARGET_BASE = Path(os.environ.get("DDS_TARGET", PROJECT_ROOT / "scunpack" / "tex_png"))
+TEXCONV = Path(os.environ.get("TEXCONV", PROJECT_ROOT / "DS_Textures" / "RawTex" / "texconv.exe"))
 
 # ── 命令行参数 ──────────────────────────────────────────────
 parser = argparse.ArgumentParser(description="批量 DDS → PNG 转换")
