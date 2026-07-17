@@ -14,6 +14,11 @@ quickbms/
 .sisyphus/
 NOESIS/
 
+# 项目本地配置（不上传）
+AGENTS.md
+TargemImage.php
+batch_noesis_fbx.ps1
+
 # 临时文件
 *.pyc
 __pycache__/
