@@ -16,8 +16,8 @@
 
 bl_info = {
     "name": "Star Conflict MSH Importer",
-    "author": "Sisyphus",
-    "version": (1, 1, 0),
+    "author": "SUSWYNH",
+    "version": (1, 2, 0),
     "blender": (4, 2, 0),
     "location": "File > Import",
     "description": "Import Star Conflict Hammer Engine .mdl-mshXXX mesh files",
@@ -55,10 +55,10 @@ def get_uv_offset(vbytes, flag):
     elif vbytes == 24:
         return 16
     elif vbytes == 28:
-        if flag == 0xE or flag == 5:
+        if flag == 0xE:
             return 16
-        elif flag == 0x11:
-            return 20
+        elif flag == 5 or flag == 0x11:
+            return 20   # flag=0x0005 UV is at 20 (verified: pvp_omega map_510/512/513)
         return 16
     elif vbytes == 32:
         return 20
@@ -76,7 +76,13 @@ def get_uv2_info(vbytes, flag):
     
     Returns (offset, format) or None if no UV2 space.
     format: 'float2' or 'uint16_unorm'
+    
+    VBytes=28 flag=0x0E: UV2 @ 24 (uint16 UNORM, animated_mock airwalls/gates)
     """
+    # VBytes=28 with flag=0x0E: animated_mock airwall models
+    if vbytes == 28 and flag == 0x0E:
+        return (24, 'uint16_unorm')
+
     if vbytes < 36:
         return None
     

@@ -36,7 +36,7 @@ SAMPLER_TO_SUFFIX = {
 TEXTURE_COLORSPACE = {
     "_d":    "sRGB",
     "_nm":   "Non-Color",
-    "_sc":   "sRGB",
+    "_sc":   "Non-Color",  # linear specular color (used in lighting equations)
     "_s1":   "sRGB",
     "_glow": "sRGB",
     "_pdo":  "Non-Color",
@@ -50,7 +50,7 @@ TEXTURE_COLORSPACE = {
 SAMPLER_TO_BSDF_INPUT = {
     "DiffuseSampler":         "Base Color",
     "NormalSampler":          "Normal",          # via Normal Map node
-    "SpecularColorSampler":   "Specular IOR Level",
+    "SpecularColorSampler":   "Specular Tint",   # object.fx: specColor.rgb tints highlight
     "Diffuse2Sampler":        "Emission Color",
     "LightmapSampler":        None,              # multiply with Base Color via Mix
     "AmbOcclSampler":         None,              # multiply with Base Color via Mix
@@ -96,6 +96,9 @@ MATERIAL_SAMPLERS = {
         "AmbOcclSampler",         # _msk: G=AO, B=Glossiness
         "Diffuse2Sampler",        # _glow: emission
         "LightmapSampler",        # _pdo: lightmap AO (maps/scene, Type=5 PDO)
+        # ── Detail pipeline (pins User2=BUMP_DETAIL, User3=ALBEDO_DETAIL) ──
+        "DetailSampler",          # _nm: detail normal (object.fx L530: BUMP_DETAIL)
+        "UserSampler1",           # _d: detail albedo (object.fx L344: ALBEDO_DETAIL, multiply ×2)
     ],
     "object_norm_blend": [
         "DiffuseSampler",
@@ -209,7 +212,25 @@ def is_non_color_sampler(sampler_name):
 
 
 # ──────────────────────────────────────────────────────────────
-# Transparent / Alpha-blended material types
+# Shader Type Aliases — dyn_* → static counterpart normalization
+# ──────────────────────────────────────────────────────────────
+# Hammer Engine uses "dyn_" prefix for dynamic object shaders and
+# non-prefixed names for static scene objects. When the sampler set
+# and node network are functionally identical (verified in builder),
+# we normalize to the static variant to enable cross-MDF deduplication.
+# 
+# This prevents creating duplicate materials when the same texture set
+# is referenced by both a component model (dyn_object_norm) and a
+# map model (object_norm).
+SHADER_TYPE_ALIASES = {
+    "dyn_object":            "object",
+    "dyn_object_norm":       "object_norm",
+    "dyn_object_norm_blend": "object_norm_blend",
+    "dyn_animated_mock":     "animated_mock",
+}
+
+# ──────────────────────────────────────────────────────────────
+# Transparent / Alpha-blended Material Types
 # ──────────────────────────────────────────────────────────────
 
 # shader_type values that require Alpha Blend in Blender.
@@ -239,6 +260,9 @@ TRANSPARENT_MATERIAL_TYPES = frozenset({
     "dyn_animated_mock",
     "animated_mock",
     "dyn_drone",
+    "sky",
+    "skybackground",
+    "planets",    # sky.fx with PLANETS define: uses color.a for modulation
 })
 
 

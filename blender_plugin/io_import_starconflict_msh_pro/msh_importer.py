@@ -13,6 +13,9 @@ Handles:
 
 import os
 import math
+import struct
+import sys
+import traceback
 
 import bpy
 from mathutils import Matrix, Euler
@@ -54,20 +57,22 @@ def build_mesh(name, positions, uvs, indices, uvs2=None):
     # UV1 (diffuse/color) — "map1"
     if uvs and any(u != 0.0 or v != 0.0 for u, v in uvs):
         uv_layer = mesh.uv_layers.new(name="map1")
+        uv_data_len = len(uv_layer.data)
         loop_idx = 0
         for face in faces:
             for vert_idx in face:
-                if vert_idx < len(uvs):
+                if loop_idx < uv_data_len and vert_idx < len(uvs):
                     uv_layer.data[loop_idx].uv = uvs[vert_idx]
                 loop_idx += 1
 
     # UV2 (lightmap) — "lightmap"
     if uvs2 and any(u != 0.0 or v != 0.0 for u, v in uvs2):
         uv2_layer = mesh.uv_layers.new(name="lightmap")
+        uv2_data_len = len(uv2_layer.data)
         loop_idx = 0
         for face in faces:
             for vert_idx in face:
-                if vert_idx < len(uvs2):
+                if loop_idx < uv2_data_len and vert_idx < len(uvs2):
                     uv2_layer.data[loop_idx].uv = uvs2[vert_idx]
                 loop_idx += 1
 
@@ -197,8 +202,7 @@ def import_msh_with_materials(filepath, context,
                                resolver=None,
                                registry=None,
                                unpack_root=None,
-                               smooth_angle=30.0,
-                               mapping_db=None):
+                                smooth_angle=30.0):
     """Import a single MSH file with optional material linking.
 
     Args:
@@ -222,7 +226,7 @@ def import_msh_with_materials(filepath, context,
     try:
         with open(filepath, 'rb') as f:
             data = f.read()
-        positions, uvs, uvs2, indices = msh_parser.parse_msh(data)
+        positions, uvs, uvs2, indices, material_block_index = msh_parser.parse_msh(data)
 
         raw_name = os.path.basename(filepath)
 
@@ -235,6 +239,21 @@ def import_msh_with_materials(filepath, context,
             coll_path = []
 
         mesh = build_mesh(obj_name, positions, uvs, indices, uvs2)
+
+        # ── VBytes=28 flag=0x0E: duplicate UV2 as "FX" for animated_mock materials ──
+        # These models use VTEXCOORD1 (Tex1) for ColormapSampler (gate_mask02),
+        # NOT for lightmap. The separate layer name avoids naming conflicts.
+        if uvs2 and any(u != 0.0 or v != 0.0 for u, v in uvs2):
+            flag = struct.unpack_from("<I", data, 0x04)[0]
+            vbytes = struct.unpack_from("<I", data, 0x08)[0]
+            if vbytes == 28 and flag == 0x0E:
+                colormap_uv = mesh.uv_layers.new(name="FX")
+                cm_data_len = len(colormap_uv.data)
+                for loop_idx, face in enumerate(indices[i:i+3] for i in range(0, len(indices), 3)):
+                    for vi, vert_idx in enumerate(face):
+                        li = loop_idx * 3 + vi
+                        if li < cm_data_len and vert_idx < len(uvs2):
+                            colormap_uv.data[li].uv = uvs2[vert_idx]
 
         # ── Auto-smooth (matching in-game normal splitting) ──
         if smooth_angle > 0.0:
@@ -269,8 +288,8 @@ def import_msh_with_materials(filepath, context,
             _link_materials(obj, filepath, obj_name, raw_name,
                            tex_search_dirs, mdf_search_dirs,
                            tex_extensions, complexity,
-                           registry, unpack_root,
-                           mapping_db=mapping_db)
+                            registry, unpack_root,
+                            material_block_index=material_block_index)
 
         return obj
 
@@ -286,7 +305,7 @@ def _link_materials(obj, filepath, obj_name, raw_name,
                     tex_search_dirs, mdf_search_dirs,
                     tex_extensions, complexity,
                     registry, unpack_root,
-                    mapping_db=None):
+                    material_block_index=None):
     """材质链接逻辑（独立函数，便于维护）。
 
     优先级:
@@ -313,9 +332,9 @@ def _link_materials(obj, filepath, obj_name, raw_name,
 
             # 检测是否为 map 场景（MSH 数量远超 MDF block 数量）
             is_map = 'map.mdf' in mdf_path.lower() or 'map_' in mdf_path.lower()
-            target_block, is_fallback, db_confidence = material_builder.get_block_for_msh(
+            target_block, is_fallback = material_builder.get_block_for_msh(
                 blocks, msh_idx, is_map=is_map,
-                mapping_db=mapping_db, mdf_path=mdf_path
+                material_block_index=material_block_index
             )
             if target_block is not None:
                 block_idx = blocks.index(target_block)
@@ -329,6 +348,20 @@ def _link_materials(obj, filepath, obj_name, raw_name,
                 )
                 obj.data.materials.append(mat)
 
+                # ── Lightmap variant: if block has LightmapSampler with real _pdo ──
+                # The core material always uses a neutral white lightmap.
+                # If a scene-specific _pdo is available, create a variant that
+                # replaces it with the actual lightmap texture.
+                if "LightmapSampler" in target_block.samplers:
+                    lm_path = tex_map.get("LightmapSampler")
+                    if lm_path and os.path.isfile(lm_path):
+                        variant = material_builder.create_lightmap_variant(
+                            mat, lm_path
+                        )
+                        if variant:
+                            obj.data.materials[-1] = variant
+                            print(f"  [MSH Pro] msh{msh_idx:03d} → LM variant: {variant.name}")
+
                 deduped = material_builder.get_deduplicated_blocks(blocks)
                 cache_info = ""
                 if registry:
@@ -336,17 +369,26 @@ def _link_materials(obj, filepath, obj_name, raw_name,
                 else:
                     cache_info = f"cache={len(material_builder._material_cache)}"
 
-                fallback_tag = ""
-                if db_confidence:
-                    fallback_tag = f" [DB:{db_confidence}]"
-                elif is_fallback:
-                    fallback_tag = " [fallback]"
+                fallback_tag = " [header]" if material_block_index is not None else " [fallback]" if is_fallback else ""
                 print(f"  [MSH Pro] msh{msh_idx:03d} → {mat.name}{fallback_tag} "
                       f"({len(blocks)} blocks, {len(deduped)} unique, {cache_info})")
             else:
-                print(f"  [MSH Pro] msh{msh_idx:03d}: no matching material block")
+                print(f"  [MSH Pro] msh{msh_idx:03d}: no matching material block → fallback")
+                fallback = material_builder.build_fallback_material(
+                    name=f"SC_Fallback_{obj_name}",
+                    color=(0.4, 0.4, 0.5, 1.0)
+                )
+                obj.data.materials.append(fallback)
         except Exception as e:
-            print(f"  [MSH Pro] Material link warning: {e}")
+            print(f"  [MSH Pro] msh{msh_idx:03d} material link FAILED: {e}")
+            print(f"    File: {os.path.basename(filepath)}")
+            traceback.print_exc(file=sys.stderr)
+            # Create fallback material so object is not left without a material
+            fallback = material_builder.build_fallback_material(
+                name=f"SC_Fallback_{obj_name}",
+                color=(0.4, 0.4, 0.5, 1.0)
+            )
+            obj.data.materials.append(fallback)
 
     elif registry is not None:
         # ── 策略2: 无本地 MDF → 库反查 ──

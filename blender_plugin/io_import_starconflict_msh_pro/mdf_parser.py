@@ -137,8 +137,11 @@ def parse_mdf(filepath):
             current_block.params[param_match.group(1)] = param_match.group(2)
             continue
 
-        # Check for 'pins' keyword alone
+        # Check for 'pins' keyword (standalone, brace on next line)
+        # Most Hammer Engine MDF files write pins and { on separate lines,
+        # so we must set in_pins = True here to catch the next brace line.
         if line.strip().lower() == 'pins':
+            in_pins = True
             continue
 
     # If file ended with unclosed block, still add it

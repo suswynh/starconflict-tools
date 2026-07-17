@@ -28,6 +28,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional
 
+from . import shader_presets
+SHADER_TYPE_ALIASES = shader_presets.SHADER_TYPE_ALIASES
+
 # ============================================================================
 # 内嵌默认材质库（最小集——覆盖最常见的 shader 类型）
 # ============================================================================
@@ -313,8 +316,9 @@ class MaterialLibrary:
 
             material_ids = []
             for block in blocks:
-                fingerprint = _compute_fingerprint(block)
-                mat_id = f"SC_{block.shader_type}_{fingerprint}"
+                fingerprint = _compute_fingerprint(block, shader_aliases=SHADER_TYPE_ALIASES)
+                aliased_shader = SHADER_TYPE_ALIASES.get(block.shader_type, block.shader_type)
+                mat_id = f"SC_{aliased_shader}_{fingerprint}"
 
                 if mat_id not in material_map:
                     material_map[mat_id] = MaterialDef(
@@ -363,19 +367,36 @@ class MaterialLibrary:
 # 辅助函数
 # ============================================================================
 
-def _compute_fingerprint(block):
+def _compute_fingerprint(block, shader_aliases=None):
     """计算材质的贴图指纹（MD5 前8位）。
 
-    基于 shader_type + 所有 sampler 引用的贴图基底名。
+    基于 shader_type（经别名规范化）+ 所有 sampler 引用的贴图基底名
+    + UserParam2_Float4（UV tiling 影响材质行为）。
+
+    注意: LightmapSampler 不参与指纹，以允许跨场景的材质共享；
+    lightmap 通过 variant 机制单独处理。
     """
+    # ── Shader type 别名规范化（dyn_object_norm → object_norm 等）──
+    if shader_aliases:
+        shader_type = shader_aliases.get(block.shader_type, block.shader_type)
+    else:
+        shader_type = block.shader_type
+
     texture_basenames = set()
     for sampler_name, path in block.samplers.items():
+        # LightmapSampler 不参与指纹——场景级 lightmap 不应阻止材质共享
+        if sampler_name == "LightmapSampler":
+            continue
         basename = os.path.basename(path)
-        # 去掉贴图类型后缀
         clean = _TEXTURE_SUFFIX_RE.sub('', basename)
         texture_basenames.add(clean)
 
-    key = f"{block.shader_type}|{'|'.join(sorted(texture_basenames))}"
+    # 包含 UV tiling 参数（与 material_registry 保持一致）
+    param_key = ""
+    if "UserParam2_Float4" in block.params:
+        param_key = f"|uv={block.params['UserParam2_Float4']}"
+
+    key = f"{shader_type}|{'|'.join(sorted(texture_basenames))}{param_key}"
     return hashlib.md5(key.encode('utf-8')).hexdigest()[:8]
 
 

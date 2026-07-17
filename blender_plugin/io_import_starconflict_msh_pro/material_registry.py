@@ -97,8 +97,8 @@ class MaterialRegistry:
         Returns:
             bpy.types.Material
         """
-        fingerprint = self._compute_fingerprint(block)
-        mat_id = f"SC_{block.shader_type}_{fingerprint}"
+        fingerprint, aliased_shader = self._compute_fingerprint(block)
+        mat_id = f"SC_{aliased_shader}_{fingerprint}"
 
         # 1. 运行时缓存命中
         if mat_id in self._cache:
@@ -125,7 +125,7 @@ class MaterialRegistry:
         )
 
         self._cache[mat_id] = mat
-        self._fingerprint_index[(block.shader_type, fingerprint)] = mat_id
+        self._fingerprint_index[(aliased_shader, fingerprint)] = mat_id
         self._miss_count += 1
         self._created_count += 1
         return mat
@@ -224,8 +224,8 @@ class MaterialRegistry:
         Returns:
             str or None
         """
-        fingerprint = self._compute_fingerprint(block)
-        mat_id = f"SC_{block.shader_type}_{fingerprint}"
+        fingerprint, aliased_shader = self._compute_fingerprint(block)
+        mat_id = f"SC_{aliased_shader}_{fingerprint}"
         if mat_id in self._cache:
             return mat_id
         if bpy.data.materials.get(mat_id):
@@ -256,11 +256,28 @@ class MaterialRegistry:
         """计算材质的贴图指纹（MD5 前8位）。
 
         指纹基于:
-          - shader_type
+          - shader_type（经别名规范化）
           - 所有 sampler 引用的贴图基底名（去后缀、排序）
+          - UserParam2_Float4（UV tiling）
+
+        注意: LightmapSampler 不参与指纹计算，以允许不同场景/上下文
+        使用相同核心贴图集的对象共享基础材质；lightmap 通过 variant 机制
+        在赋值阶段单独处理（参见 material_builder.create_lightmap_variant）。
+
+        Returns:
+            (fingerprint_8chars, aliased_shader_type)
         """
+        # ── Shader type 别名规范化 ──
+        aliased = shader_presets.SHADER_TYPE_ALIASES.get(
+            block.shader_type, block.shader_type
+        )
+
         texture_basenames = set()
         for sampler_name, path in block.samplers.items():
+            # LightmapSampler 不参与指纹——lightmap 是场景级外部因素，
+            # 不应阻止核心贴图集相同的材质共享。
+            if sampler_name == "LightmapSampler":
+                continue
             basename = os.path.basename(path)
             clean = _TEXTURE_SUFFIX_RE.sub('', basename)
             texture_basenames.add(clean)
@@ -270,8 +287,8 @@ class MaterialRegistry:
         if "UserParam2_Float4" in block.params:
             param_key = f"|uv={block.params['UserParam2_Float4']}"
 
-        key = f"{block.shader_type}|{'|'.join(sorted(texture_basenames))}{param_key}"
-        return hashlib.md5(key.encode('utf-8')).hexdigest()[:8]
+        key = f"{aliased}|{'|'.join(sorted(texture_basenames))}{param_key}"
+        return hashlib.md5(key.encode('utf-8')).hexdigest()[:8], aliased
 
     # ── 属性 ────────────────────────────────────────────────
 

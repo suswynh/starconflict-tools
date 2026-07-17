@@ -133,7 +133,6 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
         # ── Initialize resolver & registry ──
         resolver = None
         registry = None
-        mapping_db = None
 
         prefs = self._get_prefs(context)
 
@@ -164,18 +163,6 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
                 collection_depth=prefs.collection_depth if prefs else 2,
                 use_abbreviations=prefs.use_abbreviations if prefs else False,
             )
-
-        # ── Load static material mapping database ──
-        mapping_db = None
-        try:
-            from . import material_mapping
-            db_path = os.path.join(os.path.dirname(__file__), 'material_mapping_db.json')
-            mapping_db = material_mapping.MaterialMappingDB.load(db_path)
-            if not mapping_db.is_empty:
-                print(f"  [MSH Pro] MappingDB: {mapping_db.map_count} maps, "
-                      f"{mapping_db.total_overrides} overrides")
-        except Exception as e:
-            pass  # DB optional — fail silently
 
         # Collect texture search dirs
         tex_dirs = []
@@ -217,7 +204,6 @@ class SC_PRO_OT_import_msh(Operator, ImportHelper):
                 resolver=resolver,
                 registry=registry,
                 unpack_root=unpack_root,
-                mapping_db=mapping_db,
                 smooth_angle=self.smooth_angle if self.auto_smooth else 0.0,
             )
             if obj:
@@ -310,6 +296,13 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
         default=False,
     )
 
+    auto_place: BoolProperty(
+        name="Auto-Place from scene.xml",
+        description="If a scene.xml exists in levels/, automatically place "
+                    "imported models at their scene-specified world positions",
+        default=True,
+    )
+
     # ── Texture & MDF search (same as single-file import) ──
     tex_search_dir: StringProperty(
         name="Texture Dir",
@@ -353,7 +346,6 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
     def _batch_import(self, context):
         imported = 0
         failed = 0
-        mapping_db = None  # 初始化默认值
 
         # Get search paths: operator fields first, then preferences
         tex_dirs = []
@@ -401,18 +393,6 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
                 use_abbreviations=prefs.use_abbreviations if prefs else False,
             )
 
-        # ── Load static material mapping database ──
-        mapping_db = None
-        try:
-            from . import material_mapping
-            db_path = os.path.join(os.path.dirname(__file__), 'material_mapping_db.json')
-            mapping_db = material_mapping.MaterialMappingDB.load(db_path)
-            if not mapping_db.is_empty:
-                print(f"  [MSH Pro] MappingDB: {mapping_db.map_count} maps, "
-                      f"{mapping_db.total_overrides} overrides")
-        except Exception:
-            pass
-
         # ── Collect & scan all MSH files ──
         all_msh = []
         for root, dirs, filenames in os.walk(self.directory):
@@ -428,6 +408,36 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
             conflicts = resolver.get_conflicts()
             if conflicts:
                 print(f"  [MSH Pro] Batch: {len(conflicts)} conflict groups detected")
+
+        # ── Scene.xml position lookup (auto-place) ──
+        entity_positions = {}  # {model_basename: (pos_tuple, rot_tuple)}
+        if self.auto_place and unpack_root and os.path.isdir(unpack_root):
+            try:
+                from . import scene_xml_parser as sxp
+                # Search for scene.xml: levels/<area>/<map>/scene.xml
+                levels_dir = os.path.join(unpack_root, "levels")
+                if os.path.isdir(levels_dir):
+                    for root, dirs, files in os.walk(levels_dir):
+                        if "scene.xml" in files:
+                            scene_path = os.path.join(root, "scene.xml")
+                            try:
+                                scene = sxp.parse_scene_xml(scene_path)
+                                for entity in scene.model_entities:
+                                    # Normalize model path to basename
+                                    model_base = os.path.basename(
+                                        entity.model_path.replace('\\', '/')
+                                    )
+                                    if model_base:
+                                        entity_positions[model_base] = (
+                                            entity.pos, entity.rot
+                                        )
+                            except Exception:
+                                pass
+                if entity_positions:
+                    print(f"  [MSH Pro] Batch: Loaded {len(entity_positions)} "
+                          f"entity positions from scene.xml")
+            except Exception as e:
+                print(f"  [MSH Pro] Batch: scene.xml lookup skipped ({e})")
 
         # Import files
         total = len(all_msh)
@@ -456,11 +466,27 @@ class SC_PRO_OT_import_msh_batch(Operator, ImportHelper):
                 resolver=resolver,
                 registry=registry,
                 unpack_root=unpack_root,
-                mapping_db=mapping_db,
                 smooth_angle=self.smooth_angle if self.auto_smooth else 0.0,
             )
             if obj:
                 imported += 1
+
+                # ── Auto-place from scene.xml ──
+                if entity_positions:
+                    fname_noext = os.path.splitext(fname)[0]
+                    # Strip .mdl-msh suffix variants
+                    import re
+                    fname_base = re.sub(r'\.mdl-msh\d+$', '', fname_noext)
+                    if fname_base in entity_positions:
+                        pos, rot = entity_positions[fname_base]
+                        hx, hy, hz = pos
+                        qx, qy, qz, qw = rot
+                        # Hammer Y-up world → Blender Z-up world: (hx, hz, hy)
+                        obj.location = (hx, hz, hy)
+                        if (qx, qy, qz, qw) != (0, 0, 0, 1):
+                            obj.rotation_mode = 'QUATERNION'
+                            obj.rotation_quaternion = (qw, qx, qz, qy)
+
                 if self.show_details:
                     print(f"  ✓ {fname}")
             else:
@@ -542,12 +568,332 @@ class SC_PRO_OT_clear_tex_cache(Operator):
 
 
 # ──────────────────────────────────────────────────────────────
+# Import Scene XML — Level Assembly Operator
+# ──────────────────────────────────────────────────────────────
+
+class SC_PRO_OT_import_scene_xml(Operator, ImportHelper):
+    """Import a Star Conflict level from scene.xml (one-click assembly)"""
+    bl_idname = "import_scene.starconflict_scene_xml"
+    bl_label = "Import Star Conflict Level (scene.xml)"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    filename_ext = ".xml"
+
+    filter_glob: StringProperty(
+        default="*.xml",
+        options={'HIDDEN'},
+    )
+
+    unpack_root: StringProperty(
+        name="Unpack Root",
+        description="Star Conflict unpack root directory (e.g. /path/to/unpack/output)",
+        default="",
+        subtype='DIR_PATH',
+    )
+
+    scale: FloatProperty(
+        name="Scale",
+        default=1.0,
+        min=0.001, max=1000.0,
+    )
+
+    up_axis: EnumProperty(
+        name="Up Axis",
+        items=[
+            ('Z_UP_TO_Y_UP', "Z-up → Y-up", "Convert from Z-up to Y-up"),
+            ('Y_UP_TO_Z_UP', "Y-up → Z-up", "Convert from Hammer Y-up to Blender Z-up"),
+            ('NONE', "No Rotation", "Keep original vertex data"),
+        ],
+        default='Z_UP_TO_Y_UP',
+    )
+
+    import_static: BoolProperty(
+        name="Import Static Scene",
+        description="Also import map.mdl-msh* static scene geometry",
+        default=True,
+    )
+
+    import_decals: BoolProperty(
+        name="Import Decals (Experimental)",
+        description="Import decals from decals.dat. "
+                    "EXPERIMENTAL: decals require manual editing after import",
+        default=True,
+    )
+
+    import_lights: BoolProperty(
+        name="Import Lights (Experimental)",
+        description="Import Lights_ entities as Blender light objects. "
+                    "EXPERIMENTAL: light orientation may need manual correction",
+        default=False,
+    )
+
+    tex_extensions: StringProperty(
+        name="Texture Extensions",
+        description="Comma-separated extensions (priority order)",
+        default=".dds,.png,.tga",
+    )
+
+    @classmethod
+    def _get_prefs(cls, context):
+        """Get addon preferences, safely."""
+        try:
+            addon = context.preferences.addons.get(__package__.split('.')[0])
+            return addon.preferences if addon else None
+        except Exception:
+            return None
+
+    def invoke(self, context, event):
+        """Auto-fill unpack_root from preferences."""
+        prefs = self._get_prefs(context)
+        if prefs and not self.unpack_root:
+            self.unpack_root = getattr(prefs, 'unpack_root_default', '') or ''
+        return super().invoke(context, event)
+
+    def execute(self, context):
+        from . import level_assembler
+        from . import material_registry as mat_reg
+        from . import material_library as mat_lib
+
+        prefs = self._get_prefs(context)
+
+        # Texture search dirs
+        tex_dirs = []
+        tex_ext = self.tex_extensions if hasattr(self, 'tex_extensions') else ".dds,.png,.tga"
+        if prefs:
+            for item in prefs.default_tex_paths:
+                if item.path and os.path.isdir(item.path):
+                    tex_dirs.append(item.path)
+            tex_ext = prefs.tex_extensions
+
+        # MDF search dirs
+        mdf_dirs = []
+        if prefs:
+            for item in prefs.default_mdf_paths:
+                if item.path and os.path.isdir(item.path):
+                    mdf_dirs.append(item.path)
+
+        # Unpack root
+        unpack_root = self.unpack_root
+        if not unpack_root and prefs:
+            unpack_root = getattr(prefs, 'default_unpack_root', '')
+
+        if not unpack_root or not os.path.isdir(unpack_root):
+            self.report({'ERROR'}, "Unpack root not set. Configure in preferences or operator options.")
+            return {'CANCELLED'}
+
+        # Setup material library + registry
+        library = None
+        registry = None
+        try:
+            library_path = os.path.join(unpack_root, "material_library.json")
+            if os.path.isfile(library_path):
+                library = mat_lib.MaterialLibrary(library_path=library_path)
+            else:
+                library = mat_lib.MaterialLibrary()
+            registry = mat_reg.MaterialRegistry(library=library, unpack_root=unpack_root)
+        except Exception:
+            registry = mat_reg.MaterialRegistry(unpack_root=unpack_root)
+
+        # Run assembly with progress
+        context.workspace.status_text_set("Star Conflict — Importing level, please wait...")
+        self.report({'INFO'}, f"Assembling level from: {self.filepath}")
+        print(f"\n{'='*60}")
+        print(f"  Star Conflict — 正在导入关卡场景，请耐心等待...")
+        print(f"  {self.filepath}")
+        print(f"{'='*60}\n")
+
+        def _progress(current, total, message=""):
+            pct = int((current / total) * 100) if total > 0 else 0
+            context.workspace.status_text_set(
+                f"Star Conflict: {message} ({current}/{total})"
+            )
+            self.report({'INFO'}, f"Star Conflict: {message} ({current}/{total})")
+
+        result = level_assembler.assemble_level(
+            scene_xml_path=self.filepath,
+            unpack_root=unpack_root,
+            context=context,
+            registry=registry,
+            library=library,
+            tex_search_dirs=tex_dirs,
+            mdf_search_dirs=mdf_dirs,
+            tex_extensions=tex_ext,
+            import_decals=getattr(self, 'import_decals', True),
+            import_lights=getattr(self, 'import_lights', False),
+            scale=self.scale,
+            up_axis=self.up_axis,
+            import_static_scene=self.import_static,
+            progress_callback=_progress,
+        )
+
+        if "error" in result:
+            self.report({'ERROR'}, result["error"])
+            return {'CANCELLED'}
+
+        summary = (
+            f"Level '{result['level_name']}': "
+            f"{result['imported_count']} entities imported, "
+            f"{result['static_scene_count']} static meshes"
+        )
+        if result['error_count'] > 0:
+            summary += f", {result['error_count']} errors"
+            for err in result['errors'][:5]:
+                print(f"  [LevelAssembler Error] {err}")
+
+        self.report({'INFO'}, summary)
+        print(f"[LevelAssembler] {summary} (elapsed: {result['elapsed']:.1f}s)")
+        context.workspace.status_text_set(None)
+        return {'FINISHED'}
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "unpack_root")
+        layout.prop(self, "scale")
+        layout.prop(self, "up_axis")
+        layout.prop(self, "import_static")
+        layout.prop(self, "import_decals")
+        layout.prop(self, "import_lights")
+
+
+# ──────────────────────────────────────────────────────────────
+# Level Area Import — discover and import complete level area
+# ──────────────────────────────────────────────────────────────
+
+class SC_PRO_OT_import_level_area(Operator):
+    """Import a complete Star Conflict level area (all variants + static scenes)
+
+    Select the area folder (e.g. levels/dreadnoughtbattle/allidium/)
+    and this operator will discover all scene variants, static scenes,
+    and orphan models, then let you choose what to import.
+    """
+    bl_idname = "import_scene.starconflict_level_area"
+    bl_label = "Import Star Conflict Level Area"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    directory: StringProperty(
+        name="Area Folder",
+        description="Select the level area folder containing scene variants",
+        subtype='DIR_PATH',
+    )
+
+    unpack_root: StringProperty(
+        name="Unpack Root",
+        description="Star Conflict unpack root directory",
+        default="",
+        subtype='DIR_PATH',
+    )
+
+    scale: FloatProperty(
+        name="Scale",
+        default=1.0,
+        min=0.001, max=1000.0,
+    )
+
+    @classmethod
+    def _get_prefs(cls, context):
+        try:
+            addon = context.preferences.addons.get(__package__.split('.')[0])
+            return addon.preferences if addon else None
+        except Exception:
+            return None
+
+    def invoke(self, context, event):
+        prefs = self._get_prefs(context)
+        if prefs and not self.unpack_root:
+            self.unpack_root = getattr(prefs, 'unpack_root_default', '') or ''
+        return context.window_manager.invoke_props_dialog(self, width=500)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "unpack_root")
+        layout.prop(self, "directory")
+        layout.prop(self, "scale")
+
+    def execute(self, context):
+        from . import level_assembler
+        from . import level_area_dialog
+
+        area_path = self.directory
+        if not area_path or not os.path.isdir(area_path):
+            self.report({'ERROR'}, "Please select a valid area folder")
+            return {'CANCELLED'}
+
+        unpack_root = self.unpack_root
+        prefs = self._get_prefs(context)
+        if not unpack_root and prefs:
+            unpack_root = getattr(prefs, 'unpack_root_default', '') or ''
+
+        if not unpack_root or not os.path.isdir(unpack_root):
+            self.report({'ERROR'}, "Unpack root not set")
+            return {'CANCELLED'}
+
+        # Gather texture/MDF search paths
+        tex_dirs = []
+        mdf_dirs = []
+        tex_ext = ".dds,.png,.tga"
+        if prefs:
+            for item in prefs.default_tex_paths:
+                if item.path and os.path.isdir(item.path):
+                    tex_dirs.append(item.path)
+            tex_ext = prefs.tex_extensions or tex_ext
+            for item in prefs.default_mdf_paths:
+                if item.path and os.path.isdir(item.path):
+                    mdf_dirs.append(item.path)
+
+        # ── Discovery ──
+        context.workspace.status_text_set("Star Conflict — Scanning level area...")
+        self.report({'INFO'}, f"Scanning level area: {area_path}")
+        print(f"\n[LevelArea] Scanning: {area_path}")
+
+        results = level_assembler.discover_level_area(area_path, unpack_root)
+        if "error" in results:
+            self.report({'ERROR'}, results["error"])
+            return {'CANCELLED'}
+
+        # Print discovery summary
+        area_name = results["area_name"]
+        variants = results.get("scene_variants", [])
+        statics = results.get("static_scenes", [])
+        orphans = results.get("orphan_models", [])
+
+        print(f"[LevelArea] Area: {area_name}")
+        print(f"  Scene variants: {len(variants)}")
+        for sv in variants:
+            inh = f" ↗ {', '.join(sv['inherits_from'])}" if sv.get('inherits_from') else ""
+            print(f"    - {sv['name']}{inh} ({sv['entity_count']} entities)")
+        print(f"  Static scenes: {len(statics)}")
+        for ss in statics:
+            shared = " [SHARED]" if ss.get("shared") else ""
+            print(f"    - {os.path.basename(ss['path'])}{shared} ({ss['msh_count']} models)")
+        print(f"  Orphan models: {len(orphans)}")
+        for om in orphans:
+            print(f"    - {om['name']} ({om['msh_count']} meshes)")
+
+        # ── Show confirm dialog ──
+        level_area_dialog.set_discovery_results(
+            results=results,
+            unpack_root=unpack_root,
+            scale=self.scale,
+            tex_extensions=tex_ext,
+            tex_search_dirs=tex_dirs,
+            mdf_search_dirs=mdf_dirs,
+            import_decals=True,
+            import_lights=False,
+        )
+        bpy.ops.sc_pro.import_level_area_confirm('INVOKE_DEFAULT')
+        context.workspace.status_text_set(None)
+        return {'FINISHED'}
+
+
+# ──────────────────────────────────────────────────────────────
 # Registration
 # ──────────────────────────────────────────────────────────────
 
 _CLASSES = [
     SC_PRO_OT_import_msh,
     SC_PRO_OT_import_msh_batch,
+    SC_PRO_OT_import_scene_xml,
+    SC_PRO_OT_import_level_area,
     SC_PRO_OT_refresh_materials,
     SC_PRO_OT_clear_tex_cache,
 ]
