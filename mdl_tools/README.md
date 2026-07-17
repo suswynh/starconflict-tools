@@ -2,7 +2,7 @@
 
 ## 一、概述
 
-将 Star Conflict（星际争端）Hammer Engine 的五种二进制辅助文件格式解析为可读文本。这五种文件与 `.mdl-mshXXX`（渲染网格）并存，服务于游戏的碰撞检测、场景布置和区域触发系统。
+将 Star Conflict（星际争端）Hammer Engine 的六种二进制/文本辅助文件格式解析为可读文本。这些文件与 `.mdl-mshXXX`（渲染网格）并存，服务于游戏的碰撞检测、场景布置和区域触发系统。
 
 **工具目录**：`mdl_tools/`
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 二、支持的五种格式
+## 二、支持的六种格式
 
 | 扩展名 | 含义 | 实际用途 | 典型大小 | 输出文件 |
 |--------|------|----------|----------|----------|
@@ -19,6 +19,7 @@
 | `.mdp` | Model Data Physics | TCF 碰撞物理网格 | ~8 KB | `.mdp.txt` |
 | `.sot` | Scene Object Table | 场景物体放置变换表（层级+位置） | ~3 KB | `.sot.txt` |
 | `.mdl-zon` | Model Zone | 触发/杀伤区域（Maya 导出） | ~1 KB | `.mdl-zon.txt` |
+| `decals.dat` | Decals | 贴花材质库（文本） / 实例放置数据（二进制） | 0.4–47 KB | `decals.dat.txt` |
 
 ---
 
@@ -130,6 +131,67 @@ Offset  Size   内容
 
 > ⚠️ 顶点数据的精确偏移依赖启发式搜索，格式仍在逆向中。当前可正确提取实际网格顶点。
 
+### 3.6 `decals.dat` — 贴花系统
+
+Star Conflict 的贴花系统使用 **两种不同格式** 的 `decals.dat`，解析器自动检测：
+
+#### A. 文本格式：`gamedata/decals.dat`
+
+材质库定义，Hammer Engine 自定义文本格式，约 346 条记录：
+
+```
+name {
+    diffuse "textures\decals\xxx_d"
+    normal "textures\decals\xxx_nm"
+    glow "textures\decals\xxx_glow"
+    uv ( u1 u2 v1 v2 )
+    blend alpha_glow
+    material bump
+    spec_color ( r g b )
+    gloss value
+}
+```
+
+**字段说明**：
+| 字段 | 类型 | 含义 |
+|------|------|------|
+| `diffuse` | path | 漫反射纹理路径 |
+| `normal` | path | 法线贴图路径 |
+| `glow` | path | 自发光纹理路径 |
+| `spec` | path | 高光纹理路径 |
+| `uv` | vec4 | UV 坐标裁剪 (u_min, u_max, v_min, v_max) |
+| `blend` | enum | 混合模式：`alpha_glow`, `alpha_test`, `none` |
+| `material` | enum | 材质类型：`bump`, `alphatest` |
+| `spec_color` | vec3 | 高光颜色 (r, g, b) |
+| `gloss` | float | 光泽度 |
+
+#### B. 二进制格式：`levels/*/decals.dat`
+
+关卡级贴花实例放置数据（**小端序**，96 字节/记录）：
+
+```
+Offset  Size   内容
+0x00    4      uint32 version (=5)
+0x04    4      uint32 count (实例数)
+0x08    8      uint64 padding (零)
+0x10    —      记录数组
+
+每条记录 (96 字节):
+0x00    12     float32×3  position (x, y, z)     — Hammer Y-up 世界坐标
+0x0C    4      float32    padding
+0x10    16     float32×4  rotation (x, y, z, w)   — 四元数
+0x20    12     float32×3  direction (dx, dy, dz)  — 贴花法向
+0x2C    4      float32    padding
+0x30    12     float32×3  scale (sx, sy, sz)
+0x3C    4      float32    padding
+0x40    N      char[]     texture name (null-terminated ASCII)
+—       —      —          padding 至 96 字节
+```
+
+**坐标系**：Hammer Engine 使用 Y-up，Blender 使用 Z-up，转换由调用方处理。
+
+**用途**：场景中血迹、弹痕、标志、损坏痕迹等贴花的空间放置。每个实例引用 `gamedata/decals.dat` 中定义的材质模板。
+
 ---
 
 ## 四、使用方式
@@ -189,7 +251,7 @@ print(result["center"])     # (-452.50, 70.53, 286.34)
 | `.mdl-zon` | 导入触发区域为半透明碰撞体（线框模式） |
 | `.mdp` | 导入物理网格为隐藏碰撞体 |
 | `.sot` | 批量放置多个模型到场景正确位置 |
-| `.mdl-geo` | 作为低精度 LOD 或碰撞代理导入 |
+| `decals.dat` | 批量放置贴花实例到场景表面 |
 
 ---
 
@@ -203,5 +265,6 @@ mdl_tools/
 ├── mdl_geo_parser.py      ← .mdl-geo 简化几何解析
 ├── mdp_parser.py          ← .mdp TCF 碰撞物理解析
 ├── sot_parser.py          ← .sot 场景对象表解析
-└── mdl_zon_parser.py      ← .mdl-zon 触发区域解析
+├── decals_parser.py        ← decals.dat 贴花解析（自动检测文本/二进制）
+└── mdl_zon_parser.py       ← .mdl-zon 触发区域解析
 ```

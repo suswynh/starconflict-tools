@@ -2,7 +2,11 @@
 
 A pure C command-line tool that converts Hammer Engine `.mdl-mshXXX` static meshes to Autodesk FBX format. Zero external dependencies — no Noesis or Autodesk SDK required.
 
-> **v1.2** (2026-06) — Fixed front axis: MSH models face -Z, negated to +Z for Maya/FBX compatibility. Batch mode overwrites by default.
+> **v1.7** (2026-07-14) — Fixed missing VBytes=32 UV2 (lightmap): offset 28 uint16_unorm, aligned with blender plugin PRO.
+> **v1.6** (2026-07-11) — Fixed VBytes=40 flag=0x10/0x13 and VBytes=32 flag=0x0F character model UV1 offsets.
+> **v1.5** (2026-07) — VBytes=28 flag=0x0E: FX UV2 extraction for animated_mock airwalls (gate_mask02).
+> **v1.4** (2026-07) — Fixed VB=28 flag=0x0005 skybox UV offset: 16→20.
+> **v1.3** (2026-06) — Fixed UV visibility in Blender 4.2 LTS: mapping from ByVertice to ByPolygonVertex.
 
 ## Building
 
@@ -106,15 +110,20 @@ Not included (MSH format lacks this data):
 
 ## Supported Formats
 
-| VBytes | Flag Condition | UV Offset | Common Usage |
-|--------|---------------|-----------|--------------|
-| 20 | — | 12 | Basic mesh |
-| 24 | — | 16 | Extended mesh |
-| 28 | flag=0xE, 5 | 16 | Scene objects |
-| 28 | flag=0x11 | 20 | Special objects |
-| 32 | — | 20 | Medium mesh |
-| 36 | — | 20 | Large mesh |
-| 40 | — | 24 | Character model |
+| VBytes | Flag Condition | UV Offset | UV2 | Common Usage |
+|--------|---------------|-----------|:---:|--------------|
+| 20 | — | 12 | — | Basic mesh |
+| 24 | — | 16 | — | Extended mesh |
+| 28 | flag=0xE, 5 | 16 | — | Scene objects |
+| 28 | flag=0x0E | 16 | **24** (FX) | Airwalls/gates (animated_mock) |
+| 28 | flag=0x11 | 20 | — | Special objects |
+| 32 | — | 20 | 28 | Medium mesh |
+| 36 | — | 20 | 28 | Large mesh |
+| 40 | — | 24 | 32 | Character model |
+| 44 | — | 20 | 28 | Decoration model |
+
+- **UV2 Lightmap**: Exported to FBX UV layer 1 when VBytes≥32
+- **UV2 FX**: Exported to FBX UV layer 1 when VBytes=28 flag=0x0E (gate_mask02 coordinates)
 
 Number range: `.mdl-msh000` ~ `.mdl-msh1308`
 

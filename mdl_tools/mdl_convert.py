@@ -30,6 +30,7 @@ _PARSER_MAP = {
     ".mdp": None,
     ".sot": None,
     ".mdl-zon": None,
+    ".decals": None,
 }
 
 # 扩展名映射：处理 .mdl-zon000 → .mdl-zon 的情况
@@ -38,12 +39,16 @@ _EXT_CANONICAL = {
     ".mdl-geo": ".mdl-geo",
     ".mdp": ".mdp",
     ".sot": ".sot",
+    ".decals": ".decals",
 }
 
 
 def _canonical_ext(filepath: str) -> str:
-    """将文件名映射到标准扩展名。.mdl-zon000 → .mdl-zon"""
+    """将文件名映射到标准扩展名。.mdl-zon000 → .mdl-zon, decals.dat → .decals"""
     name = os.path.basename(filepath).lower()
+    # decals.dat 特殊处理 — 必须在 .ext 映射之前
+    if "decals.dat" in name:
+        return ".decals"
     for key in _EXT_CANONICAL:
         if key in name:
             return key
@@ -65,6 +70,7 @@ def _load_parsers():
         ".mdp": "mdp_parser",
         ".sot": "sot_parser",
         ".mdl-zon": "mdl_zon_parser",
+        ".decals": "decals_parser",
     }
 
     for ext, mod_name in parser_modules.items():
@@ -207,6 +213,46 @@ def _write_text_output(f, filepath: str, ext: str, result: dict):
             nonzero = [c for c in children if c != 0]
             f.write(f"  Child Indices: {children} ({len(nonzero)} non-zero)\n")
 
+    elif ext == ".decals":
+        fmt = result.get("format", "unknown")
+        records = result.get("records", [])
+
+        if fmt == "binary":
+            f.write("Decals — 关卡贴花实例\n")
+            f.write("-" * 40 + "\n")
+            f.write(f"版本:        {result.get('version', '?')}\n")
+            f.write(f"贴花数:      {result.get('count', 0)}\n")
+            if records:
+                f.write(f"\n{'#':>4}  {'纹理名称':<32} {'位置 (x, y, z)':<38} {'缩放 (x, y, z)':<32}\n")
+                f.write("-" * 110 + "\n")
+                for r in records:
+                    texture = r["texture"][:30] if r["texture"] else "(空)"
+                    pos = f"({r['position'][0]:.2f}, {r['position'][1]:.2f}, {r['position'][2]:.2f})"
+                    scl = f"({r['scale'][0]:.2f}, {r['scale'][1]:.2f}, {r['scale'][2]:.2f})"
+                    f.write(f"{r['index']:4}  {texture:<32} {pos:<38} {scl:<32}\n")
+                f.write(f"\n{'#':>4}  {'方向 (dx, dy, dz)':<40} {'四元数 (qx, qy, qz, qw)':<52}\n")
+                f.write("-" * 100 + "\n")
+                for r in records:
+                    d = r['direction']
+                    rot = r['rotation']
+                    d_str = f"({d[0]:+.4f}, {d[1]:+.4f}, {d[2]:+.4f})"
+                    r_str = f"({rot[0]:+.4f}, {rot[1]:+.4f}, {rot[2]:+.4f}, {rot[3]:+.4f})"
+                    f.write(f"{r['index']:4}  {d_str:<40} {r_str:<52}\n")
+
+        elif fmt == "text":
+            f.write("Decal Materials — 贴花材质库\n")
+            f.write("-" * 40 + "\n")
+            f.write(f"材质数:      {result.get('count', 0)}\n")
+            for i, mat in enumerate(records):
+                f.write(f"\n[{i}] {mat.get('name', '(无名称)')}\n")
+                for key, val in mat.items():
+                    if key == "name":
+                        continue
+                    if isinstance(val, tuple):
+                        f.write(f"    {key}: ({', '.join(str(v) for v in val)})\n")
+                    else:
+                        f.write(f"    {key}: {val}\n")
+
     elif ext == ".mdl-zon":
         f.write("Trigger Zone — 触发区域\n")
         f.write("-" * 40 + "\n")
@@ -244,10 +290,13 @@ def batch_process(directory: str, parsers: dict, quiet: bool = False) -> tuple:
     # 收集所有支持格式的文件
     extensions = tuple(_PARSER_MAP.keys())
     # 对于 .mdl-zon，匹配 .mdl-zon*
+    # 对于 .decals，匹配 decals.dat
     all_files = []
     for ext in extensions:
         if ext == ".mdl-zon":
             all_files.extend(dirpath.rglob(f"*{ext}*"))
+        elif ext == ".decals":
+            all_files.extend(dirpath.rglob("decals.dat"))
         else:
             all_files.extend(dirpath.rglob(f"*{ext}"))
 

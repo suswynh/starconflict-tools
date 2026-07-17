@@ -71,7 +71,17 @@ static int get_uv_offset(uint32_t vbytes, uint32_t flag)
 typedef enum { UV2_NONE, UV2_FLOAT2, UV2_UINT16_UNORM } uv2_format_t;
 
 /* 获取 UV2 (lightmap) 的字节偏移和格式。
-   返回 (offset, format)，如无 UV2 空间则 format=UV2_NONE。 */
+   返回 (offset, format)，如无 UV2 空间则 format=UV2_NONE。
+
+   已验证布局：
+     VBytes=32:           UV2 @ 28 (uint16 UNORM, maps/terrain/bigships)
+     VBytes=28 flag=0x0E: UV2 @ 24 (uint16 UNORM, animated_mock airwalls/gates)
+     VBytes=36:           UV2 @ 28 (uint16 UNORM)
+     VBytes=40 flag=0x1C: UV2 @ 32 (uint16 UNORM)
+     VBytes=40 flag=0x10: UV2 @ 32 (uint16 UNORM, skinned characters)
+     VBytes=40 flag=0x13: UV2 @ 32 (float2, often all-zero)
+     VBytes=44 flag=0x16: UV2 @ 28 (uint16 UNORM)
+     VBytes=48:           UV2 @ 40 (float2, tentative) */
 static void get_uv2_info(uint32_t vbytes, uint32_t flag, int *out_offset, uv2_format_t *out_format)
 {
     *out_format = UV2_NONE;
@@ -84,7 +94,14 @@ static void get_uv2_info(uint32_t vbytes, uint32_t flag, int *out_offset, uv2_fo
         return;
     }
 
-    if (vbytes < 36) return;  /* 无 UV2 空间 */
+    /* VBytes=32: UV2 @ 28 (uint16 UNORM, verified: maps/terrain/bigships) */
+    if (vbytes == 32) {
+        *out_offset = 28;
+        *out_format = UV2_UINT16_UNORM;
+        return;
+    }
+
+    if (vbytes < 36) return;  /* 无 UV2 空间 (VBytes=20/24/28 非0x0E) */
 
     if (vbytes == 36) {
         *out_offset = 28;

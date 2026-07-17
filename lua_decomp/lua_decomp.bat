@@ -1,15 +1,14 @@
 @echo off
 REM ============================================================================
-REM Star Conflict LuaJIT 字节码反编译 — 拖拽工具
-REM 支持拖放单/多个 .lua 字节码文件或文件夹到本 .bat 上
-REM 依赖: pip install ljd
+REM Star Conflict LuaJIT Bytecode Decompiler - Drag & Drop Tool
 REM ============================================================================
-setlocal enabledelayedexpansion
+setlocal enabledelapsedexpansion
 
 set "SCRIPT_DIR=%~dp0"
-set "DECOMPILER=%SCRIPT_DIR%lua_decomp.py"
+set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+set "DECOMPILER=%SCRIPT_DIR%\lua_decomp.py"
 
-REM ── 查找 Python ──
+REM --- Find Python ---
 set "PYTHON="
 for %%p in (python python3 py) do (
     where %%p >nul 2>&1
@@ -18,43 +17,52 @@ for %%p in (python python3 py) do (
         goto :found_python
     )
 )
-echo [错误] 未找到 Python。请安装 Python 3.7+ 并添加到 PATH。
+echo.
+echo ============================================================
+echo  [ERROR] Python not found!
+echo  Install Python 3.7+ from https://www.python.org/
+echo ============================================================
+echo.
 pause
 exit /b 1
 
 :found_python
-echo [Lua Decomp] 使用: %PYTHON%
-echo.
 
-REM ── 检查 ljd 是否安装 ──
+REM --- Check ljd ---
 %PYTHON% -c "import ljd" >nul 2>&1
 if errorlevel 1 (
-    echo [错误] ljd 库未安装。
     echo.
-    echo 请运行: pip install ljd
-    echo 或从源码安装: https://github.com/NightNord/ljd
+    echo ============================================================
+    echo  [ERROR] ljd library not installed.
+    echo.
+    echo  Run: pip install ljd
+    echo  Source: https://github.com/NightNord/ljd
+    echo ============================================================
+    echo.
     pause
     exit /b 1
 )
 
-REM ── 无参数时提示 ──
+REM --- No args: show help ---
 if "%~1"=="" (
-    echo 用法:
-    echo   拖放 .lua 字节码文件到本窗口（反编译单个文件）
-    echo   拖放整个文件夹到本窗口（批量反编译目录下所有 .lua 字节码）
     echo.
-    echo 输出:
-    echo   - 单文件: 反编译后的 .lua 源码输出到源文件同目录
-    echo   - 批量模式: 输出到 <源目录>_decompiled/ 子目录
+    echo ============================================================
+    echo  Star Conflict LuaJIT Decompiler
+    echo ============================================================
     echo.
-    echo 注意: 仅处理 LuaJIT 2.0 字节码文件（以 1B 4C 4A 开头）
+    echo  Drag .lua bytecode files or folders onto this .bat file.
     echo.
-    echo 按任意键退出...
-    pause >nul
+    echo  Output:
+    echo    Single file: decompiled .lua next to source file
+    echo    Folder:       output to ^<source^>_decompiled/ subdirectory
+    echo.
+    echo  Note: Only processes LuaJIT 2.0 bytecode (starts with 1B 4C 4A)
+    echo.
+    pause
     exit /b 0
 )
 
-REM ── 处理拖放的文件/目录 ──
+REM --- Collect args ---
 set "FILES="
 set "DIRS="
 set "HAS_DIR=0"
@@ -68,46 +76,39 @@ if exist "%~1\" (
 ) else if exist "%~1" (
     set "FILES=!FILES! "%~1""
 ) else (
-    echo [警告] 路径不存在: %~1
+    echo [WARNING] Path not found: %~1
 )
-
 shift
 goto :parse_args
 
 :done_parsing
 
-REM ── 有目录时用批量模式（优先） ──
+REM --- Batch mode (directories) ---
 if "!HAS_DIR!"=="1" (
     for %%d in (!DIRS!) do (
         echo.
         echo ============================================================
-        echo 批量反编译目录: %%d
+        echo Batch decompile: %%d
         echo ============================================================
         %PYTHON% "%DECOMPILER%" --batch %%d
-        if errorlevel 1 (
-            echo [错误] 批量处理失败: %%d
-        )
         echo.
     )
 )
 
-REM ── 单文件用 solo 模式 ──
+REM --- Solo mode (files) ---
 if not "!FILES!"=="" (
+    echo.
     echo ============================================================
-    echo 反编译文件...
+    echo Decompiling files...
     echo ============================================================
     %PYTHON% "%DECOMPILER%" !FILES!
-    if errorlevel 1 (
-        echo [错误] 处理失败
-        pause
-        exit /b 1
-    )
     echo.
 )
 
+echo ============================================================
+echo  Done. Decompiled .lua files are next to each source file,
+echo  or in ^<source^>_decompiled/ for batch mode.
+echo ============================================================
 echo.
-echo [完成] 所有文件已处理。
-echo.
-echo 按任意键退出...
-pause >nul
+pause
 exit /b 0

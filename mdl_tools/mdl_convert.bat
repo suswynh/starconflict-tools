@@ -1,15 +1,14 @@
 @echo off
 REM ============================================================================
-REM Star Conflict MDL 格式转换 — 拖拽工具
-REM 支持拖放单/多个文件或文件夹到本 .bat 上
-REM 输出 .txt 文件到源文件同目录
+REM Star Conflict MDL Convert - Drag & Drop Tool
 REM ============================================================================
 setlocal enabledelayedexpansion
 
 set "SCRIPT_DIR=%~dp0"
-set "CONVERTER=%SCRIPT_DIR%mdl_convert.py"
+set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+set "CONVERTER=%SCRIPT_DIR%\mdl_convert.py"
 
-REM ── 查找 Python ──
+REM --- Find Python ---
 set "PYTHON="
 for %%p in (python python3 py) do (
     where %%p >nul 2>&1
@@ -18,29 +17,34 @@ for %%p in (python python3 py) do (
         goto :found_python
     )
 )
-echo [错误] 未找到 Python。请安装 Python 3.7+ 并添加到 PATH。
+echo.
+echo ============================================================
+echo  [ERROR] Python not found!
+echo  Install Python 3.7+ from https://www.python.org/
+echo ============================================================
+echo.
 pause
 exit /b 1
 
 :found_python
-echo [MDL Convert] 使用: %PYTHON%
-echo.
 
-REM ── 无参数时提示 ──
+REM --- No args: show help ---
 if "%~1"=="" (
-    echo 用法:
-    echo   拖放 .mdl-hdr / .mdl-geo / .mdp / .sot / .mdl-zon* 文件到本窗口
-    echo   拖放整个文件夹到本窗口（批量转换目录下所有 MDL 文件）
     echo.
-    echo 支持的格式: mdl-hdr, mdl-geo, mdp, sot, mdl-zon
-    echo 输出: 每种文件生成对应的 .txt 文本文件在源文件同目录
+    echo ============================================================
+    echo  Star Conflict MDL Convert
+    echo ============================================================
     echo.
-    echo 按任意键退出...
-    pause >nul
+    echo  Drag supported files or folders onto this .bat file.
+    echo.
+    echo  Supported: mdl-hdr, mdl-geo, mdp, sot, mdl-zon, decals.dat
+    echo  Output:    .txt file next to each source file
+    echo.
+    pause
     exit /b 0
 )
 
-REM ── 处理拖放的文件/目录 ──
+REM --- Collect args ---
 set "FILES="
 set "DIRS="
 set "HAS_DIR=0"
@@ -48,54 +52,44 @@ set "HAS_DIR=0"
 :parse_args
 if "%~1"=="" goto :done_parsing
 
-REM 检查是文件还是目录
 if exist "%~1\" (
     set "DIRS=!DIRS! "%~1""
     set "HAS_DIR=1"
 ) else if exist "%~1" (
     set "FILES=!FILES! "%~1""
 ) else (
-    echo [警告] 路径不存在: %~1
+    echo [WARNING] Path not found: %~1
 )
-
 shift
 goto :parse_args
 
 :done_parsing
 
-REM ── 有目录时用批量模式（优先） ──
+REM --- Batch mode (directories) ---
 if "!HAS_DIR!"=="1" (
     for %%d in (!DIRS!) do (
         echo.
         echo ============================================================
-        echo 批量处理目录: %%d
+        echo Batch: %%d
         echo ============================================================
         %PYTHON% "%CONVERTER%" --batch %%d
-        if errorlevel 1 (
-            echo [错误] 批量处理失败: %%d
-        )
         echo.
     )
 )
 
-REM ── 单文件用 solo 模式 ──
+REM --- Solo mode (files) ---
 if not "!FILES!"=="" (
+    echo.
     echo ============================================================
-    echo 处理文件...
+    echo Processing files...
     echo ============================================================
     %PYTHON% "%CONVERTER%" !FILES!
-    if errorlevel 1 (
-        echo [错误] 处理失败
-        pause
-        exit /b 1
-    )
     echo.
 )
 
+echo ============================================================
+echo  Done. Output .txt files are next to each source file.
+echo ============================================================
 echo.
-echo [完成] 所有文件已处理。
-echo 输出文件与源文件在同一目录，扩展名为 .txt
-echo.
-echo 按任意键退出...
-pause >nul
+pause
 exit /b 0

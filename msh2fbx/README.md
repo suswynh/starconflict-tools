@@ -3,6 +3,8 @@
 纯 C 命令行工具，将 Hammer Engine 的 `.mdl-mshXXX` 静态网格转换为 Autodesk FBX 格式。
 零外部依赖，无需 Noesis 或 Autodesk SDK。
 
+> **v1.7** (2026-07-14) — 修复 VBytes=32 UV2 (lightmap) 缺失：offset 28 uint16_unorm，对齐 blender plugin PRO。
+> **v1.6** (2026-07-11) — 修复 VBytes=40 flag=0x10/0x13 和 VBytes=32 flag=0x0F 角色模型 UV1 偏移。
 > **v1.5** (2026-07) — VBytes=28 flag=0x0E 新增 FX UV2 提取（animated_mock 空气墙 gate_mask02）。
 > **v1.4** (2026-07) — 修复 VB=28 flag=0x0005 天空盒 UV 偏移：offset 16→20，修复 UV 解析为单线问题。
 > **v1.3** (2026-06) — 修复 Blender 4.2 LTS FBX 导入 UV 不可见问题：UV 映射从 `ByVertice` 改为 `ByPolygonVertex`。
@@ -87,7 +89,7 @@ fbx_output/
 导出内容：
 - 顶点位置 (position xyz)
 - UV 坐标 (set 0, ByPolygonVertex, V 自动翻转)
-- **UV2 Lightmap** (set 1, VBytes≥36 时自动导出，uint16_unorm/float2 自动检测)
+- **UV2 Lightmap** (set 1, VBytes≥32 时自动导出，uint16_unorm/float2 自动检测)
 - 三角形面索引（Z 轴取反，前向 -Z→+Z）
 - 平滑法线 (flat normals)
 
