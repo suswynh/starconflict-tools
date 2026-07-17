@@ -1,3 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,ship_hull,color,"color, color_msk, gun_l, paper_ship",5
-1,ship_hull,paper2,"gun_l, paper2, paper_ship, papers, papers_msk",5

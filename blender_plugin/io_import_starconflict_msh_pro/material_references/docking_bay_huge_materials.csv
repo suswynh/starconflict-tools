@@ -1,6 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,dyn_object_norm,bs_center,"bs_center, bs_center_msk, docking_bay_huge",6
-1,dyn_object_norm,linewind,linewind,4
-2,dyn_object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, docking_bay_huge",5
-3,dyn_object_norm,bs_shell_02,"bs_shell_02, bs_shell_02_msk, docking_bay_huge",6
-4,dyn_animated_mock,gate_scroll,"docking_bay_huge, gate_scroll",2

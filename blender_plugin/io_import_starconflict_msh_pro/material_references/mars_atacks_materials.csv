@@ -1,6 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk",5
-1,object_norm,pc_planet,"pc_planet, pc_planet_02, pc_planet_detail, prec_cruiser_details, prec_cruiser_details_msk",6
-2,object_norm,bs_imper_engines,"bs_imper_engines, bs_imper_engines_glow_red, bs_imper_engines_msk",5
-3,object_norm,crs_plates02,"asteroid_lava01, crs_plates02",5
-4,object_norm,rockground,"asteroid_detail01, rockground, rockground_msk",5

@@ -1,9 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,object_norm,asteroid_hole01,"asteroid_detail01, asteroid_hole01, asteroids",5
-1,skybackground,gasgiant_rings,gasgiant_rings,1
-2,skybackground,asteroid_pole,asteroid_pole,1
-3,skybackground,gasplanet,gasplanet,1
-4,sky,aura,aura,1
-5,skybackground,jer_main,jer_main,1
-6,sky,aura,aura,1
-7,object_norm,bs_communications_02,"bs_communications_02, bs_communications_02_msk, storage",6

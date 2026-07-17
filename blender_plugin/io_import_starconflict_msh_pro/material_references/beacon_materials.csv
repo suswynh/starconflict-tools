@@ -1,4 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,dyn_object_norm,color,"color, color_msk, paper_beacon",5
-1,dyn_object_norm,color,"color, color_msk, paper_beacon",5
-2,dyn_object_norm,color,"color, color_msk, detail1, paper_beacon",6

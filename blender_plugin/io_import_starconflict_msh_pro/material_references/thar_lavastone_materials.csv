@@ -1,5 +1,0 @@
-﻿block,shader,diffuse_short,keywords,samplers
-0,object_norm,solid_rock01,"rock01_detail, solid, solid_rock01",5
-1,object_norm,layed_rock,"layed_rock, rock01_detail, rocks",5
-2,object_norm,sc_crack_plates_full,"prec, sc_crack_plates_full, sc_crack_plates_full_msk, sc_plates01",5
-3,object_norm,sc_cubes02,"prec, sc_cubes02, sc_cubes02_msk",6
