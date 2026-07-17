@@ -118,6 +118,27 @@ entity.Name = "main_2_team1_1", Def = "ClanShip_BaseGen"
   → 返回 cooler 模型路径 ✓
 ```
 
+#### v2.5.5 (2026-07-11) — 角色模型 UV1 偏移修正
+
+VBytes=40/32 多种 flag 的顶点布局中 UV1 偏移量修正：
+
+| 修复 | (VBytes, flag) | 旧偏移 | 新偏移 | 影响模型 |
+|------|---------------|--------|--------|----------|
+| skinned character | (40, 0x10) | 24 | **16** | fed_mercenary_man |
+| static character | (40, 0x13) | 24 | **20** | loader, reptile_01 |
+| mixed mesh | (32, 0x0F) | 20 | **16** | fed_mercenary_tool |
+
+根因：VBytes=40 的 skinned 和 static 角色使用不同顶点布局（sentinel 7FFF0000 位置不同），
+原统一返回偏移 24 导致读取全零数据，UV 显示为单点/单线。
+
+##### 各 flag 顶点布局对比
+
+```
+flag=0x10 (skinned): [0]Pos(12)|[12]Data(4)|[16]UV1(8)|[24]Sentinel|[28]Data(4)|[32]UV2(4)
+flag=0x13 (static):  [0]Pos(12)|[12]Data(8)|[20]UV1(8)|[28]Data(4)|[32]UV2(8)
+flag=0x0F (mixed):   [0]Pos(12)|[12]Data(4)|[16]UV1(8)|[24]Sentinel|[28]Data(4)
+```
+
 #### v2.5 (2026-07-06) — 环境设置/Decals/Def映射
 
 环境设置应用（World HDRI/Mapping/clip）、Lights实体→Blender灯光、decals.dat解析导入、Def实体映射引擎（LuaJIT字节码）、mapskit/models递归搜索、去重逻辑、tree透明修复、进度条优化。

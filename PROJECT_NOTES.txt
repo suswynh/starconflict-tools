@@ -53,8 +53,11 @@ PBR 贴图通道分析 (2026-06-30 — 着色器源码验证):
   ⚠️ RGBA DDS兼容性: 部分查看器不支持无压缩RGBA (用Honeyview/GIMP/PS)
   ⚠️ 极小尺寸纹理: 部分mip级仅几个像素, 属正常现象
   ⚠️ irradiance cubemap: 缺TFD文件
-  ⚠️ VBytes=40角色模型: UV偏移待修正
-  ⚠️ VBytes=28模型: 无UV2空间, lightmap使用UV1采样 (PD_OCCL Type=0)
+   ✅ VBytes=40 flag=0x13: UV偏移已修正 24→20 (2026-07-11, loader/reptile_01)
+   ✅ VBytes=40 flag=0x10: UV偏移已修正 24→16 (2026-07-11, fed_mercenary_man, skinned character, sentinel@24)
+   ✅ VBytes=32 flag=0x0F: UV偏移已修正 20→16 (2026-07-11, fed_mercenary_tool)
+   ℹ️  jerichonec (flag=0x11 vb=28): UV正常, MDF贴图引用正确; 贴图位于 tex_universe_check\models\characters\jericho\*.dds
+   ⚠️ VBytes=28模型: 无UV2空间, lightmap使用UV1采样 (PD_OCCL Type=0)
    ✅ fed_plates01_msk 通道: 已通过着色器源码确认为 G=AO, B=Glossiness
    ⚠️ Blender Principled BSDF 与 Blinn-Phong 不完全匹配: Gloss→Roughness 转换为近似
 
@@ -163,3 +166,103 @@ PBR 贴图通道分析 (2026-06-30 — 着色器源码验证):
 
        shader_presets.py: 新增 sky/skybackground/planets 到 TRANSPARENT_MATERIAL_TYPES
        修改文件: material_builder.py, shader_presets.py, PROJECT_NOTES.txt, README_PRO.md
+
+   ── Shader Type 别名字典与材质合并 (2026-07-03) ──
+
+   背景:
+     组件模型 (models/objects/) 使用 dyn_object_norm 等 dyn_ 前缀 shader,
+     关卡地图 (mapskit/maps/) 使用 object_norm 等无前缀 shader。
+     两者在 material_builder 中走完全相同的节点创建路径、sampler 集功能等价,
+     但因 shader_type 不同导致指纹不同, 生成两份完全相同的 Blender 材质。
+     例: bigship_empire_01 的 bs_communications_01 材质 vs allidium_yard 的
+         同一贴图组 → SC_dyn_object_norm_xxxx vs SC_object_norm_yyyy。
+
+   发现: 两套指纹算法不一致
+     material_library.py:366 _compute_fingerprint()     — 缺 UserParam2_Float4
+     material_registry.py:255 _compute_fingerprint()    — 含 UserParam2_Float4
+     不一致导致: 库 JSON 生成 mat_id ≠ 运行时生成 mat_id → 跨 session 复用失败。
+     * 非 FX UV2 导致。FX UV2 是 UV 层命名 ("FX" vs "lightmap"), 无关联。
+
+   方案: Shader Type 别名字典
+     shader_presets.py 新增 SHADER_TYPE_ALIASES:
+       dyn_object_norm       → object_norm
+       dyn_object_norm_blend → object_norm_blend
+       dyn_object            → object
+       dyn_animated_mock     → animated_mock
+
+     两个 _compute_fingerprint 同步应用别名:
+       - fingerprint key 使用 aliased shader_type
+       - mat_id 命名也使用 aliased shader_type
+
+   Lightmap 差异保护:
+     关卡模型 (pvp_omega) 的 MDF 含 LightmapSampler → 贴图基底名集合多出
+     lightmap basename (如 station_03) → 指纹自然不同 → 不会与无 lightmap 的
+     组件模型材质错误合并。这是正确的差异化行为。
+
+   验证:
+     ✅ fed_big_station_08 (组件): VBytes=28 Flag=0x11 → 无 UV2 → 无 lightmap
+     ✅ pvp_omega/map (关卡):  VBytes=32 Flag=0x14 → 有 UV2 → 有 LightmapSampler
+     ✅ FX UV2 命名 ("FX" 用于 animated_mock ColormapSampler) 不受影响
+     ✅ dyn_glass/dyn_fresnel 等不在别名表中, 不受影响
+
+    修改文件: shader_presets.py, material_registry.py, material_library.py
+              README_PRO.md, PROJECT_NOTES.txt
+
+   ── 关卡一键组装 + 批量自动放置 (2026-07-04) ──
+
+   新增文件:
+     scene_xml_parser.py  — scene.xml 解析器
+     level_assembler.py   — 模型路径解析 + 关卡组装核心
+
+   新增功能:
+     ① File → Import → Star Conflict Level (scene.xml) — 一键关卡组装
+     ② 批量导入 Auto-Place — 自动从 scene.xml 查找模型世界位置
+
+   scene.xml 解析能力:
+     - 提取 <Entity Def="ModelEntity" Model="..."> 实体列表
+     - 解析 Pos (世界坐标) + Rot (四元数) 变换
+     - 解析 <Inheritance> 子场景链（递归加载）
+     - Model 路径 → unpack_root 中查找 .mdl-msh* 文件
+     - 策略A: <model_path> 作为目录 → *.mdl-msh*
+     - 策略B: <parent>/<basename>.mdl-msh*
+     - 策略C: unpack_root 全量递归查找
+
+   坐标系转换:
+     Hammer Y-up → Blender Z-up
+     - 位置: (hx, hy, hz) → (hx, hz, hy)
+     - 四元数: (qx, qy, qz, qw) → (qw, qx, qz, qy)
+     - 默认 up_axis='Z_UP_TO_Y_UP' (与批量导入一致)
+
+   关卡静态场景导入:
+     mapskit/maps/<area>/<map>/*.mdl-msh* → 全局匹配
+     (命名模式: map.mdl-msh*/<map>.mdl-msh*/<comp>.mdl-msh*)
+
+    Def 实体回退:
+     当 scene.xml 无 Model= 引用时, 尝试 Def 名称 → 模型路径映射:
+       Def="PvE_Geostation_Diafragma" → mapskit/maps/<area>/<map>/pve_geostation_diafragma
+     ⚠ 大部分 Def 实体 (Character_*, Debris_*, VitalPoint_*) 模型嵌入引擎,
+        解包数据中不存在对应 .mdl-msh 文件, 无法自动导入.
+
+   dyn_glass 材质:
+     allidium_glass_01/02 使用 dyn_glass shader, MDF 仅含参数无采样器:
+       UserParam0_Float4: 玻璃着色 RGB
+       UserParam0_Float[0]: Alpha 不透明度 (默认 0.5)
+       UserParam1_Float4: Fresnel 参数
+     material_builder.py: BSDF 设置后早期返回 (Transmission=1.0, Alpha Blend)
+     新增 _parse_float4() 辅助函数
+
+   Collection 命名:
+     场景导入使用 NameResolver (与批量导入一致), 基于文件路径生成层级
+     Collection → 基于 unpack_root 相对路径自动组织
+
+   进度提示:
+     operators.py → SC_PRO_OT_import_scene_xml.execute()
+     使用 wm.progress_begin/update/end + status_text_set
+
+   菜单注册:
+     Blender 4.2 中 ImportHelper 自动注册 import_scene.* 操作符
+     scene_xml 需手动 TOPBAR_MT_file_import.append (其他两个是自动的)
+
+   修改文件: scene_xml_parser.py (新), level_assembler.py (新),
+             operators.py, __init__.py, material_builder.py,
+             shader_presets.py, README_PRO.md, PROJECT_NOTES.txt

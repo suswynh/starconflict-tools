@@ -163,3 +163,17 @@ Pro edition requires these resources for automatic material creation:
 | Pink/purple model | Textures not found | Check Texture Search Paths, clear cache |
 | No materials created | MDF not found | Verify MDF is alongside MSH, or add MDF Search Path |
 | Wrong textures | Cache stale | Sidebar → **Clear Texture Cache** |
+
+### Full Level Import
+
+When importing an entire level scene (e.g., `federation/pvp_omega`), importing only the `maps/` directory models is incomplete. Also needed:
+
+| Resource Type | Directory | Examples |
+|---------------|-----------|----------|
+| Sky background textures | `mapskit/backgrounds/` | `misc/clouds_*`, `textures/fed_station_*` |
+| Light fixture models | `models/illumination/` | `rectlight`, `fed_dread_lights_*`, `rotrig_*` |
+| Decal models | `models/objects/constructor/decal/` | `constructor_decal_0*` |
+| Shared scene models | `mapskit/maps/models/` | asteroids, containers, outposts |
+| Skydome sphere | **Engine built-in `skydome`** | No .mdl-msh file — create sphere manually |
+
+> See `io_import_starconflict_msh_pro/README_PRO.md` → **完整关卡导入** section for detailed dependency analysis workflow.

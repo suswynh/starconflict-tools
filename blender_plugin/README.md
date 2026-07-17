@@ -3,9 +3,16 @@
 将 Hammer Engine (Star Conflict) 的 `.mdl-mshXXX` 静态网格导入 Blender。
 
 **兼容版本**：Blender 4.2 LTS、Blender 5.0+
+**Compatible with**: Blender 4.2 LTS, Blender 5.0+
 
-> **v2.1** (2026-06) — 修复前向轴：MSH 前向 -Z→+Z，默认坐标系改为 Z-up→Y-up。Blender 直接导入即标准姿势。
-> **Pro 版** (`io_import_starconflict_msh_pro`) 已发布：支持 MDF 材质解析、自动贴图链接、Principled BSDF 节点网络。
+> **v2.6** (2026-07-17) — Lightmap weak-reference material merging: core materials reduced 39%, cross-scene material sharing; full Blender 5.0 compatibility
+> **v2.5.5** (2026-07-11) — Character model UV1 offset fixes, AlphaTest pin-driven transparency, static scene path narrowing
+> **v2.5.4** (2026-07) — ClanShip_BaseGen subtype resolution (ShieldGeneratorA/TurretPowerB/TicketTowerC)
+> **v2.5.3** (2026-07) — Rotation formula fix round 3: M conjugation negates all vector components
+> **v2.4** (2026-07) — Pro Edition: one-click level assembly (scene.xml), batch auto-placement, Glass material, Shader Type aliases, experimental light import
+> **v2.2** (2026-07) — VB=28 flag=0x0005 skybox UV offset fix (Basic + Pro)
+> **v2.1** (2026-06) — Forward axis fix: MSH forward -Z→+Z, coordinate system Z-up→Y-up
+> **Pro Edition** (`io_import_starconflict_msh_pro`) released: MDF material parsing, auto texture linking, Principled BSDF node networks, one-click level assembly
 
 ## 安装
 
@@ -81,15 +88,26 @@
 blender_plugin/
 ├── io_import_starconflict_msh/          # 基础版（仅网格导入）
 │   └── __init__.py
-├── io_import_starconflict_msh_pro/      # Pro 版（材质管线）
+├── io_import_starconflict_msh_pro/      # Pro 版（完整材质管线）
 │   ├── __init__.py
-│   ├── msh_parser.py
-│   ├── msh_importer.py
-│   ├── mdf_parser.py
-│   ├── material_builder.py
+│   ├── msh_parser.py                    # MSH 网格解析
+│   ├── msh_importer.py                  # 网格构建 + 材质链接 + Lightmap variant
+│   ├── mdf_parser.py                    # MDF 材质定义解析
+│   ├── material_builder.py              # Principled BSDF 节点网络 + 中性 lightmap + 变体创建
+│   ├── material_registry.py             # 贴图指纹去重（LightmapSampler 弱引用）
+│   ├── material_library.py              # 静态材质库
+│   ├── texture_finder.py                # 多级贴图搜索
+│   ├── shader_presets.py                # 着色器类型→采样器映射
+│   ├── level_assembler.py               # 关卡组装 + Decals 生成
+│   ├── scene_xml_parser.py              # Scene XML 解析
+│   ├── decal_parser.py                  # Decals.dat 解析
+│   ├── def_resolver.py                  # Def 实体→模型路径解析
+│   ├── name_resolver.py                 # 模型命名冲突检测
+│   ├── README_PRO.md                    # Pro 版完整文档
+│   ├── DECALS_README.md                 # 贴花导入说明
 │   └── ...
 ├── io_import_starconflict_msh_pro.zip   # Pro 版 ZIP包
-└── README.md
+└── README.md                            # 本文档
 ```
 
 ## 与 msh2fbx 配合
@@ -155,6 +173,7 @@ Pro 版需要以下资源已就绪才能自动创建材质：
 | Shader 还原 | 为手动预设映射，非 .fx 自动解析 |
 | Cubemap | EnvSampler / ReflectionsSampler 暂未实现 |
 | DDS 兼容性 | 部分 RGBA DDS 需 Honeyview/GIMP 查看 |
+| Blender 5.0 | `Material.shadow_method` 已移除，插件通过 hasattr 兼容 |
 
 ### 问题排查
 
@@ -163,3 +182,28 @@ Pro 版需要以下资源已就绪才能自动创建材质：
 | 模型紫色/粉色 | 贴图未找到 | 检查 Texture Search Paths，清除缓存后重试 |
 | 无材质创建 | MDF 未找到 | 确认 MDF 与 MSH 同目录，或添加 MDF Search Path |
 | 贴图显示错误 | 缓存过期 | Sidebar → **Clear Texture Cache** |
+
+### 完整关卡导入
+
+导入整个关卡场景（如 `federation/pvp_omega`）时，仅导入 `maps/` 下的关卡主模型是不完整的。还需一并导入：
+
+| 资源类型 | 目录 | 示例 |
+|----------|------|------|
+| 天空背景贴图 | `mapskit/backgrounds/` | `misc/clouds_*`, `textures/fed_station_*` |
+| 模拟灯光模型 | `models/illumination/` | `rectlight`, `fed_dread_lights_*`, `rotrig_*` |
+| 贴花模型 | `models/objects/constructor/decal/` | `constructor_decal_0*` |
+| 共享场景模型 | `mapskit/maps/models/` | 小行星、集装箱、前哨站等 |
+| 天空盒球体 | **引擎内置几何体 `skydome`** | 无 .mdl-msh 文件，需手动创建球体 |
+
+### 灯光导入（实验性）
+
+关卡组装时可导入 `Lights_` 实体为 Blender 原生灯光对象：
+
+- **PointLight** → Blender Point Light
+- **Beam / BeamWithHalo** → Blender Spot Light
+
+> ⚠️ **实验性功能**：灯光方向可能不正确，导入后需手动调整旋转。导入的灯光放入 `Lights（Experimental - need user to edit）` Collection。
+>
+> 默认关闭。在 **Import Star Conflict Level** 面板中勾选 **Import Lights (Experimental)** 启用。
+
+> 完整关卡导入的详细流程和依赖分析方法见 `io_import_starconflict_msh_pro/README_PRO.md` → **完整关卡导入** 章节。
